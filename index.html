@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- REPLACE: Update page title if desired -->
+  <title>Colton WelganUGC Creator</title>
+  <meta name="description" content="Story-driven, scroll-stopping UGC. The kind of content brands actually remember.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       VARIABLES
+    ============================================================ */
+    :root {
+      --bg:          #0A0A0A;
+      --bg-raised:   #0F0F0F;
+      --bg-card:     #111111;
+      --accent:      #7B2D8B;
+      --accent-hi:   #9B3DAB;
+      --accent-dim:  rgba(123, 45, 139, 0.15);
+      --white:       #FFFFFF;
+      --grey:        #A0A0A0;
+      --border:      rgba(255,255,255,0.07);
+      --border-acc:  rgba(123, 45, 139, 0.35);
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ============================================================
+       UTILITY
+    ============================================================ */
+    .display {
+      font-family: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    .container {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 0 5rem;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+    ============================================================ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.45s; }
+    .delay-5 { transition-delay: 0.6s; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 1.75rem 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s ease, border-color 0.4s ease, padding 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    #nav.scrolled {
+      background: rgba(10, 10, 10, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom-color: var(--border-acc);
+      padding-top: 1.1rem;
+      padding-bottom: 1.1rem;
+    }
+
+    .nav-logo {
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+      position: relative;
+      transition: color 0.25s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--white);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu overlay */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 3.5rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 6rem;
+      padding-top: 10rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle radial glow */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      right: -5%;
+      width: 60%;
+      height: 80%;
+      background: radial-gradient(ellipse at center, rgba(123,45,139,0.10) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    /* REPLACE: Main hero name */
+    .hero-name {
+      font-family: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
+      font-size: clamp(5.5rem, 16vw, 15rem);
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 2.25rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1.55;
+      max-width: 560px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .pill {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      color: var(--grey);
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 4.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 1rem 2.25rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease,
+                  background 0.25s ease, border-color 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn-filled {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+
+    .btn-filled:hover {
+      background: var(--accent-hi);
+      border-color: var(--accent-hi);
+      box-shadow: 0 8px 28px rgba(123,45,139,0.45);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--white);
+      box-shadow: 0 8px 28px rgba(255,255,255,0.07);
+    }
+
+    .btn-white {
+      background: var(--white);
+      color: var(--accent);
+      border-color: var(--white);
+    }
+
+    .btn-white:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .hero-socials {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      transition: color 0.2s;
+    }
+
+    .social-link:hover { color: var(--accent); }
+    .social-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+
+    /* ============================================================
+       MARQUEE TICKER
+    ============================================================ */
+    .ticker-wrap {
+      background: var(--accent);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 0.85rem 0;
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      animation: ticker 22s linear infinite;
+    }
+
+    .ticker-track span {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      padding: 0 2.5rem;
+    }
+
+    .ticker-track span.dot {
+      color: rgba(255,255,255,0.4);
+      padding: 0;
+      letter-spacing: 0;
+      font-size: 0.5rem;
+    }
+
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ============================================================
+       STATS BAR
+    ============================================================ */
+    #stats {
+      background: var(--bg-raised);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-item {
+      padding: 2.5rem 3rem;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-num .hi { color: var(--accent); }
+
+    .stat-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--grey);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       ABOUT
+    ============================================================ */
+    #about {
+      padding: 9rem 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 7rem;
+      align-items: center;
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .about-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      line-height: 0.92;
+      margin-bottom: 2rem;
+    }
+
+    .about-body {
+      font-size: 0.97rem;
+      line-height: 1.85;
+      color: var(--grey);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-body strong { color: var(--white); font-weight: 600; }
+    .about-body em     { color: var(--accent); font-style: italic; }
+
+    .about-callout {
+      margin-top: 2.5rem;
+      padding: 1.5rem 2rem;
+      border-left: 2px solid var(--accent);
+      background: rgba(123,45,139,0.06);
+    }
+
+    .about-callout p {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--grey);
+      line-height: 1.7;
+    }
+
+    .about-callout p strong {
+      color: var(--white);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       WORK
+    ============================================================ */
+    #work {
+      padding: 9rem 0;
+      background: #111111;
+    }
+
+    .work-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .work-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.88;
+    }
+
+    .work-aside {
+      max-width: 320px;
+      text-align: right;
+    }
+
+    .work-aside p {
+      font-size: 0.85rem;
+      color: var(--grey);
+      line-height: 1.75;
+    }
+
+    .work-aside p strong { color: var(--white); }
+
+    /* ── 4-card video grid ── */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .vc {
+      aspect-ratio: 9 / 16;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-acc);
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .vc:hover, .vc.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 0 40px rgba(123,45,139,0.4);
+    }
+
+    .vc video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* label always visible top-left */
+    .vc-label {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      z-index: 3;
+    }
+
+    .vc-tag {
+      display: inline-block;
+      font-size: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--accent);
+      padding: 0.25rem 0.6rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .vc-title {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.95);
+      display: block;
+    }
+
+    /* bottom control bar */
+    .vc-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      background: linear-gradient(transparent, rgba(0,0,0,0.75));
+      padding: 2rem 0.9rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* progress scrub bar */
+    .vc-progress {
+      width: 100%;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .vc-progress-track {
+      position: absolute;
+      left: 0; right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.2);
+      pointer-events: none;
+    }
+
+    .vc-progress-fill {
+      height: 3px;
+      background: var(--accent);
+      width: 0%;
+      pointer-events: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .vc-progress-fill::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* play/pause + sound row */
+    .vc-buttons {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .vc-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .vc-btn:hover { opacity: 1; }
+    .vc-btn svg { fill: var(--white); width: 18px; height: 18px; }
+
+    .vc-time {
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.05em;
+      margin-left: auto;
+    }
+
+    .work-footnote {
+      text-align: center;
+      font-size: 0.82rem;
+      font-style: italic;
+      color: rgba(160,160,160,0.5);
+    }
+
+    @media (max-width: 1024px) { .videos-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .videos-grid { grid-template-columns: 1fr; max-width: 300px; margin-inline: auto; } }
+
+    /* ============================================================
+       FORMATS
+    ============================================================ */
+    #formats {
+      padding: 9rem 0;
+    }
+
+    .formats-header {
+      margin-bottom: 4rem;
+    }
+
+    .formats-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.9;
+    }
+
+    .formats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .format-card {
+      background: var(--bg);
+      padding: 3rem 2.75rem 3.5rem;
+      border-top: 2px solid var(--accent);
+      transition: background 0.3s ease;
+    }
+
+    .format-card:hover { background: #0D0D0D; }
+
+    .format-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 5rem;
+      color: rgba(160,80,180,0.65);
+      line-height: 1;
+      margin-bottom: 1.75rem;
+    }
+
+    .format-name {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    .format-desc {
+      font-size: 0.9rem;
+      color: var(--grey);
+      line-height: 1.75;
+    }
+
+    .format-desc em {
+      color: rgba(255,255,255,0.6);
+      font-style: italic;
+    }
+
+    /* ============================================================
+       CLIENTS
+    ============================================================ */
+    #clients {
+      padding: 9rem 0;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .clients-header {
+      margin-bottom: 5rem;
+    }
+
+    .clients-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.9;
+    }
+
+    .clients-coming-soon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem;
+      border: 1px dashed var(--border-acc);
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .clients-coming-soon-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(5rem, 12vw, 10rem);
+      line-height: 1;
+      color: rgba(160,80,180,0.55);
+    }
+
+    .clients-coming-soon-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    .clients-coming-soon-sub {
+      font-size: 0.9rem;
+      color: rgba(160,160,160,0.5);
+      font-style: italic;
+      max-width: 380px;
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       CONTACT
+    ============================================================ */
+    #contact {
+      background: var(--accent);
+      padding: 9rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #contact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 0% 0%, rgba(0,0,0,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.25) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Large decorative watermark */
+    #contact::after {
+      content: "LET'S GO";
+      position: absolute;
+      bottom: -2rem;
+      right: -1rem;
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(6rem, 18vw, 18rem);
+      color: rgba(0,0,0,0.12);
+      letter-spacing: -0.02em;
+      pointer-events: none;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .contact-inner { position: relative; z-index: 1; }
+
+    .contact-over {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(4.5rem, 13vw, 11rem);
+      line-height: 0.88;
+      color: var(--white);
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-body {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.78);
+      max-width: 520px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: #050505;
+      border-top: 1px solid var(--border);
+      padding: 2.25rem 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-left {
+      font-size: 0.68rem;
+      color: var(--grey);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-left span { color: var(--accent); }
+
+    .footer-right {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-right a {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+      transition: color 0.2s;
+    }
+
+    .footer-right a:hover { color: var(--white); }
+
+    /* ============================================================
+       RESPONSIVETABLET (≤1024px)
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .container { padding: 0 2.5rem; }
+      #nav { padding-left: 2.5rem; padding-right: 2.5rem; }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+      }
+
+      .about-photo {
+        max-width: 380px;
+        margin: 0 auto;
+        aspect-ratio: 4 / 3;
+      }
+
+      .work-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .work-aside { text-align: left; max-width: 100%; }
+
+
+      .formats-grid { grid-template-columns: repeat(2, 1fr); }
+      .formats-grid .format-card:nth-child(10) { grid-column: span 2; }
+    }
+
+    /* ============================================================
+       RESPONSIVEMOBILE (≤768px)
+    ============================================================ */
+    @media (max-width: 768px) {
+      .container { padding: 0 1.5rem; }
+      #nav { padding: 1.25rem 1.5rem; }
+
+      .nav-links { display: none !important; }
+      .hamburger { display: flex; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3),
+      .stat-item:nth-child(4) { border-top: 1px solid var(--border); }
+      .stat-item:nth-child(4) { border-right: none; }
+
+
+      .formats-grid { grid-template-columns: 1fr; gap: 0; }
+      .formats-grid .format-card:nth-child(10) { grid-column: span 1; }
+
+      .format-card:not(:last-child) {
+        border-bottom: 1px solid var(--border);
+      }
+
+      #hero { padding-bottom: 5rem; }
+
+      .hero-ctas { flex-direction: column; align-items: flex-start; }
+      .btn { width: 100%; justify-content: center; }
+
+      #stats { padding: 3.5rem 0; }
+      #about, #work, #formats, #contact { padding: 6rem 0; }
+    }
+
+    /* ============================================================
+       RESPONSIVESMALL MOBILE (≤480px)
+    ============================================================ */
+    @media (max-width: 480px) {
+    }
+
+    @media (max-width: 480px) {
+      .contact-headline { font-size: clamp(3.5rem, 14vw, 5rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     MOBILE MENU OVERLAY
+============================================================ -->
+<div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
+  <!-- REPLACE: Update links if you add/remove sections -->
+  <a href="#work"    onclick="closeMobileMenu()">Work</a>
+  <a href="#about"   onclick="closeMobileMenu()">About</a>
+  <a href="#clients" onclick="closeMobileMenu()">Clients</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- ============================================================
+     NAVIGATION
+============================================================ -->
+<nav id="nav">
+  <!-- REPLACE: Your preferred display name -->
+  <a href="#hero" class="nav-logo">Colton Welgan</a>
+
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="hamburger" id="hamburger" aria-label="Open navigation" role="button" tabindex="0">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</nav>
+
+<!-- ============================================================
+     SECTION 1HERO
+============================================================ -->
+<section id="hero">
+  <div class="container">
+
+    <p class="hero-eyebrow">UGC</p>
+
+    <!-- REPLACE: Your display name -->
+    <h1 class="hero-name display">Colton<br>Welgan.</h1>
+
+    <!-- REPLACE: Taglineupdate any time -->
+    <p class="hero-sub">
+      Story-driven, scroll-stopping UGC.<br>
+      The kind of content brands actually remember.
+    </p>
+
+    <div class="hero-pills">
+      <span class="pill">Based in Vancouver</span>
+      <span class="pill">10 Ad Angles</span>
+      <span class="pill">Full Time Creator</span>
+    </div>
+
+    <div class="hero-ctas">
+      <!-- REPLACE: Update href to your preferred CTA destination -->
+      <a href="#contact" class="btn btn-filled">Work With Me →</a>
+      <a href="#work"    class="btn btn-ghost">View Work</a>
+    </div>
+
+    <!-- REPLACE: Update each href to your actual social profiles -->
+    <div class="hero-socials">
+      <a href="#" class="social-link" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+      <a href="#" class="social-link" aria-label="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        TikTok
+      </a>
+      <a href="#" class="social-link" aria-label="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+        YouTube
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     MARQUEE TICKER
+============================================================ -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <!-- Duplicated for seamless infinite loop -->
+    <span>UGC Creator</span><span class="dot">◆</span>
+    <span>Vancouver Based</span><span class="dot">◆</span>
+    <span>Brand Strategist</span><span class="dot">◆</span>
+    <span>Scroll-Stopping Content</span><span class="dot">◆</span>
+    <span>10 Ad Angles</span><span class="dot">◆</span>
+    <span>Hook First</span><span class="dot">◆</span>
+    <span>Story-Driven</span><span class="dot">◆</span>
+    <span>Available Now</span><span class="dot">◆</span>
+    <span>UGC Creator</span><span class="dot">◆</span>
+    <span>Vancouver Based</span><span class="dot">◆</span>
+    <span>Brand Strategist</span><span class="dot">◆</span>
+    <span>Scroll-Stopping Content</span><span class="dot">◆</span>
+    <span>10 Ad Angles</span><span class="dot">◆</span>
+    <span>Hook First</span><span class="dot">◆</span>
+    <span>Story-Driven</span><span class="dot">◆</span>
+    <span>Available Now</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION 2STATS BAR
+============================================================ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+
+      <!-- REPLACE: Update all four stat numbers as your metrics grow -->
+      <div class="stat-item fade-up">
+        <div class="stat-num display"><span class="hi">0</span></div>
+        <div class="stat-label">Total Views</div>
+      </div>
+
+      <div class="stat-item fade-up delay-1">
+        <div class="stat-num display"><span class="hi">10</span></div>
+        <div class="stat-label">Ad Angles</div>
+      </div>
+
+      <div class="stat-item fade-up delay-2">
+        <div class="stat-num display"><span class="hi">Soon</span></div>
+        <div class="stat-label">Analytics Coming</div>
+      </div>
+
+      <div class="stat-item fade-up delay-3">
+        <div class="stat-num display"><span class="hi">YVR</span></div>
+        <div class="stat-label">Creator Based<br>in Vancouver</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3ABOUT
+============================================================ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- REPLACE: Save your photo as "photo.jpg" inside the ugc-portfolio folder -->
+      <img
+        src="photo.jpg"
+        alt="Colton Welgan"
+        class="about-photo fade-up"
+      >
+
+      <div>
+        <div class="section-label fade-up">About</div>
+
+        <h2 class="about-headline display fade-up delay-1">Hey,<br>I'm Colton.</h2>
+
+        <p class="about-body fade-up delay-2">
+          I'm a 22-year-old content creator based in Vancouver, and I'm obsessed with the mechanics of attention. My passion lies in the intersection of content marketing and brand strategy, specifically decoding exactly what makes an ad convert and why certain stories go viral.
+        </p>
+
+        <p class="about-body fade-up delay-3">
+          My approach is rooted in constant experimentation. Every brand faces a unique set of challenges and speaks to a specific set of customers, and I'm here to bridge that gap. I don't believe in 'guru' tactics; I believe in testing, refining, and documenting the process. My focus is on the hook: grabbing the viewer's attention and creating content that is so relatable they can't help but see themselves in it. By prioritizing trust and relatability, I help brands turn passive viewers into loyal advocates.
+        </p>
+
+        <div class="about-callout fade-up delay-4">
+          <p>I'm currently documenting this climb from the ground up — <strong>one test, one hook, and one story at a time.</strong></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4WORK
+============================================================ -->
+<section id="work">
+  <div class="container">
+
+    <div class="work-top">
+      <div>
+        <div class="section-label fade-up">Work</div>
+        <h2 class="work-headline display fade-up delay-1">
+          The Work.
+        </h2>
+      </div>
+    </div>
+
+    <div class="videos-grid fade-up delay-1">
+
+      <div class="vc" data-idx="0">
+        <video src="video1.mov" playsinline loop muted></video>
+        <div class="vc-label">
+          <span class="vc-tag">POV Angle</span>
+          <span class="vc-title display">Claude</span>
+        </div>
+        <div class="vc-controls">
+          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
+          <div class="vc-buttons">
+            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="vc-btn vc-sound-btn" aria-label="Sound">
+              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <span class="vc-time">0:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vc" data-idx="1">
+        <video src="video2.mp4" playsinline loop muted></video>
+        <div class="vc-label">
+          <span class="vc-tag">Storytelling</span>
+          <span class="vc-title display">Day 3</span>
+        </div>
+        <div class="vc-controls">
+          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
+          <div class="vc-buttons">
+            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="vc-btn vc-sound-btn" aria-label="Sound">
+              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <span class="vc-time">0:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vc" data-idx="2">
+        <video src="video3.mov" playsinline loop muted></video>
+        <div class="vc-label">
+          <span class="vc-tag">Failed Solution Angle</span>
+          <span class="vc-title display">Manscaped</span>
+        </div>
+        <div class="vc-controls">
+          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
+          <div class="vc-buttons">
+            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="vc-btn vc-sound-btn" aria-label="Sound">
+              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <span class="vc-time">0:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vc" data-idx="3">
+        <video src="video4.mov" playsinline loop muted></video>
+        <div class="vc-label">
+          <span class="vc-tag">Problem / Solution</span>
+          <span class="vc-title display">Perplexity</span>
+        </div>
+        <div class="vc-controls">
+          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
+          <div class="vc-buttons">
+            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="vc-btn vc-sound-btn" aria-label="Sound">
+              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <span class="vc-time">0:00</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="work-footnote fade-up">
+      Scroll-stopping content built from scratch. Every hook intentional.
+    </p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5FORMATS
+============================================================ -->
+<section id="formats">
+  <div class="container">
+
+    <div class="formats-header">
+      <div class="section-label fade-up">Ad Angles</div>
+      <h2 class="formats-headline display fade-up delay-1">
+        10 Angles.<br>One Creator.
+      </h2>
+    </div>
+
+    <div class="formats-grid fade-up delay-2">
+
+      <div class="format-card">
+        <div class="format-num display">01</div>
+        <h3 class="format-name display">The Hidden Cost</h3>
+        <p class="format-desc">
+          Show what it's actually costing them to do nothing or use the wrong solution. Not about priceabout the hidden pain they're already experiencing.<br>
+          <em>What is the hidden cost of a brand NOT investing in UGC right now?</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">02</div>
+        <h3 class="format-name display">The Failed Solution</h3>
+        <p class="format-desc">
+          Here's why nothing else has workedand this is the real fix. Validates their frustration before introducing the product.<br>
+          <em>Here's why your brand's current content strategy isn't converting.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">03</div>
+        <h3 class="format-name display">The Social Proof Pivot</h3>
+        <p class="format-desc">
+          Someone just like you got the result you want. Stack credibility through relatabilitynot celebrity endorsement.<br>
+          <em>Document your own UGC results as they happen in real time.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">04</div>
+        <h3 class="format-name display">The Mechanism</h3>
+        <p class="format-desc">
+          The unique reason WHY this product actually works. Not what it doeshow it does it differently than everything else.<br>
+          <em>Why does UGC actually convert better than traditional adsthe real mechanism.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">05</div>
+        <h3 class="format-name display">The Enemy</h3>
+        <p class="format-desc">
+          Name the thing that's actually holding them backperson, behavior, or trend. Give people something to point at besides themselves.<br>
+          <em>Recycled guru advice is the enemy. Seed oil equivalent of the creator economy.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">06</div>
+        <h3 class="format-name display">The Identity Shift</h3>
+        <p class="format-desc">
+          Don't sell the product. Sell who they become. The transformation is the hook, not the features.<br>
+          <em>You're not just building a UGC income — you're becoming someone who owns their time.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">07</div>
+        <h3 class="format-name display">The Urgency of Now</h3>
+        <p class="format-desc">
+          Waiting makes the problem worse. Not a fake countdown — a real consequence. Build the pain of inaction through a relatable story.<br>
+          <em>Every day you stay in corporate is a day you're not building your own equity.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">08</div>
+        <h3 class="format-name display">The Comparison Flip</h3>
+        <p class="format-desc">
+          Guinea pig content. I tested this so you don't have to. You appear neutral, which makes your opinion trustworthy.<br>
+          <em>I tested three UGC platforms so you don't have to — here's what actually converts.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">09</div>
+        <h3 class="format-name display">The Objection First</h3>
+        <p class="format-desc">
+          Address the skepticism before they even think it. Consumers have been advertised to their whole lives — meet them where they are.<br>
+          <em>I know what you're thinking — here's why this is different.</em>
+        </p>
+      </div>
+
+      <div class="format-card">
+        <div class="format-num display">10</div>
+        <h3 class="format-name display">The Insider</h3>
+        <p class="format-desc">
+          I've been here a long time. Learn from my mistakes so you don't make them. Loss aversion — nobody wants to mess up something they could have gotten right.<br>
+          <em>Here's what I wish I knew before I started trying to build a UGC income.</em>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — CLIENTS
+============================================================ -->
+<section id="clients">
+  <div class="container">
+
+    <div class="clients-header">
+      <div class="section-label fade-up">Clients</div>
+      <h2 class="clients-headline display fade-up delay-1">
+        Brand<br>Partnerships.
+      </h2>
+    </div>
+
+    <div class="clients-coming-soon fade-up delay-2">
+      <div class="clients-coming-soon-num display">Soon</div>
+      <p class="clients-coming-soon-label">Client roster coming soon</p>
+      <p class="clients-coming-soon-sub">First brand partnerships in progress. Check back shortly — this section will fill up fast.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7 — CONTACT / CTA
+============================================================ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+
+      <p class="contact-over fade-up">Got a Brief?</p>
+
+      <h2 class="contact-headline display fade-up delay-1">
+        Let's Make<br>Something.
+      </h2>
+
+      <!-- REPLACE: Update offer copy as your availability changes -->
+      <p class="contact-body fade-up delay-2">
+        I'm offering two free spec videos for the right brand. No contract. No risk. Just let the work speak. Send me what you're working on and I'll come back within 24 hours.
+      </p>
+
+      <!-- REPLACE: Update email address -->
+      <a href="mailto:coltonwelgan@gmail.com" class="btn btn-white fade-up delay-3">
+        coltonwelgan@gmail.com &nbsp;→
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-left">
+        © <span id="footer-year">2025</span> <span>Colton Welgan</span>. UGC Creator.
+      </p>
+      <nav class="footer-right" aria-label="Footer navigation">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#clients">Clients</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+  // ── Auto-update footer year ───────────────────────────────────
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+  // ── Sticky nav with backdrop blur on scroll ───────────────────
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // ── Mobile hamburger menu ─────────────────────────────────────
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let menuOpen = false;
+
+  function closeMobileMenu() {
+    menuOpen = false;
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    hamburger.classList.toggle('open', menuOpen);
+    mobileMenu.classList.toggle('open', menuOpen);
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+  });
+
+  hamburger.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hamburger.click(); }
+  });
+
+  // ── Scroll-triggered fade-up animations ──────────────────────
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  fadeEls.forEach(el => observer.observe(el));
+
+  // ── Per-card video controllers ────────────────────────────────
+  document.querySelectorAll('.vc').forEach(card => {
+    const video     = card.querySelector('video');
+    const fill      = card.querySelector('.vc-progress-fill');
+    const progress  = card.querySelector('.vc-progress');
+    const playBtn   = card.querySelector('.vc-play-btn');
+    const soundBtn  = card.querySelector('.vc-sound-btn');
+    const timeEl    = card.querySelector('.vc-time');
+    const iconPlay  = playBtn.querySelector('.icon-play');
+    const iconPause = playBtn.querySelector('.icon-pause');
+    const iconMute  = soundBtn.querySelector('.icon-mute');
+    const iconSnd   = soundBtn.querySelector('.icon-sound');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+      return m + ':' + String(sec).padStart(2, '0');
+    }
+
+    // videos start paused — user hits play to start
+
+    // progress bar
+    video.addEventListener('timeupdate', () => {
+      if (!video.duration) return;
+      fill.style.width = (video.currentTime / video.duration * 100) + '%';
+      timeEl.textContent = fmt(video.currentTime);
+    });
+
+    // scrub — click and drag
+    let dragging = false;
+    function scrubTo(e) {
+      const rect = progress.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (video.duration) video.currentTime = pct * video.duration;
+    }
+    progress.addEventListener('mousedown', e => { dragging = true; scrubTo(e); e.preventDefault(); });
+    document.addEventListener('mousemove', e => { if (dragging) scrubTo(e); });
+    document.addEventListener('mouseup',   () => { dragging = false; });
+    progress.addEventListener('touchstart', e => { dragging = true; scrubTo(e.touches[0]); }, { passive: true });
+    document.addEventListener('touchmove',  e => { if (dragging) scrubTo(e.touches[0]); }, { passive: true });
+    document.addEventListener('touchend',   () => { dragging = false; });
+
+    // play / pause
+    playBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (video.paused) {
+        video.play();
+        iconPlay.style.display  = 'none';
+        iconPause.style.display = '';
+      } else {
+        video.pause();
+        iconPlay.style.display  = '';
+        iconPause.style.display = 'none';
+      }
+    });
+
+    // sound — mute all others when unmuting
+    soundBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const muting = !video.muted;
+      if (!muting) {
+        // unmuting this card — mute all others
+        document.querySelectorAll('.vc video').forEach(v => { v.muted = true; });
+        document.querySelectorAll('.vc .icon-mute').forEach(i => { i.style.display = ''; });
+        document.querySelectorAll('.vc .icon-sound').forEach(i => { i.style.display = 'none'; });
+      }
+      video.muted = muting;
+      iconMute.style.display = muting ? ''     : 'none';
+      iconSnd.style.display  = muting ? 'none' : '';
+    });
+  });
+
+  // ── Smooth scroll for in-page anchor links ────────────────────
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const target = document.querySelector(anchor.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
