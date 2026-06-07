@@ -7,6 +7,8 @@
   <title>Colton WelganUGC Creator</title>
   <meta name="description" content="Story-driven, scroll-stopping UGC. The kind of content brands actually remember.">
 
+  <script src="https://player.vimeo.com/api/player.js"></script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -569,12 +571,12 @@
       box-shadow: 0 0 0 1px var(--accent), 0 0 40px rgba(123,45,139,0.4);
     }
 
-    .vc video {
+    .vc iframe {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      border: none;
     }
 
     /* label always visible top-left */
@@ -607,87 +609,6 @@
       display: block;
     }
 
-    /* bottom control bar */
-    .vc-controls {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 3;
-      background: linear-gradient(transparent, rgba(0,0,0,0.75));
-      padding: 2rem 0.9rem 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    /* progress scrub bar */
-    .vc-progress {
-      width: 100%;
-      height: 16px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .vc-progress-track {
-      position: absolute;
-      left: 0; right: 0;
-      height: 3px;
-      background: rgba(255,255,255,0.2);
-      pointer-events: none;
-    }
-
-    .vc-progress-fill {
-      height: 3px;
-      background: var(--accent);
-      width: 0%;
-      pointer-events: none;
-      position: relative;
-      z-index: 1;
-    }
-
-    .vc-progress-fill::after {
-      content: '';
-      position: absolute;
-      right: -5px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    /* play/pause + sound row */
-    .vc-buttons {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .vc-btn {
-      background: none;
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.85;
-      transition: opacity 0.2s;
-    }
-
-    .vc-btn:hover { opacity: 1; }
-    .vc-btn svg { fill: var(--white); width: 18px; height: 18px; }
-
-    .vc-time {
-      font-size: 0.55rem;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.05em;
-      margin-left: auto;
-    }
 
     .work-footnote {
       text-align: center;
@@ -1182,91 +1103,35 @@
 
     <div class="videos-grid fade-up delay-1">
 
-      <div class="vc" data-idx="0">
-        <video src="video1.mov" playsinline loop muted></video>
+      <div class="vc">
+        <iframe src="https://player.vimeo.com/video/1199098126?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Claude"></iframe>
         <div class="vc-label">
           <span class="vc-tag">POV Angle</span>
           <span class="vc-title display">Claude</span>
         </div>
-        <div class="vc-controls">
-          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
-          <div class="vc-buttons">
-            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
-              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            <button class="vc-btn vc-sound-btn" aria-label="Sound">
-              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            </button>
-            <span class="vc-time">0:00</span>
-          </div>
-        </div>
       </div>
 
-      <div class="vc" data-idx="1">
-        <video src="video2.mp4" playsinline loop muted></video>
+      <div class="vc">
+        <iframe src="https://player.vimeo.com/video/1199098117?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Day 3"></iframe>
         <div class="vc-label">
           <span class="vc-tag">Storytelling</span>
           <span class="vc-title display">Day 3</span>
         </div>
-        <div class="vc-controls">
-          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
-          <div class="vc-buttons">
-            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
-              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            <button class="vc-btn vc-sound-btn" aria-label="Sound">
-              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            </button>
-            <span class="vc-time">0:00</span>
-          </div>
-        </div>
       </div>
 
-      <div class="vc" data-idx="2">
-        <video src="video3.mov" playsinline loop muted></video>
+      <div class="vc">
+        <iframe src="https://player.vimeo.com/video/1199098102?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Manscaped"></iframe>
         <div class="vc-label">
           <span class="vc-tag">Failed Solution Angle</span>
           <span class="vc-title display">Manscaped</span>
         </div>
-        <div class="vc-controls">
-          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
-          <div class="vc-buttons">
-            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
-              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            <button class="vc-btn vc-sound-btn" aria-label="Sound">
-              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            </button>
-            <span class="vc-time">0:00</span>
-          </div>
-        </div>
       </div>
 
-      <div class="vc" data-idx="3">
-        <video src="video4.mov" playsinline loop muted></video>
+      <div class="vc">
+        <iframe src="https://player.vimeo.com/video/1199098103?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Perplexity"></iframe>
         <div class="vc-label">
           <span class="vc-tag">Problem / Solution</span>
           <span class="vc-title display">Perplexity</span>
-        </div>
-        <div class="vc-controls">
-          <div class="vc-progress"><div class="vc-progress-track"></div><div class="vc-progress-fill"></div></div>
-          <div class="vc-buttons">
-            <button class="vc-btn vc-play-btn" aria-label="Play/Pause">
-              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            <button class="vc-btn vc-sound-btn" aria-label="Sound">
-              <svg class="icon-mute" viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-              <svg class="icon-sound" viewBox="0 0 24 24" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            </button>
-            <span class="vc-time">0:00</span>
-          </div>
         </div>
       </div>
 
@@ -1506,76 +1371,6 @@
 
   fadeEls.forEach(el => observer.observe(el));
 
-  // ── Per-card video controllers ────────────────────────────────
-  document.querySelectorAll('.vc').forEach(card => {
-    const video     = card.querySelector('video');
-    const fill      = card.querySelector('.vc-progress-fill');
-    const progress  = card.querySelector('.vc-progress');
-    const playBtn   = card.querySelector('.vc-play-btn');
-    const soundBtn  = card.querySelector('.vc-sound-btn');
-    const timeEl    = card.querySelector('.vc-time');
-    const iconPlay  = playBtn.querySelector('.icon-play');
-    const iconPause = playBtn.querySelector('.icon-pause');
-    const iconMute  = soundBtn.querySelector('.icon-mute');
-    const iconSnd   = soundBtn.querySelector('.icon-sound');
-
-    function fmt(s) {
-      const m = Math.floor(s / 60), sec = Math.floor(s % 60);
-      return m + ':' + String(sec).padStart(2, '0');
-    }
-
-    // videos start paused — user hits play to start
-
-    // progress bar
-    video.addEventListener('timeupdate', () => {
-      if (!video.duration) return;
-      fill.style.width = (video.currentTime / video.duration * 100) + '%';
-      timeEl.textContent = fmt(video.currentTime);
-    });
-
-    // scrub — click and drag
-    let dragging = false;
-    function scrubTo(e) {
-      const rect = progress.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      if (video.duration) video.currentTime = pct * video.duration;
-    }
-    progress.addEventListener('mousedown', e => { dragging = true; scrubTo(e); e.preventDefault(); });
-    document.addEventListener('mousemove', e => { if (dragging) scrubTo(e); });
-    document.addEventListener('mouseup',   () => { dragging = false; });
-    progress.addEventListener('touchstart', e => { dragging = true; scrubTo(e.touches[0]); }, { passive: true });
-    document.addEventListener('touchmove',  e => { if (dragging) scrubTo(e.touches[0]); }, { passive: true });
-    document.addEventListener('touchend',   () => { dragging = false; });
-
-    // play / pause
-    playBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      if (video.paused) {
-        video.play();
-        iconPlay.style.display  = 'none';
-        iconPause.style.display = '';
-      } else {
-        video.pause();
-        iconPlay.style.display  = '';
-        iconPause.style.display = 'none';
-      }
-    });
-
-    // sound — mute all others when unmuting
-    soundBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const muting = !video.muted;
-      if (!muting) {
-        // unmuting this card — mute all others
-        document.querySelectorAll('.vc video').forEach(v => { v.muted = true; });
-        document.querySelectorAll('.vc .icon-mute').forEach(i => { i.style.display = ''; });
-        document.querySelectorAll('.vc .icon-sound').forEach(i => { i.style.display = 'none'; });
-      }
-      video.muted = muting;
-      iconMute.style.display = muting ? ''     : 'none';
-      iconSnd.style.display  = muting ? 'none' : '';
-    });
-  });
 
   // ── Smooth scroll for in-page anchor links ────────────────────
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {

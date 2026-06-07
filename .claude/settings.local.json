@@ -3,7 +3,11 @@
     "allow": [
       "Skill(run)",
       "Skill(run:*)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__javascript_tool",
+      "mcp__Claude_in_Chrome__form_input",
+      "mcp__Claude_in_Chrome__find"
     ]
   }
 }
