@@ -800,6 +800,153 @@
     }
 
     /* ============================================================
+       CLIENT MODAL
+    ============================================================ */
+    .client-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .client-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .client-modal {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 560px;
+      width: 100%;
+      padding: 2.5rem;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.25s ease;
+    }
+
+    .client-modal-overlay.open .client-modal {
+      transform: translateY(0);
+    }
+
+    .client-modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      color: var(--grey);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.25rem;
+    }
+
+    .client-modal-close:hover { color: var(--fg); }
+
+    .client-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .client-modal-logo {
+      width: 64px;
+      height: 52px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .client-modal-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .client-modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .client-modal-type {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.2rem;
+    }
+
+    .client-modal-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-box-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .stat-box-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.4rem;
+    }
+
+    .client-modal-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .client-modal-section h4 {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 0.75rem;
+    }
+
+    .client-modal-section p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+    }
+
+    .client-card[data-modal] {
+      cursor: pointer;
+    }
+
+    .client-card[data-modal]:hover .client-card-logo {
+      transform: scale(1.04);
+      transition: transform 0.2s ease;
+    }
+
+    /* ============================================================
        CONTACT
     ============================================================ */
     #contact {
@@ -1168,7 +1315,7 @@
     <div class="clients-marquee-wrap fade-up delay-2">
       <div class="clients-marquee-track">
         <!-- set 1 -->
-        <div class="client-card">
+        <div class="client-card" data-modal="triips">
           <div class="client-card-logo">
             <img src="triips-logo.svg" alt="Triips">
           </div>
@@ -1180,7 +1327,7 @@
         <div class="client-card client-card--empty"></div>
         <div class="client-card client-card--empty"></div>
         <!-- set 2 (duplicate for seamless loop) -->
-        <div class="client-card">
+        <div class="client-card" data-modal="triips">
           <div class="client-card-logo">
             <img src="triips-logo.svg" alt="Triips">
           </div>
@@ -1362,6 +1509,70 @@
       }
     });
   });
+</script>
+
+<!-- CLIENT MODAL -->
+<div class="client-modal-overlay" id="clientModal">
+  <div class="client-modal">
+    <button class="client-modal-close" id="clientModalClose">&times;</button>
+
+    <div class="client-modal-header">
+      <div class="client-modal-logo">
+        <img src="triips-logo.svg" alt="Triips">
+      </div>
+      <div>
+        <div class="client-modal-title">Triips.com</div>
+        <div class="client-modal-type">Organic UGC</div>
+      </div>
+    </div>
+
+    <div class="client-modal-stats">
+      <div class="stat-box">
+        <div class="stat-box-num">—</div>
+        <div class="stat-box-label">Total Views</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">—</div>
+        <div class="stat-box-label">Videos Made</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-num">—</div>
+        <div class="stat-box-label">Avg. Watch Time</div>
+      </div>
+    </div>
+
+    <div class="client-modal-section">
+      <h4>What I Did</h4>
+      <p>Placeholder — add deliverables, formats, and scope of work here.</p>
+    </div>
+
+    <div class="client-modal-section">
+      <h4>Results</h4>
+      <p>Placeholder — add key results, engagement stats, or client feedback here.</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('clientModal');
+  const modalClose = document.getElementById('clientModalClose');
+
+  document.querySelectorAll('[data-modal]').forEach(card => {
+    card.addEventListener('click', () => {
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
 
 </body>
