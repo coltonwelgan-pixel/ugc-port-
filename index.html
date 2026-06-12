@@ -699,38 +699,104 @@
       line-height: 0.9;
     }
 
-    .clients-coming-soon {
+    /* ---- Clients marquee ---- */
+    .clients-marquee-wrap {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+    }
+
+    .clients-marquee-wrap::before,
+    .clients-marquee-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .clients-marquee-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-raised), transparent);
+    }
+
+    .clients-marquee-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-raised), transparent);
+    }
+
+    .clients-marquee-track {
+      display: flex;
+      gap: 4rem;
+      width: max-content;
+      animation: marquee-scroll 22s linear infinite;
+    }
+
+    .clients-marquee-wrap:hover .clients-marquee-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .client-card {
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 1rem;
+      min-width: 180px;
+    }
+
+    .client-card-logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 6rem 2rem;
-      border: 1px dashed var(--border-acc);
-      text-align: center;
-      gap: 1.5rem;
+      background: #1E40FF;
     }
 
-    .clients-coming-soon-num {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(5rem, 12vw, 10rem);
-      line-height: 1;
-      color: rgba(160,80,180,0.55);
+    .client-card-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .clients-coming-soon-label {
-      font-size: 0.68rem;
+    .client-card-name {
+      font-size: 0.85rem;
       font-weight: 700;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.04em;
+      color: var(--fg);
+    }
+
+    .client-card-type {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--grey);
+      margin-top: -0.5rem;
     }
 
-    .clients-coming-soon-sub {
-      font-size: 0.9rem;
-      color: rgba(160,160,160,0.5);
-      font-style: italic;
-      max-width: 380px;
-      line-height: 1.7;
+    .client-card--empty {
+      min-width: 180px;
+      height: 148px;
+    }
+
+    .client-card--empty::before {
+      content: '';
+      display: block;
+      width: 100px;
+      height: 100px;
+      border-radius: 18px;
+      border: 1px dashed var(--border-acc);
+      margin: 0 auto;
     }
 
     /* ============================================================
@@ -1157,10 +1223,33 @@
       </h2>
     </div>
 
-    <div class="clients-coming-soon fade-up delay-2">
-      <div class="clients-coming-soon-num display">Soon</div>
-      <p class="clients-coming-soon-label">Client roster coming soon</p>
-      <p class="clients-coming-soon-sub">First brand partnerships in progress. Check back shortly — this section will fill up fast.</p>
+    <div class="clients-marquee-wrap fade-up delay-2">
+      <div class="clients-marquee-track">
+        <!-- set 1 -->
+        <div class="client-card">
+          <div class="client-card-logo">
+            <img src="triips-logo.svg" alt="Triips">
+          </div>
+          <div class="client-card-name">Triips.com</div>
+          <div class="client-card-type">Organic UGC</div>
+        </div>
+        <div class="client-card client-card--empty"></div>
+        <div class="client-card client-card--empty"></div>
+        <div class="client-card client-card--empty"></div>
+        <div class="client-card client-card--empty"></div>
+        <!-- set 2 (duplicate for seamless loop) -->
+        <div class="client-card">
+          <div class="client-card-logo">
+            <img src="triips-logo.svg" alt="Triips">
+          </div>
+          <div class="client-card-name">Triips.com</div>
+          <div class="client-card-type">Organic UGC</div>
+        </div>
+        <div class="client-card client-card--empty"></div>
+        <div class="client-card client-card--empty"></div>
+        <div class="client-card client-card--empty"></div>
+        <div class="client-card client-card--empty"></div>
+      </div>
     </div>
 
   </div>
