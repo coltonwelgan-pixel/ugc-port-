@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results | Colton Welgan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:          #0A0A0A;
+      --bg-raised:   #0F0F0F;
+      --accent:      #7B2D8B;
+      --accent-hi:   #9B3DAB;
+      --white:       #FFFFFF;
+      --grey:        #A0A0A0;
+      --border:      rgba(255,255,255,0.07);
+      --border-acc:  rgba(123,45,139,0.3);
+      --fg:          #F0F0F0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nav-back {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--grey);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--fg); }
+
+    /* HERO */
+    .results-hero {
+      padding: 7rem 0 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent-hi);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .results-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-sub {
+      font-size: 1rem;
+      color: var(--grey);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* CLIENT CARDS */
+    .results-grid {
+      padding: 6rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    .result-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--bg-raised);
+    }
+
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-card-logo {
+      width: 72px;
+      height: 58px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .result-card-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .result-card-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .result-card-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.3rem;
+    }
+
+    /* STATS ROW */
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-stat {
+      padding: 2rem;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .result-stat:last-child { border-right: none; }
+
+    .result-stat-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 2.8rem;
+      line-height: 1;
+      color: var(--accent-hi);
+    }
+
+    .result-stat-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.5rem;
+    }
+
+    /* BREAKDOWN */
+    .result-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .result-section {
+      padding: 2.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .result-section:last-child { border-right: none; }
+
+    .result-section h4 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-hi);
+      margin-bottom: 1rem;
+    }
+
+    .result-section p {
+      font-size: 0.9rem;
+      color: rgba(240,240,240,0.65);
+      line-height: 1.8;
+    }
+
+    .result-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .result-section ul li {
+      font-size: 0.9rem;
+      color: rgba(240,240,240,0.65);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.5;
+    }
+
+    .result-section ul li::before {
+      content: '◆';
+      font-size: 0.45rem;
+      color: var(--accent);
+      margin-top: 0.4rem;
+      flex-shrink: 0;
+    }
+
+    /* PLACEHOLDER STATE */
+    .placeholder {
+      color: rgba(160,160,160,0.35) !important;
+      font-style: italic;
+    }
+
+    /* FOOTER */
+    .results-footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
+      text-align: center;
+    }
+
+    .results-footer a {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey);
+      transition: color 0.2s;
+    }
+
+    .results-footer a:hover { color: var(--fg); }
+
+    @media (max-width: 700px) {
+      .result-stats { grid-template-columns: repeat(2, 1fr); }
+      .result-stat:nth-child(2) { border-right: none; }
+      .result-stat:nth-child(3) { border-top: 1px solid var(--border); }
+      .result-stat:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .result-breakdown { grid-template-columns: 1fr; }
+      .result-section { border-right: none; border-top: 1px solid var(--border); }
+      .result-section:first-child { border-top: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Colton Welgan</a>
+      <a href="index.html" class="nav-back">← Back to Portfolio</a>
+    </div>
+  </div>
+</nav>
+
+<section class="results-hero">
+  <div class="container">
+    <div class="section-label">Proof of Work</div>
+    <h1 class="results-headline">Results.</h1>
+    <p class="results-sub">A breakdown of every brand I've worked with — what I made, what it did, and the numbers behind it.</p>
+  </div>
+</section>
+
+<div class="container">
+  <div class="results-grid">
+
+    <!-- TRIIPS -->
+    <div class="result-card" id="triips">
+      <div class="result-card-header">
+        <div class="result-card-logo">
+          <img src="triips-logo.svg" alt="Triips">
+        </div>
+        <div>
+          <div class="result-card-name">Triips.com</div>
+          <div class="result-card-type">Organic UGC</div>
+        </div>
+      </div>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-num placeholder">—</div>
+          <div class="result-stat-label">Total Views</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-num placeholder">—</div>
+          <div class="result-stat-label">Videos Made</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-num placeholder">—</div>
+          <div class="result-stat-label">Avg. Watch Time</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-num placeholder">—</div>
+          <div class="result-stat-label">Top Video Views</div>
+        </div>
+      </div>
+
+      <div class="result-breakdown">
+        <div class="result-section">
+          <h4>What I Did</h4>
+          <ul>
+            <li class="placeholder">Placeholder — add formats and deliverables here</li>
+            <li class="placeholder">Placeholder — e.g. 3 organic TikTok scripts + shoots</li>
+            <li class="placeholder">Placeholder — e.g. Hook testing across 2 angles</li>
+          </ul>
+        </div>
+        <div class="result-section">
+          <h4>Results</h4>
+          <p class="placeholder">Placeholder — add key outcomes, engagement stats, or client feedback once campaign wraps.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="results-footer">
+  <div class="container">
+    <a href="index.html">← Back to coltonwelgan.com</a>
+  </div>
+</div>
+
+</body>
+</html>
