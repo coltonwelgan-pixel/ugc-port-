@@ -1,14 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
   <rect width="500" height="400" rx="40" ry="40" fill="#FFFFFF"/>
-  <!-- Arc text: Refresh your mind & body. -->
-  <path id="arc" d="M 100,270 A 165,165 0 0,1 400,270" fill="none"/>
-  <text font-family="Arial, sans-serif" font-size="22" font-weight="600" fill="#00BCD4" letter-spacing="1">
-    <textPath href="#arc" startOffset="8%">Refresh your mind &amp; body.</textPath>
-  </text>
-  <!-- Main Neuro wordmark -->
-  <text x="50%" y="62%" font-family="Georgia, 'Times New Roman', serif" font-size="130" font-weight="700" fill="#00BCD4" text-anchor="middle" dominant-baseline="middle" font-style="italic">Neuro</text>
-  <!-- Registered mark -->
-  <text x="390" y="195" font-family="Arial, sans-serif" font-size="24" fill="#00BCD4">®</text>
-  <!-- Subtitle -->
-  <text x="50%" y="82%" font-family="Arial, sans-serif" font-size="26" fill="#00BCD4" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">functional gum &amp; mints</text>
+  <text x="50%" y="52%" font-family="Georgia, 'Times New Roman', serif" font-size="140" font-weight="700" fill="#111111" text-anchor="middle" dominant-baseline="middle">Neuro</text>
+  <text x="310" y="178" font-family="Arial, sans-serif" font-size="28" fill="#111111">®</text>
+  <text x="50%" y="76%" font-family="Arial, sans-serif" font-size="28" fill="#111111" text-anchor="middle" dominant-baseline="middle" letter-spacing="0.5">functional gum &amp; mints</text>
 </svg>
