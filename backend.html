@@ -288,6 +288,7 @@
       <div class="nav-item" onclick="showPage('calendar')"><span class="icon">📅</span> Calendar</div>
       <div class="nav-item" onclick="showPage('clients')"><span class="icon">🤝</span> Clients</div>
       <div class="nav-item" onclick="showPage('revenue')"><span class="icon">💰</span> Revenue</div>
+      <div class="nav-item" onclick="showPage('meetings')"><span class="icon">🤙</span> Pipeline</div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user">welgancreative@gmail.com</div>
@@ -448,6 +449,50 @@
           <table>
             <thead><tr><th>Date</th><th>Client</th><th>Deliverable</th><th>Amount</th><th>Status</th><th>Notes</th><th></th></tr></thead>
             <tbody id="revenue-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PIPELINE / MEETINGS ── -->
+    <div id="page-meetings" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Pipeline</div>
+          <div class="page-subtitle">Deals in progress — who you're talking to and what's at stake</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary" onclick="openMeetingModal()">+ Add Deal</button>
+        </div>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:28px">
+        <div class="stat-card"><div class="label">Active Deals</div><div class="value" id="pipe-count">—</div><div class="sub">in pipeline</div></div>
+        <div class="stat-card"><div class="label">Pipeline Value</div><div class="value" id="pipe-value">—</div><div class="sub">potential revenue</div></div>
+        <div class="stat-card"><div class="label">Waiting to Sign</div><div class="value trend-warn" id="pipe-signing">—</div><div class="sub">deals nearly closed</div></div>
+        <div class="stat-card"><div class="label">Signed This Month</div><div class="value trend-good" id="pipe-signed">—</div><div class="sub">closed deals</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">All Deals</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input type="text" id="pipe-search" placeholder="Search…" oninput="renderMeetings()" style="max-width:180px">
+            <select id="pipe-stage-filter" onchange="renderMeetings()" style="width:auto">
+              <option value="">All Stages</option>
+              <option value="talking">Talking</option>
+              <option value="proposal">Proposal Sent</option>
+              <option value="negotiating">Negotiating</option>
+              <option value="waiting">Waiting to Sign</option>
+              <option value="signed">Signed</option>
+              <option value="lost">Lost</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Brand / Contact</th><th>Deal Value</th><th>Stage</th><th>Last Contact</th><th>Follow-up</th><th>Notes</th><th></th></tr></thead>
+            <tbody id="meetings-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -635,6 +680,65 @@
   </div>
 </div>
 
+<!-- Meeting Modal -->
+<div class="modal-overlay" id="modal-meeting" onclick="if(event.target===this)closeModal('modal-meeting')">
+  <div class="modal">
+    <div class="modal-title" id="meeting-modal-title">Add Deal</div>
+    <input type="hidden" id="meeting-id">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Brand / Company</label>
+        <input type="text" id="meeting-brand" placeholder="e.g. Athletic Greens">
+      </div>
+      <div class="form-group">
+        <label>Contact Name</label>
+        <input type="text" id="meeting-contact" placeholder="First Last">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Deal Value ($)</label>
+        <input type="number" id="meeting-value" placeholder="2000" min="0">
+      </div>
+      <div class="form-group">
+        <label>Contact Email</label>
+        <input type="email" id="meeting-email" placeholder="name@brand.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Stage</label>
+      <div class="pill-select" id="meeting-stage-pills">
+        <div class="pill active"  data-val="talking"     onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Talking</div>
+        <div class="pill"         data-val="proposal"    onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Proposal Sent</div>
+        <div class="pill"         data-val="negotiating" onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Negotiating</div>
+        <div class="pill"         data-val="waiting"     onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Waiting to Sign</div>
+        <div class="pill"         data-val="signed"      onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Signed</div>
+        <div class="pill"         data-val="lost"        onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Lost</div>
+      </div>
+      <input type="hidden" id="meeting-stage" value="talking">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Last Contact Date</label>
+        <input type="date" id="meeting-last">
+      </div>
+      <div class="form-group">
+        <label>Follow-up Date</label>
+        <input type="date" id="meeting-followup">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="meeting-notes" placeholder="What was discussed, what they need, next steps…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button id="meeting-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteMeeting()">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-meeting')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMeeting()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -679,16 +783,19 @@ function uid() {
 let clients      = [];
 let deliverables = [];
 let revenue      = [];
+let meetings     = [];
 
 function loadAll() {
   clients      = loadData('clients');
   deliverables = loadData('deliverables');
   revenue      = loadData('revenue');
+  meetings     = loadData('meetings');
 }
 function persist() {
   saveData('clients',      clients);
   saveData('deliverables', deliverables);
   saveData('revenue',      revenue);
+  saveData('meetings',     meetings);
 }
 
 /* ══════════════════════════════════════════
@@ -703,6 +810,7 @@ function startApp() {
   renderCalendar();
   renderClients();
   renderRevenue();
+  renderMeetings();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -716,15 +824,15 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  const labels = {dashboard:'dashboard',tracker:'tracker',calendar:'calendar',clients:'clients',revenue:'revenue'};
   document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.textContent.toLowerCase().includes(id)) n.classList.add('active');
+    if (n.textContent.toLowerCase().includes(id === 'meetings' ? 'pipeline' : id)) n.classList.add('active');
   });
   if (id === 'dashboard') renderDashboard();
   if (id === 'tracker')   renderKanban();
   if (id === 'calendar')  renderCalendar();
   if (id === 'clients')   renderClients();
   if (id === 'revenue')   renderRevenue();
+  if (id === 'meetings')  renderMeetings();
 }
 
 /* ══════════════════════════════════════════
@@ -1309,6 +1417,133 @@ function deleteRevenue() {
   closeModal('modal-revenue');
   toast('Payment deleted.');
   renderRevenue(); renderDashboard();
+}
+
+/* ══════════════════════════════════════════
+   PIPELINE / MEETINGS
+══════════════════════════════════════════ */
+
+const PIPE_STAGE_MAP = {
+  talking:     {label:'Talking',          cls:'badge-filmed'},
+  proposal:    {label:'Proposal Sent',    cls:'badge-editing'},
+  negotiating: {label:'Negotiating',      cls:'badge-sent'},
+  waiting:     {label:'Waiting to Sign',  cls:'badge-approved'},
+  signed:      {label:'Signed ✓',         cls:'badge-active'},
+  lost:        {label:'Lost',             cls:'badge-inactive'},
+};
+
+function pipeStageBadge(s) {
+  const m = PIPE_STAGE_MAP[s] || {label:s, cls:'badge-inactive'};
+  return `<span class="badge ${m.cls}">${m.label}</span>`;
+}
+
+function renderMeetings() {
+  const now   = new Date();
+  const active = meetings.filter(m => m.stage !== 'signed' && m.stage !== 'lost');
+  const pipeVal = active.reduce((s,m) => s + Number(m.value||0), 0);
+  const waiting = meetings.filter(m => m.stage === 'waiting').length;
+  const signedThisMonth = meetings.filter(m => {
+    if (m.stage !== 'signed' || !m.lastContact) return false;
+    const d = new Date(m.lastContact);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+
+  document.getElementById('pipe-count').textContent   = active.length;
+  document.getElementById('pipe-value').textContent   = fmt$(pipeVal);
+  document.getElementById('pipe-signing').textContent = waiting;
+  document.getElementById('pipe-signed').textContent  = signedThisMonth;
+
+  const q  = (document.getElementById('pipe-search').value || '').toLowerCase();
+  const sf = document.getElementById('pipe-stage-filter').value;
+  const filtered = meetings.filter(m =>
+    (!q  || (m.brand||'').toLowerCase().includes(q) || (m.contact||'').toLowerCase().includes(q)) &&
+    (!sf || m.stage === sf)
+  ).sort((a,b) => {
+    const order = {waiting:0,negotiating:1,proposal:2,talking:3,signed:4,lost:5};
+    return (order[a.stage]||9) - (order[b.stage]||9);
+  });
+
+  const tb = document.getElementById('meetings-tbody');
+  tb.innerHTML = filtered.length ? filtered.map(m => {
+    const fu = m.followup ? daysUntil(m.followup) : null;
+    const fuCls = fu !== null && fu < 0 ? 'k-card-overdue' : fu !== null && fu <= 2 ? 'k-card-due' : '';
+    const fuLbl = fu === null ? '—' : fu === 0 ? 'Today!' : fu < 0 ? `${Math.abs(fu)}d overdue` : fmtDate(m.followup);
+    return `<tr>
+      <td><strong>${m.brand||'—'}</strong><br><small style="color:var(--grey)">${m.contact||''} ${m.email ? '· '+m.email : ''}</small></td>
+      <td><strong>${m.value ? fmt$(m.value) : '—'}</strong></td>
+      <td>${pipeStageBadge(m.stage)}</td>
+      <td style="color:var(--grey)">${fmtDate(m.lastContact)}</td>
+      <td class="${fuCls}">${fuLbl}</td>
+      <td style="color:var(--grey);font-size:12px;max-width:200px">${m.notes||'—'}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="openMeetingModal('${m.id}')">Edit</button></td>
+    </tr>`;
+  }).join('') : '<tr class="empty-row"><td colspan="7">No deals yet — add your first prospect!</td></tr>';
+}
+
+function openMeetingModal(id) {
+  if (id) {
+    const m = meetings.find(x => x.id === id);
+    if (!m) return;
+    document.getElementById('meeting-modal-title').textContent    = 'Edit Deal';
+    document.getElementById('meeting-id').value                   = m.id;
+    document.getElementById('meeting-brand').value                = m.brand || '';
+    document.getElementById('meeting-contact').value              = m.contact || '';
+    document.getElementById('meeting-value').value                = m.value || '';
+    document.getElementById('meeting-email').value                = m.email || '';
+    document.getElementById('meeting-last').value                 = m.lastContact || '';
+    document.getElementById('meeting-followup').value             = m.followup || '';
+    document.getElementById('meeting-notes').value                = m.notes || '';
+    setPill('meeting-stage-pills', 'meeting-stage', m.stage || 'talking');
+    document.getElementById('meeting-delete-btn').style.display   = 'inline-flex';
+  } else {
+    document.getElementById('meeting-modal-title').textContent    = 'Add Deal';
+    document.getElementById('meeting-id').value                   = '';
+    document.getElementById('meeting-brand').value                = '';
+    document.getElementById('meeting-contact').value              = '';
+    document.getElementById('meeting-value').value                = '';
+    document.getElementById('meeting-email').value                = '';
+    document.getElementById('meeting-last').value                 = today();
+    document.getElementById('meeting-followup').value             = '';
+    document.getElementById('meeting-notes').value                = '';
+    setPill('meeting-stage-pills', 'meeting-stage', 'talking');
+    document.getElementById('meeting-delete-btn').style.display   = 'none';
+  }
+  openModal('modal-meeting');
+}
+
+function saveMeeting() {
+  const id  = document.getElementById('meeting-id').value;
+  const obj = {
+    id:          id || uid(),
+    brand:       document.getElementById('meeting-brand').value.trim(),
+    contact:     document.getElementById('meeting-contact').value.trim(),
+    value:       Number(document.getElementById('meeting-value').value),
+    email:       document.getElementById('meeting-email').value.trim(),
+    stage:       document.getElementById('meeting-stage').value,
+    lastContact: document.getElementById('meeting-last').value,
+    followup:    document.getElementById('meeting-followup').value,
+    notes:       document.getElementById('meeting-notes').value.trim(),
+    createdAt:   id ? (meetings.find(m=>m.id===id)||{}).createdAt : new Date().toISOString(),
+  };
+  if (!obj.brand) { toast('Please enter a brand name'); return; }
+
+  if (id) { meetings[meetings.findIndex(m=>m.id===id)] = obj; }
+  else    { meetings.push(obj); }
+
+  persist();
+  closeModal('modal-meeting');
+  toast(id ? 'Deal updated!' : 'Deal added!');
+  renderMeetings();
+}
+
+function deleteMeeting() {
+  const id = document.getElementById('meeting-id').value;
+  if (!confirm('Delete this deal?')) return;
+  meetings = meetings.filter(m => m.id !== id);
+  persist();
+  closeModal('modal-meeting');
+  toast('Deal deleted.');
+  renderMeetings();
 }
 </script>
 </body>
