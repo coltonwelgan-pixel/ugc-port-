@@ -616,6 +616,10 @@
       </div>
     </div>
     <div class="form-group">
+      <label>Videos Per Month <span style="color:var(--grey);font-weight:400">(fills calendar automatically — leave blank if not recurring)</span></label>
+      <input type="number" id="client-videos-per-month" placeholder="e.g. 30" min="0">
+    </div>
+    <div class="form-group">
       <label>Status</label>
       <div class="pill-select" id="client-status-pills">
         <div class="pill active" data-val="active"   onclick="selectPill(this,'client-status-pills','client-status')">Active</div>
@@ -1020,6 +1024,20 @@ function renderCalendar() {
   const daysInMo  = new Date(calYear, calMonth + 1, 0).getDate();
   const prevTotal = new Date(calYear, calMonth, 0).getDate();
 
+  // Build a map of day → recurring client events
+  // For a client with N videos/month across M days, spread evenly: post on days
+  // where Math.floor((d-1) * N / M) < Math.floor(d * N / M)
+  const recurringByDay = {};
+  clients.filter(c => c.videosPerMonth > 0 && c.status === 'active').forEach(c => {
+    const n = Math.min(c.videosPerMonth, daysInMo);
+    for (let d = 1; d <= daysInMo; d++) {
+      if (Math.floor((d - 1) * n / daysInMo) < Math.floor(d * n / daysInMo)) {
+        if (!recurringByDay[d]) recurringByDay[d] = [];
+        recurringByDay[d].push(c.name);
+      }
+    }
+  });
+
   let html = dayNames.map(d => `<div class="cal-day-header">${d}</div>`).join('');
 
   for (let i = firstDay - 1; i >= 0; i--)
@@ -1030,8 +1048,10 @@ function renderCalendar() {
     const isToday = ds === todayStr;
     const dueEvts  = deliverables.filter(x => x.dueDate  === ds);
     const postEvts = deliverables.filter(x => x.postDate === ds);
+    const recurring = recurringByDay[d] || [];
     html += `<div class="cal-day${isToday?' today':''}">
       <div class="cal-day-num" style="${isToday?'color:var(--accent-hi)':''}">${d}</div>
+      ${recurring.map(name => `<div class="cal-event cal-event-post" title="${name} (recurring)">${name.slice(0,16)}</div>`).join('')}
       ${dueEvts.map(x => `<div class="cal-event cal-event-due" onclick="openDeliverableModal('${x.id}')" title="${x.title}">🟡 ${x.title.slice(0,15)}</div>`).join('')}
       ${postEvts.map(x => `<div class="cal-event cal-event-post" onclick="openDeliverableModal('${x.id}')" title="${x.title}">🟣 ${x.title.slice(0,15)}</div>`).join('')}
     </div>`;
@@ -1289,6 +1309,7 @@ function openClientModal(id) {
     document.getElementById('client-contact-email').value       = c.contactEmail || '';
     document.getElementById('client-rate').value                = c.rate || '';
     document.getElementById('client-rate-type').value           = c.rateType || 'per video';
+    document.getElementById('client-videos-per-month').value   = c.videosPerMonth || '';
     document.getElementById('client-notes').value               = c.notes || '';
     setPill('client-status-pills', 'client-status', c.status || 'active');
     document.getElementById('client-delete-btn').style.display  = 'inline-flex';
@@ -1300,6 +1321,7 @@ function openClientModal(id) {
     document.getElementById('client-contact-email').value       = '';
     document.getElementById('client-rate').value                = '';
     document.getElementById('client-rate-type').value           = 'per video';
+    document.getElementById('client-videos-per-month').value   = '';
     document.getElementById('client-notes').value               = '';
     setPill('client-status-pills', 'client-status', 'active');
     document.getElementById('client-delete-btn').style.display  = 'none';
@@ -1315,9 +1337,10 @@ function saveClient() {
     contactName:  document.getElementById('client-contact-name').value.trim(),
     contactEmail: document.getElementById('client-contact-email').value.trim(),
     rate:         Number(document.getElementById('client-rate').value),
-    rateType:     document.getElementById('client-rate-type').value,
-    status:       document.getElementById('client-status').value,
-    notes:        document.getElementById('client-notes').value.trim(),
+    rateType:        document.getElementById('client-rate-type').value,
+    videosPerMonth:  Number(document.getElementById('client-videos-per-month').value) || 0,
+    status:          document.getElementById('client-status').value,
+    notes:           document.getElementById('client-notes').value.trim(),
     createdAt:    id ? (clients.find(c=>c.id===id)||{}).createdAt : new Date().toISOString(),
   };
   if (!obj.name) { toast('Please enter a brand name'); return; }
@@ -1328,7 +1351,7 @@ function saveClient() {
   persist();
   closeModal('modal-client');
   toast(id ? 'Client updated!' : 'Client added!');
-  renderClients(); renderDashboard(); renderKanban();
+  renderClients(); renderDashboard(); renderKanban(); renderCalendar();
 }
 
 function deleteClient() {
