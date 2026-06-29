@@ -1,12 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80">
-  <rect width="260" height="80" fill="#F0EBE3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+  <rect width="500" height="400" rx="40" ry="40" fill="#F0EBE3"/>
   <!-- Replit icon mark -->
-  <!-- top-left block (tall) -->
-  <rect x="18" y="14" width="22" height="22" rx="4" fill="#E8441A"/>
-  <!-- bottom-left block (small) -->
-  <rect x="18" y="44" width="22" height="22" rx="4" fill="#E8441A"/>
-  <!-- right block (middle height) -->
-  <rect x="44" y="29" width="22" height="22" rx="4" fill="#E8441A"/>
+  <rect x="80" y="100" width="90" height="90" rx="16" fill="#E8441A"/>
+  <rect x="80" y="210" width="90" height="90" rx="16" fill="#E8441A"/>
+  <rect x="185" y="155" width="90" height="90" rx="16" fill="#E8441A"/>
   <!-- Replit text -->
-  <text x="82" y="52" font-family="'Trebuchet MS', 'Gill Sans', Arial, sans-serif" font-size="32" font-weight="600" fill="#2B2B2B" letter-spacing="-0.5">Replit</text>
+  <text x="295" y="230" font-family="'Trebuchet MS', Arial, sans-serif" font-size="120" font-weight="700" fill="#2B2B2B" dominant-baseline="middle">Replit</text>
 </svg>
