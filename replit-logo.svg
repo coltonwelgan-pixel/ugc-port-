@@ -1,11 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80">
-  <rect width="220" height="80" fill="white"/>
-  <!-- Icon: top-left square -->
-  <rect x="20" y="12" width="26" height="26" rx="5" fill="#F26207"/>
-  <!-- Icon: bottom-left square -->
-  <rect x="20" y="42" width="26" height="26" rx="5" fill="#F26207"/>
-  <!-- Icon: right square (middle) -->
-  <rect x="50" y="27" width="26" height="26" rx="5" fill="#F26207"/>
-  <!-- replit text -->
-  <text x="90" y="52" font-family="'Arial Black', Arial, sans-serif" font-size="30" font-weight="900" fill="#1B1B1B" letter-spacing="-1">replit</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 80">
+  <rect width="260" height="80" fill="#F0EBE3"/>
+  <!-- Replit icon mark -->
+  <!-- top-left block (tall) -->
+  <rect x="18" y="14" width="22" height="22" rx="4" fill="#E8441A"/>
+  <!-- bottom-left block (small) -->
+  <rect x="18" y="44" width="22" height="22" rx="4" fill="#E8441A"/>
+  <!-- right block (middle height) -->
+  <rect x="44" y="29" width="22" height="22" rx="4" fill="#E8441A"/>
+  <!-- Replit text -->
+  <text x="82" y="52" font-family="'Trebuchet MS', 'Gill Sans', Arial, sans-serif" font-size="32" font-weight="600" fill="#2B2B2B" letter-spacing="-0.5">Replit</text>
 </svg>
