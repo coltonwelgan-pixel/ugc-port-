@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
   <rect width="500" height="400" rx="40" ry="40" fill="#F0EBE3"/>
-  <!-- Replit icon mark -->
-  <rect x="80" y="100" width="90" height="90" rx="16" fill="#E8441A"/>
-  <rect x="80" y="210" width="90" height="90" rx="16" fill="#E8441A"/>
-  <rect x="185" y="155" width="90" height="90" rx="16" fill="#E8441A"/>
-  <!-- Replit text -->
-  <text x="295" y="230" font-family="'Trebuchet MS', Arial, sans-serif" font-size="120" font-weight="700" fill="#2B2B2B" dominant-baseline="middle">Replit</text>
+  <!-- icon squares -->
+  <rect x="30" y="125" width="68" height="68" rx="11" fill="#E8441A"/>
+  <rect x="30" y="207" width="68" height="68" rx="11" fill="#E8441A"/>
+  <rect x="106" y="166" width="68" height="68" rx="11" fill="#E8441A"/>
+  <!-- Replit text — font-size 88 keeps "Replit" within 500px viewBox -->
+  <text x="192" y="207" font-family="'Trebuchet MS', Arial, sans-serif" font-size="88" font-weight="700" fill="#2B2B2B" dominant-baseline="middle">Replit</text>
 </svg>
