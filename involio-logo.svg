@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+  <rect width="500" height="400" rx="40" ry="40" fill="#0A0A0F"/>
+  <!-- Ring: left half darker blue -->
+  <path d="M250,80 A170,170 0 0,0 250,420 A110,110 0 0,1 250,140 A170,170 0 0,0 250,80 Z" fill="#4A5CDB"/>
+  <!-- Ring: right half lighter blue -->
+  <path d="M250,80 A170,170 0 0,1 250,420 A110,110 0 0,0 250,140 A170,170 0 0,1 250,80 Z" fill="#6B9BF4"/>
+  <!-- Center cutout -->
+  <circle cx="250" cy="200" r="55" fill="#0A0A0F"/>
+  <!-- Top divider dot -->
+  <circle cx="250" cy="85" r="10" fill="#0A0A0F"/>
+  <!-- Bottom divider dot -->
+  <circle cx="250" cy="315" r="10" fill="#0A0A0F"/>
+</svg>
