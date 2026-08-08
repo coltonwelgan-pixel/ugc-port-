@@ -413,47 +413,6 @@
     }
 
     /* ============================================================
-       STATS BAR
-    ============================================================ */
-    #stats {
-      background: var(--bg-raised);
-      border-bottom: 1px solid var(--border);
-      padding: 5rem 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .stat-item {
-      padding: 2.5rem 3rem;
-      border-right: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .stat-item:last-child { border-right: none; }
-
-    .stat-num {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3.5rem, 6vw, 6rem);
-      line-height: 1;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-num .hi { color: var(--accent); }
-
-    .stat-label {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--grey);
-      line-height: 1.5;
-    }
-
-    /* ============================================================
        ABOUT
     ============================================================ */
     #about {
@@ -956,14 +915,6 @@
       .nav-links { display: none !important; }
       .hamburger { display: flex; }
 
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-
-      .stat-item:nth-child(2) { border-right: none; }
-      .stat-item:nth-child(3),
-      .stat-item:nth-child(4) { border-top: 1px solid var(--border); }
-      .stat-item:nth-child(4) { border-right: none; }
-
-
       .formats-grid { grid-template-columns: 1fr; gap: 0; }
       .formats-grid .format-card:nth-child(10) { grid-column: span 1; }
 
@@ -976,7 +927,6 @@
       .hero-ctas { flex-direction: column; align-items: flex-start; }
       .btn { width: 100%; justify-content: center; }
 
-      #stats { padding: 3.5rem 0; }
       #about, #work, #formats, #contact { padding: 6rem 0; }
     }
 
@@ -1037,11 +987,13 @@
     <!-- REPLACE: Your display name -->
     <h1 class="hero-name display">Colton<br>Welgan.</h1>
 
-    <!-- REPLACE: Taglineupdate any time -->
-    <p class="hero-sub">
-      Story-driven, scroll-stopping UGC.<br>
-      The kind of content brands actually remember.
-    </p>
+    <div class="hero-pills">
+      <span class="pill">Tech</span>
+      <span class="pill">AI</span>
+      <span class="pill">UGC Creator</span>
+      <span class="pill">Marketer</span>
+      <span class="pill">Content Creator</span>
+    </div>
 
     <div class="hero-ctas">
       <!-- REPLACE: Update href to your preferred CTA destination -->
@@ -1086,38 +1038,6 @@
 </div>
 
 <!-- ============================================================
-     SECTION 2STATS BAR
-============================================================ -->
-<section id="stats">
-  <div class="container">
-    <div class="stats-grid">
-
-      <!-- REPLACE: Update all four stat numbers as your metrics grow -->
-      <div class="stat-item fade-up">
-        <div class="stat-num display"><span class="hi">20,000+</span></div>
-        <div class="stat-label">Organic Views<br>for 3 Brands</div>
-      </div>
-
-      <div class="stat-item fade-up delay-1">
-        <div class="stat-num display"><span class="hi">10</span></div>
-        <div class="stat-label">Ad Angles</div>
-      </div>
-
-      <div class="stat-item fade-up delay-2">
-        <div class="stat-num display"><span class="hi">Soon</span></div>
-        <div class="stat-label">Analytics Coming</div>
-      </div>
-
-      <div class="stat-item fade-up delay-3">
-        <div class="stat-num display"><span class="hi">YVR</span></div>
-        <div class="stat-label">Creator Based<br>in Vancouver</div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
      SECTION 3ABOUT
 ============================================================ -->
 <section id="about">
@@ -1137,11 +1057,27 @@
         <h2 class="about-headline display fade-up delay-1">Hey,<br>I'm Colton.</h2>
 
         <p class="about-body fade-up delay-2">
-          I'm a 22-year-old content creator based in Vancouver, and I'm obsessed with the mechanics of attention. My passion lies in the intersection of content marketing and brand strategy, specifically decoding exactly what makes an ad convert and why certain stories go viral.
+          Hey, I'm Colton, a 22-year-old UGC creator based in Vancouver, Canada, specializing in tech and AI/software brands.
         </p>
 
         <p class="about-body fade-up delay-3">
-          If I've learned one thing, it's that virality isn't luck — it's a scientific formula that each brand must master through specific hooks, formats, and even camera angles. In 2026, we're in an interest-based economy for content and social media, and if your content isn't getting thousands of views pre-post, there's no interest.
+          I create viral content that shows real use cases for your brand and product in such an organic way that users barely even recognize it as an ad! Content that gets your product in front of the people who actually need it, and gives them a reason to buy today, not "someday."
+        </p>
+
+        <p class="about-body fade-up delay-4">
+          With a background in sales, I understand the psychology behind what actually gets people to convert, and it's rarely a "BUY NOW." I know how to build desire and trust into a video so the sell feels invisible, not forced.
+        </p>
+
+        <p class="about-body fade-up delay-5">
+          I test new hooks, angles, and formats on every video because virality isn't luck, it's iteration. My real strength: spotting exactly where a brand's current content isn't landing, whether it's weak hooks, unclear value, or too "ad-like," and fixing it with UGC that feels native and converts.
+        </p>
+
+        <p class="about-body fade-up delay-5">
+          If your product isn't backed by UGC right now, you're leaving growth on the table.
+        </p>
+
+        <p class="about-body fade-up delay-5">
+          Let's talk about what your brand's next viral moment looks like. Send me a message and let's create it!
         </p>
       </div>
 
