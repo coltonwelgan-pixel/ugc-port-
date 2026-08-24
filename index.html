@@ -283,15 +283,6 @@
       color: var(--accent-hi);
     }
 
-    .hero-dot {
-      display: inline-block;
-      width: 0.22em;
-      height: 0.22em;
-      background: var(--accent);
-      margin-left: 0.1em;
-      vertical-align: middle;
-    }
-
     /* ---- Hero split layout ---- */
     .hero-inner {
       display: grid;
@@ -464,42 +455,6 @@
 
     .social-link:hover { color: var(--accent); }
     .social-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
-
-    /* ============================================================
-       MARQUEE TICKER
-    ============================================================ */
-    .ticker-wrap {
-      background: var(--accent);
-      overflow: hidden;
-      white-space: nowrap;
-      padding: 0.85rem 0;
-    }
-
-    .ticker-track {
-      display: inline-flex;
-      animation: ticker 22s linear infinite;
-    }
-
-    .ticker-track span {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      padding: 0 2.5rem;
-    }
-
-    .ticker-track span.dot {
-      color: rgba(255,255,255,0.4);
-      padding: 0;
-      letter-spacing: 0;
-      font-size: 0.5rem;
-    }
-
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
 
     /* ============================================================
        ABOUT
@@ -814,6 +769,12 @@
       object-fit: contain;
     }
 
+    .client-card-logo img.fill {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     .client-card-name {
       font-size: 0.8rem;
       font-weight: 700;
@@ -1056,7 +1017,7 @@
         <p class="hero-eyebrow">UGC Creator &middot; Based in Canada</p>
 
         <!-- REPLACE: Your display name -->
-        <h1 class="hero-name display">Colton<br>Welgan.<span class="hero-dot"></span></h1>
+        <h1 class="hero-name display">Colton<br>Welgan.</h1>
 
         <p class="hero-sub fade-up delay-1">
           Trend-led, conversion-driven UGC for tech &amp; AI brands. <span class="hi">The kind of content people actually stop for.</span>
@@ -1115,23 +1076,6 @@
 </section>
 
 <!-- ============================================================
-     MARQUEE TICKER
-============================================================ -->
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-track">
-    <!-- Duplicated for seamless infinite loop -->
-    <span>Virality Expert</span><span class="dot">◆</span>
-    <span>Brand Strategist</span><span class="dot">◆</span>
-    <span>Tech UGC</span><span class="dot">◆</span>
-    <span>Lifestyle UGC</span><span class="dot">◆</span>
-    <span>Virality Expert</span><span class="dot">◆</span>
-    <span>Brand Strategist</span><span class="dot">◆</span>
-    <span>Tech UGC</span><span class="dot">◆</span>
-    <span>Lifestyle UGC</span><span class="dot">◆</span>
-  </div>
-</div>
-
-<!-- ============================================================
      SECTION 4 — BRANDS
 ============================================================ -->
 <section id="clients">
@@ -1155,7 +1099,7 @@
       <div class="client-card">
         <a href="results.html">
           <div class="client-card-logo">
-            <img src="triips-logo.svg" alt="Triips">
+            <img src="triips-logo.svg" alt="Triips" class="fill">
           </div>
           <div class="client-card-name">Triips.com</div>
         </a>
@@ -1165,7 +1109,7 @@
           <div class="client-card-logo" style="background:#fff;">
             <img src="neuro-logo.svg" alt="Neuro">
           </div>
-          <div class="client-card-name">Neuro Gum &amp; Mints</div>
+          <div class="client-card-name">Neuro Gum</div>
         </a>
       </div>
       <div class="client-card">
