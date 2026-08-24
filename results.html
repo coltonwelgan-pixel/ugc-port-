@@ -169,7 +169,7 @@
     /* STATS ROW */
     .result-stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       border-bottom: 1px solid var(--border);
     }
 
@@ -337,9 +337,8 @@
 
     @media (max-width: 700px) {
       .result-stats { grid-template-columns: repeat(2, 1fr); }
-      .result-stat:nth-child(2) { border-right: none; }
-      .result-stat:nth-child(3) { border-top: 1px solid var(--border); }
-      .result-stat:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .result-stat:nth-child(2n) { border-right: none; }
+      .result-stat:nth-child(n+3) { border-top: 1px solid var(--border); }
       .result-breakdown { grid-template-columns: 1fr; }
       .result-section { border-right: none; border-top: 1px solid var(--border); }
       .result-section:first-child { border-top: none; }
@@ -397,10 +396,6 @@
           <div class="result-stat-num">0 → 5K</div>
           <div class="result-stat-label">IG Followers in 1 Month</div>
         </div>
-        <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Videos Made</div>
-        </div>
       </div>
 
       <div class="result-breakdown">
@@ -422,6 +417,56 @@
         <h4>Social Proof</h4>
         <div class="result-proof-shot">
           <img src="instagram-growth.jpg" alt="Colton Welgan's Instagram at 5,072 followers, 317 posts, with 1.3M views in the last 30 days">
+        </div>
+      </div>
+    </div>
+
+    <!-- OPENART -->
+    <div class="result-card" id="openart">
+      <div class="result-card-header">
+        <div class="result-card-logo" style="background:#000;">
+          <img src="openart-logo.png" alt="OpenArt">
+        </div>
+        <div>
+          <div class="result-card-name">OpenArt</div>
+          <div class="result-card-type">Organic UGC</div>
+        </div>
+      </div>
+
+      <p class="result-objective">
+        <strong>About:</strong> OpenArt is a generative AI art platform founded by ex-Googlers in San Francisco, on a mission to make creating incredible art accessible to everyone.
+      </p>
+      <p class="result-objective">
+        <strong>Objective:</strong> Show the full range of OpenArt's use cases — from AI "vibe directing" for YouTube videos to generating Airbnb-style walkthroughs — positioning it as the go-to leader in generative AI graphics.
+      </p>
+
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-num">377,000</div>
+          <div class="result-stat-label">Total Views</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-num">Aug 2</div>
+          <div class="result-stat-label">Campaign Started 2026</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-num">0 → 2K</div>
+          <div class="result-stat-label">Followers in Under 1 Month</div>
+        </div>
+      </div>
+
+      <div class="result-breakdown">
+        <div class="result-section">
+          <h4>What I Did</h4>
+          <ul>
+            <li>Organic UGC covering OpenArt's full toolkit — from AI "vibe directing" edits for YouTube to fully generated Airbnb walkthroughs</li>
+            <li>Use-case-driven videos showing real workflows, not just feature demos, to prove OpenArt as a genuine creative tool</li>
+            <li>Content positioning OpenArt as the go-to platform for generative AI graphics across multiple content angles</li>
+          </ul>
+        </div>
+        <div class="result-section">
+          <h4>Results</h4>
+          <p>Since kicking off Aug 2, 2026, the content has pulled in 377,000+ total views and grown the account from 0 to 2,000 followers in under a month — building OpenArt's name as a leader in generative AI graphics.</p>
         </div>
       </div>
     </div>
