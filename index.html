@@ -639,7 +639,7 @@
     }
 
     /* ============================================================
-       CLIENTS
+       CLIENTS / BRANDS
     ============================================================ */
     #clients {
       padding: 9rem 0;
@@ -649,113 +649,49 @@
     }
 
     .clients-header {
-      margin-bottom: 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      margin-bottom: 3.5rem;
     }
 
     .clients-headline {
       font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3rem, 8vw, 7rem);
-      line-height: 0.9;
+      font-size: clamp(2.75rem, 6.5vw, 5.5rem);
+      line-height: 0.92;
     }
 
-    /* ---- Clients marquee ---- */
-    .clients-marquee-wrap {
-      overflow: hidden;
-      width: 100%;
-      position: relative;
+    .clients-headline .accent-text {
+      color: var(--accent-hi);
     }
 
-    .clients-marquee-wrap::before,
-    .clients-marquee-wrap::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 120px;
-      z-index: 2;
-      pointer-events: none;
+    .clients-subtext {
+      font-style: italic;
+      color: var(--grey);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 400px;
     }
 
-    .clients-marquee-wrap::before {
-      left: 0;
-      background: linear-gradient(to right, var(--bg-raised), transparent);
+    .clients-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 0;
     }
 
-    .clients-marquee-wrap::after {
-      right: 0;
-      background: linear-gradient(to left, var(--bg-raised), transparent);
-    }
-
-    .clients-marquee-track {
-      display: flex;
-      gap: 4rem;
-      width: max-content;
-      animation: marquee-scroll 22s linear infinite;
-    }
-
-    .clients-marquee-wrap:hover .clients-marquee-track {
-      animation-play-state: paused;
-    }
-
-    @keyframes marquee-scroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+    /* ---- Brands grid ---- */
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
     }
 
     .client-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      min-width: 180px;
-    }
-
-    .client-card-logo {
-      width: 140px;
-      height: 112px;
-      border-radius: 18px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1E40FF;
-    }
-
-    .client-card-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .client-card-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--fg);
-    }
-
-    .client-card-type {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--grey);
-      margin-top: -0.5rem;
-    }
-
-    .client-card--empty {
-      min-width: 180px;
-      height: 148px;
-    }
-
-    .client-card--empty::before {
-      content: '';
-      display: block;
-      width: 100px;
-      height: 100px;
-      border-radius: 18px;
-      border: 1px dashed var(--border-acc);
-      margin: 0 auto;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
 
     .client-card a {
@@ -764,12 +700,50 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      gap: 1.1rem;
+      text-align: center;
+      padding: 2.75rem 1.5rem;
+      height: 100%;
+    }
+
+    .client-card-logo {
+      width: 92px;
+      height: 92px;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-acc);
+    }
+
+    .client-card-logo img {
+      width: 68%;
+      height: 68%;
+      object-fit: contain;
+    }
+
+    .client-card-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey);
     }
 
     .client-card:hover .client-card-logo {
-      transform: scale(1.04);
+      transform: scale(1.05);
       transition: transform 0.2s ease;
+    }
+
+    @media (max-width: 900px) {
+      .clients-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .clients-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ============================================================
@@ -948,7 +922,7 @@
 ============================================================ -->
 <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
   <!-- REPLACE: Update links if you add/remove sections -->
-  <a href="#clients" onclick="closeMobileMenu()">Clients</a>
+  <a href="#clients" onclick="closeMobileMenu()">Brands</a>
   <a href="#work"    onclick="closeMobileMenu()">Work</a>
   <a href="#about"   onclick="closeMobileMenu()">About</a>
   <a href="#contact" onclick="closeMobileMenu()">Contact</a>
@@ -962,7 +936,7 @@
   <a href="#hero" class="nav-logo">Colton Welgan</a>
 
   <ul class="nav-links">
-    <li><a href="#clients">Clients</a></li>
+    <li><a href="#clients">Brands</a></li>
     <li><a href="results.html">Results</a></li>
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -1086,166 +1060,89 @@
 </section>
 
 <!-- ============================================================
-     SECTION 4 — CLIENTS
+     SECTION 4 — BRANDS
 ============================================================ -->
 <section id="clients">
   <div class="container">
 
     <div class="clients-header">
-      <div class="section-label fade-up">Clients</div>
-      <h2 class="clients-headline display fade-up delay-1">
-        Clients.
-      </h2>
+      <div>
+        <div class="section-label fade-up">Brands</div>
+        <h2 class="clients-headline display fade-up delay-1">
+          Brands I've<br>Worked <span class="accent-text">With.</span>
+        </h2>
+      </div>
+      <p class="clients-subtext fade-up delay-1">
+        From indie startups to AI-first platforms, I create UGC that performs across organic and paid for brands big and small.
+      </p>
     </div>
 
-    <div class="clients-marquee-wrap fade-up delay-2">
-      <div class="clients-marquee-track">
-        <!-- set 1 -->
-        <div class="client-card">
-          <a href="results.html#triips">
-            <div class="client-card-logo">
-              <img src="triips-logo.svg" alt="Triips">
-            </div>
-            <div class="client-card-name">Triips.com</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="results.html#neuro">
-            <div class="client-card-logo" style="background:#fff;">
-              <img src="neuro-logo.svg" alt="Neuro">
-            </div>
-            <div class="client-card-name">Neuro Gum &amp; Mints</div>
-            <div class="client-card-type">Paid UGC Ads</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#F0EBE3;">
-              <img src="replit-logo.svg" alt="Replit">
-            </div>
-            <div class="client-card-name">Replit</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo">
-              <img src="involio-logo.svg" alt="Involio">
-            </div>
-            <div class="client-card-name">Involio</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#D1FE17;">
-              <img src="higgsfield-logo.png" alt="Higgsfield">
-            </div>
-            <div class="client-card-name">Higgsfield</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="anara-logo.png" alt="Anara">
-            </div>
-            <div class="client-card-name">Anara</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="openart-logo.png" alt="OpenArt">
-            </div>
-            <div class="client-card-name">OpenArt</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="cto-logo.jpg" alt="cto.new">
-            </div>
-            <div class="client-card-name">cto.new</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <!-- set 2 (duplicate for seamless loop) -->
-        <div class="client-card">
-          <a href="results.html#triips">
-            <div class="client-card-logo">
-              <img src="triips-logo.svg" alt="Triips">
-            </div>
-            <div class="client-card-name">Triips.com</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="results.html#neuro">
-            <div class="client-card-logo" style="background:#fff;">
-              <img src="neuro-logo.svg" alt="Neuro">
-            </div>
-            <div class="client-card-name">Neuro Gum &amp; Mints</div>
-            <div class="client-card-type">Paid UGC Ads</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#F0EBE3;">
-              <img src="replit-logo.svg" alt="Replit">
-            </div>
-            <div class="client-card-name">Replit</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo">
-              <img src="involio-logo.svg" alt="Involio">
-            </div>
-            <div class="client-card-name">Involio</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#D1FE17;">
-              <img src="higgsfield-logo.png" alt="Higgsfield">
-            </div>
-            <div class="client-card-name">Higgsfield</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="anara-logo.png" alt="Anara">
-            </div>
-            <div class="client-card-name">Anara</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="openart-logo.png" alt="OpenArt">
-            </div>
-            <div class="client-card-name">OpenArt</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="cto-logo.jpg" alt="cto.new">
-            </div>
-            <div class="client-card-name">cto.new</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
+    <div class="clients-divider fade-up delay-1"></div>
+
+    <div class="clients-grid fade-up delay-2">
+      <div class="client-card">
+        <a href="results.html#triips">
+          <div class="client-card-logo">
+            <img src="triips-logo.svg" alt="Triips">
+          </div>
+          <div class="client-card-name">Triips.com</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="results.html#neuro">
+          <div class="client-card-logo" style="background:#fff;">
+            <img src="neuro-logo.svg" alt="Neuro">
+          </div>
+          <div class="client-card-name">Neuro Gum &amp; Mints</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#F0EBE3;">
+            <img src="replit-logo.svg" alt="Replit">
+          </div>
+          <div class="client-card-name">Replit</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo">
+            <img src="involio-logo.svg" alt="Involio">
+          </div>
+          <div class="client-card-name">Involio</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#D1FE17;">
+            <img src="higgsfield-logo.png" alt="Higgsfield">
+          </div>
+          <div class="client-card-name">Higgsfield</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#000;">
+            <img src="anara-logo.png" alt="Anara">
+          </div>
+          <div class="client-card-name">Anara</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#000;">
+            <img src="openart-logo.png" alt="OpenArt">
+          </div>
+          <div class="client-card-name">OpenArt</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#000;">
+            <img src="cto-logo.jpg" alt="cto.new">
+          </div>
+          <div class="client-card-name">cto.new</div>
+        </a>
       </div>
     </div>
 
@@ -1344,7 +1241,7 @@
       <nav class="footer-right" aria-label="Footer navigation">
         <a href="#work">Work</a>
         <a href="#about">About</a>
-        <a href="#clients">Clients</a>
+        <a href="#clients">Brands</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
