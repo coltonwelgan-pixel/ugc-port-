@@ -799,6 +799,41 @@
     }
 
     /* ============================================================
+       NEWSLETTER
+    ============================================================ */
+    #newsletter {
+      padding: 7rem 0;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .newsletter-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .newsletter-inner .section-label {
+      justify-content: center;
+    }
+
+    .newsletter-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(2.75rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      margin-bottom: 1.5rem;
+    }
+
+    .newsletter-sub {
+      font-size: 1rem;
+      color: var(--grey);
+      line-height: 1.75;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ============================================================
        CONTACT
     ============================================================ */
     #contact {
@@ -1237,6 +1272,23 @@
       Scroll-stopping content built from scratch. Every hook intentional.
     </p>
 
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — NEWSLETTER
+============================================================ -->
+<section id="newsletter">
+  <div class="container">
+    <div class="newsletter-inner">
+      <div class="section-label fade-up">Newsletter</div>
+      <h2 class="newsletter-headline display fade-up delay-1">Get the Playbook.</h2>
+      <p class="newsletter-sub fade-up delay-2">
+        Behind-the-scenes breakdowns of what's actually working in UGC right now — hooks, formats, and the stuff brands pay for. Straight to your inbox.
+      </p>
+      <!-- REPLACE: swap this href for your Substack URL -->
+      <a href="#" target="_blank" rel="noopener" class="btn btn-filled fade-up delay-3">Subscribe on Substack →</a>
+    </div>
   </div>
 </section>
 
