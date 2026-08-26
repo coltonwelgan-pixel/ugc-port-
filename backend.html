@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -46,6 +47,7 @@
     .login-logo span { color: var(--accent-hi); }
     .login-sub { font-size: 13px; color: var(--grey); }
     .login-error { color: var(--danger); font-size: 13px; min-height: 18px; }
+    .config-warn { color: var(--warning); font-size: 12px; line-height: 1.5; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: 8px; padding: 10px 12px; display: none; }
 
     /* ── LAYOUT ── */
     #app { display: none; min-height: 100vh; }
@@ -106,6 +108,7 @@
     .btn-danger:hover { background: rgba(239,68,68,0.2); }
     .btn-full { width: 100%; justify-content: center; }
     .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
 
     /* ── CARDS ── */
     .card {
@@ -153,6 +156,8 @@
     .badge-pending   { background: rgba(245,158,11,0.15); color: #fbbf24; }
     .badge-invoiced  { background: rgba(59,130,246,0.15); color: #60a5fa; }
     .badge-paid      { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge-outlier-hi { background: rgba(245,158,11,0.18); color: #fbbf24; }
+    .badge-outlier-lo { background: rgba(239,68,68,0.14); color: #f87171; }
 
     /* ── PAGE HEADER ── */
     .page-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -242,6 +247,9 @@
       cursor: pointer; border: 1px solid var(--border-med); color: var(--grey); background: transparent; transition: all .15s;
     }
     .pill.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
+    .pill-account { display: inline-flex; align-items: center; gap: 2px; }
+    .pill-edit { cursor: pointer; color: var(--grey); font-size: 11px; padding: 6px 8px; border-radius: 100px; }
+    .pill-edit:hover { color: var(--white); background: var(--bg-hover); }
 
     /* ── TOAST ── */
     #toast {
@@ -265,6 +273,7 @@
       <div class="login-logo">WELGAN <span>CREATIVE</span></div>
       <div class="login-sub">Creator HQ — Private Dashboard</div>
     </div>
+    <div id="supabase-banner" class="config-warn">⚠️ Backend not connected yet. Follow BACKEND_SETUP.md to create your Supabase project, then add your Project URL + anon key to backend.html.</div>
     <div id="login-error" class="login-error"></div>
     <div class="form-group">
       <label>Email</label>
@@ -274,7 +283,7 @@
       <label>Password</label>
       <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <button class="btn btn-primary btn-full" onclick="doLogin()">Sign In →</button>
+    <button class="btn btn-primary btn-full" id="login-btn" onclick="doLogin()">Sign In →</button>
   </div>
 </div>
 
@@ -284,6 +293,7 @@
     <div class="sidebar-logo">WELGAN <span>HQ</span></div>
     <nav class="sidebar-nav">
       <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
+      <div class="nav-item" onclick="showPage('instagram')"><span class="icon">📈</span> Instagram Analytics</div>
       <div class="nav-item" onclick="showPage('tracker')"><span class="icon">🎬</span> Content Tracker</div>
       <div class="nav-item" onclick="showPage('calendar')"><span class="icon">📅</span> Calendar</div>
       <div class="nav-item" onclick="showPage('clients')"><span class="icon">🤝</span> Clients</div>
@@ -291,7 +301,7 @@
       <div class="nav-item" onclick="showPage('meetings')"><span class="icon">🤙</span> Pipeline</div>
     </nav>
     <div class="sidebar-footer">
-      <div class="sidebar-user">welgancreative@gmail.com</div>
+      <div class="sidebar-user" id="sidebar-user-email"></div>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">Sign Out</button>
     </div>
   </div>
@@ -310,6 +320,8 @@
         <div class="stat-card"><div class="label">Month Revenue</div><div class="value" id="stat-month-rev">—</div><div class="sub" id="stat-month-label">this month</div></div>
         <div class="stat-card"><div class="label">Open Revisions</div><div class="value trend-warn" id="stat-revisions">—</div><div class="sub">awaiting changes</div></div>
         <div class="stat-card"><div class="label">Year Revenue</div><div class="value" id="stat-year-rev">—</div><div class="sub" id="stat-year-label">this year</div></div>
+        <div class="stat-card"><div class="label">IG Views This Week</div><div class="value" id="stat-ig-week-views">—</div><div class="sub">combined, all accounts</div></div>
+        <div class="stat-card"><div class="label">Top Account (Week)</div><div class="value" id="stat-ig-top-account" style="font-size:20px">—</div><div class="sub" id="stat-ig-top-account-views"></div></div>
       </div>
 
       <div class="dash-grid">
@@ -330,6 +342,70 @@
               <tbody id="dash-clients-tbody"></tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INSTAGRAM ANALYTICS ── -->
+    <div id="page-instagram" class="page">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Instagram Analytics</div>
+          <div class="page-subtitle">Views, top performers, and earnings across your linked accounts</div>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost" onclick="openAccountModal()">+ Add Account</button>
+          <button class="btn btn-primary" onclick="openPostModal()">+ Log Video</button>
+        </div>
+      </div>
+
+      <div class="pill-select" id="ig-account-tabs" style="margin-bottom:24px"></div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="label">Views This Month</div><div class="value" id="ig-month-views">—</div><div class="sub" id="ig-month-sub"></div></div>
+        <div class="stat-card"><div class="label">Earnings So Far</div><div class="value trend-good" id="ig-earn-actual">—</div><div class="sub">at set CPM</div></div>
+        <div class="stat-card"><div class="label">Projected Month-End</div><div class="value" id="ig-earn-projected">—</div><div class="sub">run-rate projection</div></div>
+        <div class="stat-card"><div class="label">Avg CPM</div><div class="value" id="ig-avg-cpm">—</div><div class="sub">per 1,000 views</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:24px">
+        <div class="card-header">
+          <div class="pill-select" id="ig-period-pills">
+            <div class="pill active" data-val="week"  onclick="setIgPeriod('week')">Week</div>
+            <div class="pill"        data-val="month" onclick="setIgPeriod('month')">Month</div>
+            <div class="pill"        data-val="year"  onclick="setIgPeriod('year')">Year</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <button class="btn btn-ghost btn-sm" onclick="igPeriodShift(-1)">← Prev</button>
+            <strong id="ig-period-label" style="font-family:'Bebas Neue';font-size:18px;letter-spacing:.5px"></strong>
+            <button class="btn btn-ghost btn-sm" onclick="igPeriodShift(1)">Next →</button>
+          </div>
+        </div>
+
+        <div class="stats-grid" style="margin-bottom:20px">
+          <div class="stat-card"><div class="label">Total Views</div><div class="value" id="ig-p-views">—</div><div class="sub" id="ig-p-scope"></div></div>
+          <div class="stat-card"><div class="label">Posts</div><div class="value" id="ig-p-posts">—</div><div class="sub">logged</div></div>
+          <div class="stat-card"><div class="label">Avg Views / Post</div><div class="value" id="ig-p-avg">—</div><div class="sub">this period</div></div>
+        </div>
+
+        <div class="dash-grid" style="margin-bottom:20px">
+          <div class="card"><div class="card-header"><div class="card-title">🔥 Top Video</div></div><div id="ig-top-video"></div></div>
+          <div class="card"><div class="card-header"><div class="card-title">📉 Lowest Video</div></div><div id="ig-low-video"></div></div>
+        </div>
+
+        <div class="chart-container" id="ig-chart-wrap" style="display:none;margin-bottom:0">
+          <div class="card-header" style="margin-bottom:16px"><div class="card-title" id="ig-chart-title">Views Breakdown</div></div>
+          <div class="chart-inner"><canvas id="ig-chart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Logged Videos</div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date</th><th>Account</th><th>Caption</th><th>Views</th><th>Likes</th><th>Comments</th><th></th><th></th></tr></thead>
+            <tbody id="ig-posts-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -745,82 +821,203 @@
   </div>
 </div>
 
+<!-- IG Account Modal -->
+<div class="modal-overlay" id="modal-ig-account" onclick="if(event.target===this)closeModal('modal-ig-account')">
+  <div class="modal">
+    <div class="modal-title" id="ig-account-modal-title">Add Account</div>
+    <input type="hidden" id="ig-acc-id">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Handle</label>
+        <input type="text" id="ig-acc-handle" placeholder="@yourhandle">
+      </div>
+      <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" id="ig-acc-name" placeholder="e.g. Personal Brand">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Profile URL</label>
+      <input type="text" id="ig-acc-url" placeholder="https://instagram.com/yourhandle">
+    </div>
+    <div class="form-group">
+      <label>CPM ($ per 1,000 views)</label>
+      <input type="number" id="ig-acc-cpm" min="0" step="0.1" placeholder="5">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="ig-acc-notes" placeholder="Niche, posting cadence, goals…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button id="ig-acc-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteIgAccount()">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-ig-account')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveIgAccount()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- IG Post Modal -->
+<div class="modal-overlay" id="modal-ig-post" onclick="if(event.target===this)closeModal('modal-ig-post')">
+  <div class="modal">
+    <div class="modal-title" id="ig-post-modal-title">Log Video</div>
+    <input type="hidden" id="ig-post-id">
+    <div class="form-group">
+      <label>Account</label>
+      <select id="ig-post-account"></select>
+    </div>
+    <div class="form-group">
+      <label>Caption / Title</label>
+      <input type="text" id="ig-post-caption" placeholder="e.g. Morning routine reel">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Post Date</label>
+        <input type="date" id="ig-post-date">
+      </div>
+      <div class="form-group">
+        <label>Views</label>
+        <input type="number" id="ig-post-views" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Likes</label>
+        <input type="number" id="ig-post-likes" min="0" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>Comments</label>
+        <input type="number" id="ig-post-comments" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Post URL (optional)</label>
+      <input type="text" id="ig-post-url" placeholder="https://instagram.com/reel/...">
+    </div>
+    <div class="modal-footer">
+      <button id="ig-post-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteIgPost()">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-ig-post')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveIgPost()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 /* ══════════════════════════════════════════
+   SUPABASE CONFIG
+   Fill these in after creating your project — see BACKEND_SETUP.md.
+   The anon/public key is safe to expose client-side; access is gated by
+   Row Level Security, which only lets an authenticated user read/write.
+══════════════════════════════════════════ */
+const SUPABASE_URL = 'https://tfladstuvagsuzzdtiup.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmbGFkc3R1dmFnc3V6emR0aXVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NjY3NDgsImV4cCI6MjEwMzM0Mjc0OH0.LU01RHcQTyM5s4Z3OHIrm_bLFbLzLVILHCo5iW1wRxA';
+const supabaseConfigured = SUPABASE_URL.startsWith('http') && SUPABASE_KEY.startsWith('eyJ');
+const sb = supabaseConfigured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+let currentUserEmail = '';
+
+/* ══════════════════════════════════════════
    AUTH
 ══════════════════════════════════════════ */
-const AUTH_EMAIL = 'welgancreative@gmail.com';
-const AUTH_PASS  = 'MEDIAman';
-const SESSION_KEY = 'cwHQ_session';
-
-function doLogin() {
-  const em  = document.getElementById('login-email').value.trim().toLowerCase();
+async function doLogin() {
+  const em  = document.getElementById('login-email').value.trim();
   const pw  = document.getElementById('login-password').value;
   const err = document.getElementById('login-error');
-  if (em === AUTH_EMAIL.toLowerCase() && pw === AUTH_PASS) {
-    sessionStorage.setItem(SESSION_KEY, '1');
-    err.textContent = '';
-    startApp();
-  } else {
-    err.textContent = 'Incorrect email or password.';
-  }
+  err.textContent = '';
+  if (!supabaseConfigured) { err.textContent = 'Backend not connected yet — see BACKEND_SETUP.md.'; return; }
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  const { data, error } = await sb.auth.signInWithPassword({ email: em, password: pw });
+  btn.disabled = false; btn.textContent = 'Sign In →';
+  if (error) { err.textContent = 'Incorrect email or password.'; return; }
+  currentUserEmail = data.user.email;
+  startApp();
 }
 
-function doLogout() {
-  sessionStorage.removeItem(SESSION_KEY);
+async function doLogout() {
+  if (sb) await sb.auth.signOut();
   location.reload();
 }
 
 /* ══════════════════════════════════════════
-   DATA LAYER  (localStorage)
+   DATA LAYER  (Supabase)
 ══════════════════════════════════════════ */
-function loadData(key) {
-  try { return JSON.parse(localStorage.getItem('cwHQ_' + key)) || []; } catch { return []; }
+async function dbSelect(table) {
+  const { data, error } = await sb.from(table).select('*').order('created_at', { ascending: true });
+  if (error) { console.error(error); toast('Error loading ' + table); return []; }
+  return data;
 }
-function saveData(key, arr) {
-  localStorage.setItem('cwHQ_' + key, JSON.stringify(arr));
+async function dbInsert(table, obj) {
+  const { data, error } = await sb.from(table).insert(obj).select().single();
+  if (error) { toast('Save failed: ' + error.message); throw error; }
+  return data;
 }
-function uid() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+async function dbUpdate(table, id, obj) {
+  const { data, error } = await sb.from(table).update(obj).eq('id', id).select().single();
+  if (error) { toast('Update failed: ' + error.message); throw error; }
+  return data;
 }
+async function dbDelete(table, id) {
+  const { error } = await sb.from(table).delete().eq('id', id);
+  if (error) { toast('Delete failed: ' + error.message); throw error; }
+}
+
+/* camelCase (JS) <-> snake_case (DB) mappers */
+function toDbClient(o)   { return { name:o.name, contact_name:o.contactName, contact_email:o.contactEmail, rate:o.rate, rate_type:o.rateType, videos_per_month:o.videosPerMonth, status:o.status, notes:o.notes }; }
+function fromDbClient(r) { return { id:r.id, name:r.name, contactName:r.contact_name||'', contactEmail:r.contact_email||'', rate:Number(r.rate)||0, rateType:r.rate_type||'per video', videosPerMonth:Number(r.videos_per_month)||0, status:r.status||'active', notes:r.notes||'', createdAt:r.created_at }; }
+
+function toDbDeliverable(o)   { return { title:o.title, client_id:o.clientId||null, content_type:o.contentType, stage:o.stage, due_date:o.dueDate||null, post_date:o.postDate||null, platform:o.platform, revision_count:o.revisions, notes:o.notes }; }
+function fromDbDeliverable(r) { return { id:r.id, title:r.title, clientId:r.client_id, contentType:r.content_type||'UGC Video', stage:r.stage||'scripted', dueDate:r.due_date||'', postDate:r.post_date||'', platform:r.platform||'TikTok', revisions:Number(r.revision_count)||0, notes:r.notes||'', createdAt:r.created_at }; }
+
+function toDbRevenue(o)   { return { client_id:o.clientId||null, deliverable_id:o.deliverableId||null, amount:o.amount, date:o.date||null, status:o.status, notes:o.notes }; }
+function fromDbRevenue(r) { return { id:r.id, clientId:r.client_id, deliverableId:r.deliverable_id, amount:Number(r.amount)||0, date:r.date||'', status:r.status||'pending', notes:r.notes||'', createdAt:r.created_at }; }
+
+function toDbMeeting(o)   { return { brand:o.brand, contact:o.contact, email:o.email, value:o.value, stage:o.stage, last_contact:o.lastContact||null, followup:o.followup||null, notes:o.notes }; }
+function fromDbMeeting(r) { return { id:r.id, brand:r.brand, contact:r.contact||'', email:r.email||'', value:Number(r.value)||0, stage:r.stage||'talking', lastContact:r.last_contact||'', followup:r.followup||'', notes:r.notes||'', createdAt:r.created_at }; }
+
+function toDbIgAccount(o)   { return { handle:o.handle, display_name:o.displayName, profile_url:o.profileUrl, cpm:o.cpm, notes:o.notes }; }
+function fromDbIgAccount(r) { return { id:r.id, handle:r.handle, displayName:r.display_name||'', profileUrl:r.profile_url||'', cpm:Number(r.cpm)||5, notes:r.notes||'', createdAt:r.created_at }; }
+
+function toDbIgPost(o)   { return { account_id:o.accountId, caption:o.caption, post_date:o.postDate, views:o.views, likes:o.likes, comments:o.comments, post_url:o.postUrl }; }
+function fromDbIgPost(r) { return { id:r.id, accountId:r.account_id, caption:r.caption||'', postDate:r.post_date, views:Number(r.views)||0, likes:Number(r.likes)||0, comments:Number(r.comments)||0, postUrl:r.post_url||'', createdAt:r.created_at }; }
 
 let clients      = [];
 let deliverables = [];
 let revenue      = [];
 let meetings     = [];
-
-function loadAll() {
-  clients      = loadData('clients');
-  deliverables = loadData('deliverables');
-  revenue      = loadData('revenue');
-  meetings     = loadData('meetings');
-}
-function persist() {
-  saveData('clients',      clients);
-  saveData('deliverables', deliverables);
-  saveData('revenue',      revenue);
-  saveData('meetings',     meetings);
-}
+let igAccounts   = [];
+let igPosts      = [];
 
 /* ══════════════════════════════════════════
    APP INIT
 ══════════════════════════════════════════ */
-function startApp() {
+async function startApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  loadAll();
-  renderDashboard();
-  renderKanban();
-  renderCalendar();
-  renderClients();
-  renderRevenue();
-  renderMeetings();
+  document.getElementById('sidebar-user-email').textContent = currentUserEmail || '';
+
+  const [cRows, dRows, rRows, mRows, iaRows, ipRows] = await Promise.all([
+    dbSelect('clients'), dbSelect('deliverables'), dbSelect('revenue'), dbSelect('meetings'),
+    dbSelect('ig_accounts'), dbSelect('ig_posts')
+  ]);
+  clients      = cRows.map(fromDbClient);
+  deliverables = dRows.map(fromDbDeliverable);
+  revenue      = rRows.map(fromDbRevenue);
+  meetings     = mRows.map(fromDbMeeting);
+  igAccounts   = iaRows.map(fromDbIgAccount);
+  igPosts      = ipRows.map(fromDbIgPost);
+
+  renderDashboard(); renderInstagram(); renderKanban(); renderCalendar(); renderClients(); renderRevenue(); renderMeetings();
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  if (sessionStorage.getItem(SESSION_KEY) === '1') startApp();
+window.addEventListener('DOMContentLoaded', async () => {
+  if (!supabaseConfigured) {
+    document.getElementById('supabase-banner').style.display = 'block';
+    return;
+  }
+  const { data } = await sb.auth.getSession();
+  if (data.session) { currentUserEmail = data.session.user.email; startApp(); }
 });
 
 /* ══════════════════════════════════════════
@@ -834,6 +1031,7 @@ function showPage(id) {
     if (n.textContent.toLowerCase().includes(id === 'meetings' ? 'pipeline' : id)) n.classList.add('active');
   });
   if (id === 'dashboard') renderDashboard();
+  if (id === 'instagram') renderInstagram();
   if (id === 'tracker')   renderKanban();
   if (id === 'calendar')  renderCalendar();
   if (id === 'clients')   renderClients();
@@ -851,6 +1049,15 @@ function clientName(id) {
 function fmt$(n) {
   return '$' + Number(n || 0).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
 }
+function fmtNum(n) {
+  return Number(n || 0).toLocaleString('en-US');
+}
+function fmtCompact(n) {
+  n = Number(n || 0);
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+  if (n >= 1000)    return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+  return String(Math.round(n));
+}
 function fmtDate(d) {
   if (!d) return '—';
   const [y, m, day] = d.split('-');
@@ -864,6 +1071,15 @@ function daysUntil(d) {
   const diff = new Date(d + 'T00:00:00') - new Date(today() + 'T00:00:00');
   return Math.round(diff / 86400000);
 }
+function mondayOf(d) {
+  const dt = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const day = dt.getDay();
+  const diff = (day === 0 ? -6 : 1) - day;
+  dt.setDate(dt.getDate() + diff);
+  return dt;
+}
+function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function stageBadge(s) {
   const map = {scripted:'Scripted',filmed:'Filmed',editing:'Editing',sent:'Sent',approved:'Approved',revision:'Revision',posted:'Posted'};
   return `<span class="badge badge-${s}">${map[s] || s}</span>`;
@@ -933,6 +1149,20 @@ function renderDashboard() {
   document.getElementById('stat-year-rev').textContent   = fmt$(yearPaid);
   document.getElementById('stat-year-label').textContent = now.getFullYear() + ' collected';
 
+  // Instagram — this week
+  const wkStart = mondayOf(new Date());
+  const wkEnd   = addDays(wkStart, 6);
+  const wkPosts = igPosts.filter(p => p.postDate && p.postDate >= toISO(wkStart) && p.postDate <= toISO(wkEnd));
+  const wkViews = wkPosts.reduce((s,p) => s + Number(p.views||0), 0);
+  document.getElementById('stat-ig-week-views').textContent = fmtCompact(wkViews);
+
+  const byAccount = {};
+  wkPosts.forEach(p => { byAccount[p.accountId] = (byAccount[p.accountId]||0) + Number(p.views||0); });
+  const topAccId = Object.keys(byAccount).sort((a,b) => byAccount[b]-byAccount[a])[0];
+  const topAcc = topAccId ? igAccounts.find(a => a.id === topAccId) : null;
+  document.getElementById('stat-ig-top-account').textContent = topAcc ? topAcc.handle : '—';
+  document.getElementById('stat-ig-top-account-views').textContent = topAcc ? fmtCompact(byAccount[topAccId]) + ' views' : 'no videos logged yet';
+
   // due soon
   const dueSoon = deliverables
     .filter(d => d.dueDate && d.stage !== 'posted')
@@ -957,6 +1187,334 @@ function renderDashboard() {
     return `<tr onclick="openClientModal('${c.id}')" style="cursor:pointer">
       <td><strong>${c.name}</strong></td><td>${rate}</td><td>${vids}</td></tr>`;
   }).join('') : '<tr class="empty-row"><td colspan="3">No active clients yet</td></tr>';
+}
+
+/* ══════════════════════════════════════════
+   INSTAGRAM ANALYTICS
+══════════════════════════════════════════ */
+let igActiveAccount = null;   // null = All Accounts
+let igPeriodMode     = 'week';
+let igPeriodDate     = new Date();
+let igChartInst      = null;
+
+function renderInstagram() {
+  renderIgAccountChips();
+  renderIgMonthCards();
+  renderInstagramPeriod();
+}
+
+function renderIgAccountChips() {
+  const wrap = document.getElementById('ig-account-tabs');
+  const allPill = `<div class="pill${igActiveAccount===null?' active':''}" onclick="selectIgAccount(null)">All Accounts</div>`;
+  const accPills = igAccounts.map(a => `
+    <div class="pill-account">
+      <span class="pill${igActiveAccount===a.id?' active':''}" onclick="selectIgAccount('${a.id}')">${a.handle}</span>
+      <span class="pill-edit" onclick="openAccountModal('${a.id}')" title="Edit account">✎</span>
+    </div>`).join('');
+  wrap.innerHTML = allPill + accPills + (igAccounts.length ? '' : '<span style="color:var(--grey);font-size:13px;padding:6px 0">No accounts yet — add your first Instagram account.</span>');
+}
+
+function selectIgAccount(id) {
+  igActiveAccount = id;
+  renderIgAccountChips();
+  renderIgMonthCards();
+  renderInstagramPeriod();
+}
+
+function scopedPosts() {
+  return igActiveAccount ? igPosts.filter(p => p.accountId === igActiveAccount) : igPosts.slice();
+}
+function postsInRange(start, end) {
+  const s = toISO(start), e = toISO(end);
+  return scopedPosts().filter(p => p.postDate && p.postDate >= s && p.postDate <= e);
+}
+
+function renderIgMonthCards() {
+  const now   = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  const end   = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  const daysInMonth = end.getDate();
+  const dayOfMonth  = now.getDate();
+
+  const scopedAccounts = igActiveAccount ? igAccounts.filter(a => a.id === igActiveAccount) : igAccounts;
+  const posts = postsInRange(start, end);
+  const totalViews = posts.reduce((s,p) => s + Number(p.views||0), 0);
+
+  let actualEarnings = 0, projectedEarnings = 0;
+  scopedAccounts.forEach(a => {
+    const accViews = posts.filter(p => p.accountId === a.id).reduce((s,p) => s + Number(p.views||0), 0);
+    actualEarnings += accViews/1000 * Number(a.cpm||0);
+    const projAccViews = dayOfMonth ? (accViews/dayOfMonth) * daysInMonth : accViews;
+    projectedEarnings += projAccViews/1000 * Number(a.cpm||0);
+  });
+
+  document.getElementById('ig-month-views').textContent      = fmtCompact(totalViews);
+  document.getElementById('ig-month-sub').textContent        = MONTH_NAMES[now.getMonth()] + ' so far';
+  document.getElementById('ig-earn-actual').textContent      = fmt$(actualEarnings);
+  document.getElementById('ig-earn-projected').textContent   = fmt$(projectedEarnings);
+  const avgCpm = scopedAccounts.length ? scopedAccounts.reduce((s,a) => s + Number(a.cpm||0), 0) / scopedAccounts.length : 0;
+  document.getElementById('ig-avg-cpm').textContent = fmt$(avgCpm);
+}
+
+function getIgPeriodRange() {
+  if (igPeriodMode === 'week') {
+    const start = mondayOf(igPeriodDate);
+    const end   = addDays(start, 6);
+    return { start, end, label: `${start.toLocaleDateString('en-US',{month:'short',day:'numeric'})} – ${end.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}` };
+  }
+  if (igPeriodMode === 'month') {
+    const start = new Date(igPeriodDate.getFullYear(), igPeriodDate.getMonth(), 1);
+    const end   = new Date(igPeriodDate.getFullYear(), igPeriodDate.getMonth()+1, 0);
+    return { start, end, label: `${MONTH_NAMES[start.getMonth()]} ${start.getFullYear()}` };
+  }
+  const start = new Date(igPeriodDate.getFullYear(), 0, 1);
+  const end   = new Date(igPeriodDate.getFullYear(), 11, 31);
+  return { start, end, label: `${start.getFullYear()}` };
+}
+
+function setIgPeriod(mode) {
+  igPeriodMode = mode;
+  igPeriodDate = new Date();
+  document.querySelectorAll('#ig-period-pills .pill').forEach(p => p.classList.toggle('active', p.dataset.val === mode));
+  renderInstagramPeriod();
+}
+
+function igPeriodShift(dir) {
+  if (igPeriodMode === 'week')  igPeriodDate = addDays(igPeriodDate, 7*dir);
+  if (igPeriodMode === 'month') igPeriodDate = new Date(igPeriodDate.getFullYear(), igPeriodDate.getMonth()+dir, 1);
+  if (igPeriodMode === 'year')  igPeriodDate = new Date(igPeriodDate.getFullYear()+dir, 0, 1);
+  renderInstagramPeriod();
+}
+
+function outlierBadge(post) {
+  const others = igPosts.filter(p => p.accountId === post.accountId && p.id !== post.id);
+  if (others.length < 3) return '';
+  const avg = others.reduce((s,p) => s + Number(p.views||0), 0) / others.length;
+  if (avg <= 0) return '';
+  const ratio = Number(post.views||0) / avg;
+  if (ratio >= 2)   return '<span class="badge badge-outlier-hi" title="2x+ this account\'s average views">🔥 Outlier</span>';
+  if (ratio <= 0.4) return '<span class="badge badge-outlier-lo" title="Well below this account\'s average views">⚠️ Underperformer</span>';
+  return '';
+}
+
+function igVideoCardHtml(p) {
+  const acc = igAccounts.find(a => a.id === p.accountId);
+  return `<div>
+    <div style="font-size:22px;font-family:'Bebas Neue';letter-spacing:1px">${fmtNum(p.views)} views</div>
+    <div style="font-size:13px;color:var(--grey-light);margin:6px 0">${p.caption || '(no caption)'}</div>
+    <div style="font-size:12px;color:var(--grey)">${acc ? acc.handle : ''} · ${fmtDate(p.postDate)} ${outlierBadge(p)}</div>
+    ${p.postUrl ? `<a href="${p.postUrl}" target="_blank" rel="noopener" style="font-size:12px;color:var(--accent-hi)">View post →</a>` : ''}
+  </div>`;
+}
+
+function renderInstagramPeriod() {
+  const { start, end, label } = getIgPeriodRange();
+  document.getElementById('ig-period-label').textContent = label;
+  const posts = postsInRange(start, end).sort((a,b) => new Date(b.postDate) - new Date(a.postDate));
+
+  const totalViews = posts.reduce((s,p) => s + Number(p.views||0), 0);
+  document.getElementById('ig-p-views').textContent = fmtCompact(totalViews);
+  document.getElementById('ig-p-scope').textContent = igActiveAccount ? (igAccounts.find(a=>a.id===igActiveAccount)?.handle || '') : 'all accounts';
+  document.getElementById('ig-p-posts').textContent = posts.length;
+  document.getElementById('ig-p-avg').textContent   = fmtCompact(posts.length ? Math.round(totalViews/posts.length) : 0);
+
+  const top = posts.length ? posts.reduce((a,b) => Number(b.views||0) > Number(a.views||0) ? b : a) : null;
+  const low = posts.length ? posts.reduce((a,b) => Number(b.views||0) < Number(a.views||0) ? b : a) : null;
+  document.getElementById('ig-top-video').innerHTML = top ? igVideoCardHtml(top) : '<p style="color:var(--grey)">No videos logged for this period.</p>';
+  document.getElementById('ig-low-video').innerHTML = posts.length > 1 ? igVideoCardHtml(low) : (posts.length === 1 ? '<p style="color:var(--grey)">Need 2+ videos to compare.</p>' : '');
+
+  renderIgChart(start, end);
+  renderIgPostsTable(posts);
+}
+
+function renderIgChart(start, end) {
+  const wrap = document.getElementById('ig-chart-wrap');
+  if (igPeriodMode === 'week') { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+
+  let labels, data;
+  if (igPeriodMode === 'month') {
+    const buckets = new Map();
+    let cursor = mondayOf(start);
+    while (cursor <= end) { buckets.set(toISO(cursor), 0); cursor = addDays(cursor, 7); }
+    postsInRange(start, end).forEach(p => {
+      const wk = toISO(mondayOf(new Date(p.postDate + 'T00:00:00')));
+      buckets.set(wk, (buckets.get(wk) || 0) + Number(p.views||0));
+    });
+    labels = [...buckets.keys()].map(k => 'Wk of ' + new Date(k + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+    data = [...buckets.values()];
+    document.getElementById('ig-chart-title').textContent = 'Weekly Views This Month';
+  } else {
+    labels = MONTH_NAMES.map(m => m.slice(0,3));
+    data = Array(12).fill(0);
+    postsInRange(start, end).forEach(p => { data[new Date(p.postDate + 'T00:00:00').getMonth()] += Number(p.views||0); });
+    document.getElementById('ig-chart-title').textContent = 'Monthly Views This Year';
+  }
+
+  const ctx = document.getElementById('ig-chart').getContext('2d');
+  if (igChartInst) igChartInst.destroy();
+  igChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Views', data, backgroundColor: '#7B2D8Bbb', borderColor: '#9B3DAB', borderWidth: 1 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color:'#888' }, grid: { color:'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color:'#888', callback: v => fmtCompact(v) }, grid: { color:'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+}
+
+function renderIgPostsTable(posts) {
+  const tb = document.getElementById('ig-posts-tbody');
+  tb.innerHTML = posts.length ? posts.map(p => {
+    const acc = igAccounts.find(a => a.id === p.accountId);
+    return `<tr>
+      <td>${fmtDate(p.postDate)}</td>
+      <td>${acc ? acc.handle : '—'}</td>
+      <td style="max-width:220px;color:var(--grey-light)">${p.caption || '—'}</td>
+      <td><strong>${fmtNum(p.views)}</strong></td>
+      <td>${fmtNum(p.likes)}</td>
+      <td>${fmtNum(p.comments)}</td>
+      <td>${outlierBadge(p)}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="openPostModal('${p.id}')">Edit</button></td>
+    </tr>`;
+  }).join('') : '<tr class="empty-row"><td colspan="8">No videos logged for this period yet.</td></tr>';
+}
+
+/* ── IG Account Modal ── */
+function openAccountModal(id) {
+  if (id) {
+    const a = igAccounts.find(x => x.id === id);
+    if (!a) return;
+    document.getElementById('ig-account-modal-title').textContent = 'Edit Account';
+    document.getElementById('ig-acc-id').value      = a.id;
+    document.getElementById('ig-acc-handle').value  = a.handle || '';
+    document.getElementById('ig-acc-name').value    = a.displayName || '';
+    document.getElementById('ig-acc-url').value     = a.profileUrl || '';
+    document.getElementById('ig-acc-cpm').value     = a.cpm || 5;
+    document.getElementById('ig-acc-notes').value   = a.notes || '';
+    document.getElementById('ig-acc-delete-btn').style.display = 'inline-flex';
+  } else {
+    document.getElementById('ig-account-modal-title').textContent = 'Add Account';
+    document.getElementById('ig-acc-id').value      = '';
+    document.getElementById('ig-acc-handle').value  = '';
+    document.getElementById('ig-acc-name').value    = '';
+    document.getElementById('ig-acc-url').value     = '';
+    document.getElementById('ig-acc-cpm').value     = 5;
+    document.getElementById('ig-acc-notes').value   = '';
+    document.getElementById('ig-acc-delete-btn').style.display = 'none';
+  }
+  openModal('modal-ig-account');
+}
+
+async function saveIgAccount() {
+  const id  = document.getElementById('ig-acc-id').value;
+  const obj = {
+    handle:      document.getElementById('ig-acc-handle').value.trim(),
+    displayName: document.getElementById('ig-acc-name').value.trim(),
+    profileUrl:  document.getElementById('ig-acc-url').value.trim(),
+    cpm:         Number(document.getElementById('ig-acc-cpm').value) || 5,
+    notes:       document.getElementById('ig-acc-notes').value.trim(),
+  };
+  if (!obj.handle) { toast('Please enter a handle'); return; }
+  try {
+    if (id) {
+      const row = await dbUpdate('ig_accounts', id, toDbIgAccount(obj));
+      igAccounts[igAccounts.findIndex(a => a.id === id)] = fromDbIgAccount(row);
+    } else {
+      const row = await dbInsert('ig_accounts', toDbIgAccount(obj));
+      igAccounts.push(fromDbIgAccount(row));
+    }
+  } catch { return; }
+  closeModal('modal-ig-account');
+  toast(id ? 'Account updated!' : 'Account added!');
+  renderInstagram(); renderDashboard();
+}
+
+async function deleteIgAccount() {
+  const id = document.getElementById('ig-acc-id').value;
+  if (!confirm('Delete this account and all its logged videos?')) return;
+  try { await dbDelete('ig_accounts', id); } catch { return; }
+  igAccounts = igAccounts.filter(a => a.id !== id);
+  igPosts    = igPosts.filter(p => p.accountId !== id);
+  if (igActiveAccount === id) igActiveAccount = null;
+  closeModal('modal-ig-account');
+  toast('Account deleted.');
+  renderInstagram(); renderDashboard();
+}
+
+/* ── IG Post Modal ── */
+function openPostModal(id) {
+  if (!igAccounts.length) { toast('Add an Instagram account first'); return; }
+  const sel = document.getElementById('ig-post-account');
+  sel.innerHTML = igAccounts.map(a => `<option value="${a.id}">${a.handle}</option>`).join('');
+
+  if (id) {
+    const p = igPosts.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('ig-post-modal-title').textContent = 'Edit Video';
+    document.getElementById('ig-post-id').value       = p.id;
+    sel.value                                          = p.accountId;
+    document.getElementById('ig-post-caption').value  = p.caption || '';
+    document.getElementById('ig-post-date').value     = p.postDate || '';
+    document.getElementById('ig-post-views').value    = p.views || 0;
+    document.getElementById('ig-post-likes').value    = p.likes || 0;
+    document.getElementById('ig-post-comments').value = p.comments || 0;
+    document.getElementById('ig-post-url').value      = p.postUrl || '';
+    document.getElementById('ig-post-delete-btn').style.display = 'inline-flex';
+  } else {
+    document.getElementById('ig-post-modal-title').textContent = 'Log Video';
+    document.getElementById('ig-post-id').value       = '';
+    sel.value                                          = igActiveAccount || igAccounts[0].id;
+    document.getElementById('ig-post-caption').value  = '';
+    document.getElementById('ig-post-date').value     = today();
+    document.getElementById('ig-post-views').value    = '';
+    document.getElementById('ig-post-likes').value    = '';
+    document.getElementById('ig-post-comments').value = '';
+    document.getElementById('ig-post-url').value      = '';
+    document.getElementById('ig-post-delete-btn').style.display = 'none';
+  }
+  openModal('modal-ig-post');
+}
+
+async function saveIgPost() {
+  const id  = document.getElementById('ig-post-id').value;
+  const obj = {
+    accountId: document.getElementById('ig-post-account').value,
+    caption:   document.getElementById('ig-post-caption').value.trim(),
+    postDate:  document.getElementById('ig-post-date').value,
+    views:     Number(document.getElementById('ig-post-views').value) || 0,
+    likes:     Number(document.getElementById('ig-post-likes').value) || 0,
+    comments:  Number(document.getElementById('ig-post-comments').value) || 0,
+    postUrl:   document.getElementById('ig-post-url').value.trim(),
+  };
+  if (!obj.accountId) { toast('Please select an account'); return; }
+  if (!obj.postDate)  { toast('Please enter a post date'); return; }
+  try {
+    if (id) {
+      const row = await dbUpdate('ig_posts', id, toDbIgPost(obj));
+      igPosts[igPosts.findIndex(p => p.id === id)] = fromDbIgPost(row);
+    } else {
+      const row = await dbInsert('ig_posts', toDbIgPost(obj));
+      igPosts.push(fromDbIgPost(row));
+    }
+  } catch { return; }
+  closeModal('modal-ig-post');
+  toast(id ? 'Video updated!' : 'Video logged!');
+  renderInstagram(); renderDashboard();
+}
+
+async function deleteIgPost() {
+  const id = document.getElementById('ig-post-id').value;
+  if (!confirm('Delete this logged video?')) return;
+  try { await dbDelete('ig_posts', id); } catch { return; }
+  igPosts = igPosts.filter(p => p.id !== id);
+  closeModal('modal-ig-post');
+  toast('Deleted.');
+  renderInstagram(); renderDashboard();
 }
 
 /* ══════════════════════════════════════════
@@ -1025,9 +1583,6 @@ function renderCalendar() {
   const daysInMo  = new Date(calYear, calMonth + 1, 0).getDate();
   const prevTotal = new Date(calYear, calMonth, 0).getDate();
 
-  // Build a map of day → recurring client events
-  // For a client with N videos/month across M days, spread evenly: post on days
-  // where Math.floor((d-1) * N / M) < Math.floor(d * N / M)
   const recurringByDay = {};
   clients.filter(c => c.videosPerMonth > 0 && c.status === 'active').forEach(c => {
     const n = Math.min(c.videosPerMonth, daysInMo);
@@ -1238,31 +1793,30 @@ function openDeliverableModal(id) {
     document.getElementById('del-client').value             = d.clientId || '';
     document.getElementById('del-type').value               = d.contentType || 'UGC Video';
     document.getElementById('del-due').value                = d.dueDate || '';
-    document.getElementById('del-post').value               = d.postDate || '';
+    document.getElementById('del-post').value                = d.postDate || '';
     document.getElementById('del-platform').value           = d.platform || 'TikTok';
     document.getElementById('del-revisions').value          = d.revisions || 0;
-    document.getElementById('del-notes').value              = d.notes || '';
+    document.getElementById('del-notes').value               = d.notes || '';
     setPill('del-stage-pills', 'del-stage', d.stage || 'scripted');
     document.getElementById('del-delete-btn').style.display = 'inline-flex';
   } else {
     document.getElementById('del-modal-title').textContent  = 'Add Video';
     document.getElementById('del-id').value                 = '';
     document.getElementById('del-title').value              = '';
-    document.getElementById('del-type').value               = 'UGC Video';
     document.getElementById('del-due').value                = '';
-    document.getElementById('del-post').value               = '';
+    document.getElementById('del-post').value                = '';
+    document.getElementById('del-type').value               = 'UGC Video';
     document.getElementById('del-revisions').value          = 0;
-    document.getElementById('del-notes').value              = '';
+    document.getElementById('del-notes').value               = '';
     setPill('del-stage-pills', 'del-stage', 'scripted');
     document.getElementById('del-delete-btn').style.display = 'none';
   }
   openModal('modal-deliverable');
 }
 
-function saveDeliverable() {
+async function saveDeliverable() {
   const id  = document.getElementById('del-id').value;
   const obj = {
-    id:          id || uid(),
     title:       document.getElementById('del-title').value.trim(),
     clientId:    document.getElementById('del-client').value,
     contentType: document.getElementById('del-type').value,
@@ -1272,25 +1826,30 @@ function saveDeliverable() {
     platform:    document.getElementById('del-platform').value,
     revisions:   Number(document.getElementById('del-revisions').value),
     notes:       document.getElementById('del-notes').value.trim(),
-    createdAt:   id ? (deliverables.find(d=>d.id===id)||{}).createdAt : new Date().toISOString(),
   };
   if (!obj.title)    { toast('Please enter a title'); return; }
   if (!obj.clientId) { toast('Please select a client'); return; }
 
-  if (id) { deliverables[deliverables.findIndex(d=>d.id===id)] = obj; }
-  else    { deliverables.push(obj); }
+  try {
+    if (id) {
+      const row = await dbUpdate('deliverables', id, toDbDeliverable(obj));
+      deliverables[deliverables.findIndex(d=>d.id===id)] = fromDbDeliverable(row);
+    } else {
+      const row = await dbInsert('deliverables', toDbDeliverable(obj));
+      deliverables.push(fromDbDeliverable(row));
+    }
+  } catch { return; }
 
-  persist();
   closeModal('modal-deliverable');
   toast(id ? 'Video updated!' : 'Video added!');
   renderKanban(); renderCalendar(); renderDashboard();
 }
 
-function deleteDeliverable() {
+async function deleteDeliverable() {
   const id = document.getElementById('del-id').value;
   if (!confirm('Delete this video?')) return;
+  try { await dbDelete('deliverables', id); } catch { return; }
   deliverables = deliverables.filter(d => d.id !== id);
-  persist();
   closeModal('modal-deliverable');
   toast('Deleted.');
   renderKanban(); renderCalendar(); renderDashboard();
@@ -1310,8 +1869,8 @@ function openClientModal(id) {
     document.getElementById('client-contact-email').value       = c.contactEmail || '';
     document.getElementById('client-rate').value                = c.rate || '';
     document.getElementById('client-rate-type').value           = c.rateType || 'per video';
-    document.getElementById('client-videos-per-month').value   = c.videosPerMonth || '';
-    document.getElementById('client-notes').value               = c.notes || '';
+    document.getElementById('client-videos-per-month').value    = c.videosPerMonth || '';
+    document.getElementById('client-notes').value                = c.notes || '';
     setPill('client-status-pills', 'client-status', c.status || 'active');
     document.getElementById('client-delete-btn').style.display  = 'inline-flex';
   } else {
@@ -1322,44 +1881,48 @@ function openClientModal(id) {
     document.getElementById('client-contact-email').value       = '';
     document.getElementById('client-rate').value                = '';
     document.getElementById('client-rate-type').value           = 'per video';
-    document.getElementById('client-videos-per-month').value   = '';
-    document.getElementById('client-notes').value               = '';
+    document.getElementById('client-videos-per-month').value    = '';
+    document.getElementById('client-notes').value                = '';
     setPill('client-status-pills', 'client-status', 'active');
     document.getElementById('client-delete-btn').style.display  = 'none';
   }
   openModal('modal-client');
 }
 
-function saveClient() {
+async function saveClient() {
   const id  = document.getElementById('client-id').value;
   const obj = {
-    id:           id || uid(),
-    name:         document.getElementById('client-name').value.trim(),
-    contactName:  document.getElementById('client-contact-name').value.trim(),
-    contactEmail: document.getElementById('client-contact-email').value.trim(),
-    rate:         Number(document.getElementById('client-rate').value),
+    name:            document.getElementById('client-name').value.trim(),
+    contactName:     document.getElementById('client-contact-name').value.trim(),
+    contactEmail:    document.getElementById('client-contact-email').value.trim(),
+    rate:            Number(document.getElementById('client-rate').value) || 0,
     rateType:        document.getElementById('client-rate-type').value,
     videosPerMonth:  Number(document.getElementById('client-videos-per-month').value) || 0,
     status:          document.getElementById('client-status').value,
     notes:           document.getElementById('client-notes').value.trim(),
-    createdAt:    id ? (clients.find(c=>c.id===id)||{}).createdAt : new Date().toISOString(),
   };
   if (!obj.name) { toast('Please enter a brand name'); return; }
 
-  if (id) { clients[clients.findIndex(c=>c.id===id)] = obj; }
-  else    { clients.push(obj); }
+  try {
+    if (id) {
+      const row = await dbUpdate('clients', id, toDbClient(obj));
+      clients[clients.findIndex(c=>c.id===id)] = fromDbClient(row);
+    } else {
+      const row = await dbInsert('clients', toDbClient(obj));
+      clients.push(fromDbClient(row));
+    }
+  } catch { return; }
 
-  persist();
   closeModal('modal-client');
   toast(id ? 'Client updated!' : 'Client added!');
   renderClients(); renderDashboard(); renderKanban(); renderCalendar();
 }
 
-function deleteClient() {
+async function deleteClient() {
   const id = document.getElementById('client-id').value;
   if (!confirm('Delete this client?')) return;
+  try { await dbDelete('clients', id); } catch { return; }
   clients = clients.filter(c => c.id !== id);
-  persist();
   closeModal('modal-client');
   toast('Client deleted.');
   renderClients(); renderDashboard();
@@ -1409,36 +1972,40 @@ function openRevenueModal(id) {
   openModal('modal-revenue');
 }
 
-function saveRevenue() {
+async function saveRevenue() {
   const id  = document.getElementById('rev-id').value;
   const obj = {
-    id:            id || uid(),
     clientId:      document.getElementById('rev-client').value,
     amount:        Number(document.getElementById('rev-amount').value),
     date:          document.getElementById('rev-date').value,
     status:        document.getElementById('rev-status').value,
     deliverableId: document.getElementById('rev-deliverable').value,
     notes:         document.getElementById('rev-notes').value.trim(),
-    createdAt:     id ? (revenue.find(r=>r.id===id)||{}).createdAt : new Date().toISOString(),
   };
   if (!obj.clientId) { toast('Please select a client'); return; }
   if (!obj.amount)   { toast('Please enter an amount'); return; }
   if (!obj.date)     { toast('Please enter a date'); return; }
 
-  if (id) { revenue[revenue.findIndex(r=>r.id===id)] = obj; }
-  else    { revenue.push(obj); }
+  try {
+    if (id) {
+      const row = await dbUpdate('revenue', id, toDbRevenue(obj));
+      revenue[revenue.findIndex(r=>r.id===id)] = fromDbRevenue(row);
+    } else {
+      const row = await dbInsert('revenue', toDbRevenue(obj));
+      revenue.push(fromDbRevenue(row));
+    }
+  } catch { return; }
 
-  persist();
   closeModal('modal-revenue');
   toast(id ? 'Payment updated!' : 'Payment logged!');
   renderRevenue(); renderDashboard();
 }
 
-function deleteRevenue() {
+async function deleteRevenue() {
   const id = document.getElementById('rev-id').value;
   if (!confirm('Delete this payment?')) return;
+  try { await dbDelete('revenue', id); } catch { return; }
   revenue = revenue.filter(r => r.id !== id);
-  persist();
   closeModal('modal-revenue');
   toast('Payment deleted.');
   renderRevenue(); renderDashboard();
@@ -1536,10 +2103,9 @@ function openMeetingModal(id) {
   openModal('modal-meeting');
 }
 
-function saveMeeting() {
+async function saveMeeting() {
   const id  = document.getElementById('meeting-id').value;
   const obj = {
-    id:          id || uid(),
     brand:       document.getElementById('meeting-brand').value.trim(),
     contact:     document.getElementById('meeting-contact').value.trim(),
     value:       Number(document.getElementById('meeting-value').value),
@@ -1548,24 +2114,29 @@ function saveMeeting() {
     lastContact: document.getElementById('meeting-last').value,
     followup:    document.getElementById('meeting-followup').value,
     notes:       document.getElementById('meeting-notes').value.trim(),
-    createdAt:   id ? (meetings.find(m=>m.id===id)||{}).createdAt : new Date().toISOString(),
   };
   if (!obj.brand) { toast('Please enter a brand name'); return; }
 
-  if (id) { meetings[meetings.findIndex(m=>m.id===id)] = obj; }
-  else    { meetings.push(obj); }
+  try {
+    if (id) {
+      const row = await dbUpdate('meetings', id, toDbMeeting(obj));
+      meetings[meetings.findIndex(m=>m.id===id)] = fromDbMeeting(row);
+    } else {
+      const row = await dbInsert('meetings', toDbMeeting(obj));
+      meetings.push(fromDbMeeting(row));
+    }
+  } catch { return; }
 
-  persist();
   closeModal('modal-meeting');
   toast(id ? 'Deal updated!' : 'Deal added!');
   renderMeetings();
 }
 
-function deleteMeeting() {
+async function deleteMeeting() {
   const id = document.getElementById('meeting-id').value;
   if (!confirm('Delete this deal?')) return;
+  try { await dbDelete('meetings', id); } catch { return; }
   meetings = meetings.filter(m => m.id !== id);
-  persist();
   closeModal('modal-meeting');
   toast('Deal deleted.');
   renderMeetings();
