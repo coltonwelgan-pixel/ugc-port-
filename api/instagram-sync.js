@@ -1,4 +1,4 @@
-const { serviceClient, requireAdmin } = require('./_supabase');
+const { serviceClient, requireAdmin, withErrorHandling } = require('./_supabase');
 
 const GRAPH = 'https://graph.instagram.com/v21.0';
 
@@ -15,7 +15,7 @@ async function refreshTokenIfNeeded(db, accountId, tokenRow) {
   return data.access_token;
 }
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const db = serviceClient();
@@ -70,4 +70,4 @@ module.exports = async function handler(req, res) {
   }
 
   res.status(200).json({ ok: true, synced });
-};
+});

@@ -1,6 +1,6 @@
-const { serviceClient } = require('./_supabase');
+const { serviceClient, withErrorHandling } = require('./_supabase');
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   const { code, state, error } = req.query;
   if (error) return res.status(400).send(`Instagram connection failed: ${error}`);
   if (!code || !state) return res.status(400).send('Missing code or state');
@@ -57,4 +57,4 @@ module.exports = async function handler(req, res) {
 
   res.writeHead(302, { Location: '/backend?instagram=connected' });
   res.end();
-};
+});

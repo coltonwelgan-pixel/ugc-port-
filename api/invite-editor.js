@@ -1,6 +1,6 @@
-const { serviceClient, requireAdmin } = require('./_supabase');
+const { serviceClient, requireAdmin, withErrorHandling } = require('./_supabase');
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const db = serviceClient();
@@ -23,4 +23,4 @@ module.exports = async function handler(req, res) {
   if (profileError) return res.status(400).json({ error: profileError.message });
 
   res.status(200).json({ ok: true });
-};
+});

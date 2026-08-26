@@ -1,11 +1,15 @@
-const { serviceClient, requireAdmin } = require('./_supabase');
+const { serviceClient, requireAdmin, withErrorHandling } = require('./_supabase');
 
 const SCOPES = [
   'instagram_business_basic',
   'instagram_business_manage_insights',
 ].join(',');
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
+  if (!process.env.META_APP_ID) {
+    return res.status(500).send('META_APP_ID not set in Vercel yet — create the Meta Developer App first, then add its App ID (and App Secret) as environment variables. See BACKEND_SETUP.md.');
+  }
+
   const db = serviceClient();
   const admin = await requireAdmin(req, db);
   if (!admin) return res.status(403).json({ error: 'Admin access required' });
@@ -25,4 +29,4 @@ module.exports = async function handler(req, res) {
 
   res.writeHead(302, { Location: url.toString() });
   res.end();
-};
+});

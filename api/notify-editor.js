@@ -1,8 +1,9 @@
 const { Resend } = require('resend');
-const { serviceClient, requireAdmin } = require('./_supabase');
+const { serviceClient, requireAdmin, withErrorHandling } = require('./_supabase');
 
-module.exports = async function handler(req, res) {
+module.exports = withErrorHandling(async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (!process.env.RESEND_API_KEY) return res.status(500).json({ error: 'RESEND_API_KEY not set in Vercel — see BACKEND_SETUP.md' });
 
   const db = serviceClient();
   const admin = await requireAdmin(req, db);
@@ -32,7 +33,7 @@ module.exports = async function handler(req, res) {
     .map((l) => `<li><a href="${l}">${l}</a></li>`)
     .join('');
 
-  await resend.emails.send({
+  const { error: emailError } = await resend.emails.send({
     from: 'Creator HQ <onboarding@resend.dev>',
     to: editor.email,
     subject: `New editing job: ${job.title}`,
@@ -45,6 +46,7 @@ module.exports = async function handler(req, res) {
       <p>Log in at your editor portal to update the status as you work.</p>
     `,
   });
+  if (emailError) return res.status(500).json({ error: `Resend error: ${emailError.message}` });
 
   res.status(200).json({ ok: true });
-};
+});

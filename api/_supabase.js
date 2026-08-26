@@ -1,9 +1,29 @@
 const { createClient } = require('@supabase/supabase-js');
 
 function serviceClient() {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new ConfigError('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not set in Vercel — see BACKEND_SETUP.md');
+  }
   return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
+}
+
+class ConfigError extends Error {}
+
+// Wraps a handler so any thrown error (missing env vars, Supabase client
+// construction, etc.) becomes a clean JSON response instead of a raw
+// Vercel FUNCTION_INVOCATION_FAILED crash.
+function withErrorHandling(handler) {
+  return async (req, res) => {
+    try {
+      await handler(req, res);
+    } catch (err) {
+      console.error(err);
+      const status = err instanceof ConfigError ? 500 : 500;
+      res.status(status).json({ error: err.message || 'Unexpected server error' });
+    }
+  };
 }
 
 async function requireUser(req, db) {
@@ -23,4 +43,4 @@ async function requireAdmin(req, db) {
   return user;
 }
 
-module.exports = { serviceClient, requireUser, requireAdmin };
+module.exports = { serviceClient, requireUser, requireAdmin, withErrorHandling };
