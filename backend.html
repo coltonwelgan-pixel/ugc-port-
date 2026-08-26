@@ -115,9 +115,9 @@
     .topbar-title { font-size: 13.5px; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .topbar-right { display: flex; align-items: center; gap: 8px; }
     .cmdk-trigger {
-      display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 10px; border-radius: var(--radius-sm);
-      background: var(--bg-card); border: 1px solid var(--border); color: var(--grey); cursor: pointer; font-size: 12px;
-      transition: border-color .12s var(--ease), background .12s var(--ease); width: 180px;
+      display: flex; align-items: center; gap: 6px; padding: 5px 7px; border-radius: var(--radius-sm);
+      background: var(--bg-card); border: 1px solid var(--border); color: var(--grey); cursor: pointer; font-size: 11.5px;
+      transition: border-color .12s var(--ease), background .12s var(--ease); width: auto;
     }
     .cmdk-trigger:hover { border-color: var(--border-med); background: var(--bg-hover); }
     .cmdk-trigger span { flex: 1; text-align: left; }
@@ -675,6 +675,21 @@
   <div class="modal">
     <div class="modal-title" id="ig-account-modal-title">Add Account</div>
     <input type="hidden" id="ig-acc-id">
+
+    <div id="ig-acc-new-connect" style="display:none">
+      <div class="form-group">
+        <label>Handle</label>
+        <input type="text" id="ig-acc-handle-quick" placeholder="@yourhandle">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="connectNewIgAccount()" id="ig-acc-quick-connect-btn">Connect Instagram Account →</button>
+      <p style="font-size:11.5px;color:var(--grey);margin-top:8px">Takes you to Instagram's own login to authorize — real view/like/comment data flows in automatically. Requires the account to already be a Business or Creator account.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--grey);font-size:11px">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        OR ADD MANUALLY
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+    </div>
+
     <div class="form-row">
       <div class="form-group">
         <label>Handle</label>
@@ -1332,6 +1347,7 @@ function openAccountModal(id) {
     document.getElementById('ig-acc-connect-row').style.display = 'flex';
     document.getElementById('ig-acc-connect-status').textContent = a.connected ? '🟢 Connected to Instagram' : '⚪ Not connected — data is manual only';
     document.getElementById('ig-acc-connect-btn').textContent = a.connected ? 'Sync Now' : 'Connect Instagram';
+    document.getElementById('ig-acc-new-connect').style.display = 'none';
   } else {
     document.getElementById('ig-account-modal-title').textContent = 'Add Account';
     document.getElementById('ig-acc-id').value      = '';
@@ -1340,10 +1356,26 @@ function openAccountModal(id) {
     document.getElementById('ig-acc-url').value     = '';
     document.getElementById('ig-acc-cpm').value     = 5;
     document.getElementById('ig-acc-notes').value   = '';
+    document.getElementById('ig-acc-handle-quick').value = '';
     document.getElementById('ig-acc-delete-btn').style.display = 'none';
     document.getElementById('ig-acc-connect-row').style.display = 'none';
+    document.getElementById('ig-acc-new-connect').style.display = 'block';
   }
   openModal('modal-ig-account');
+}
+
+async function connectNewIgAccount() {
+  const handle = document.getElementById('ig-acc-handle-quick').value.trim();
+  if (!handle) { toast('Please enter a handle'); return; }
+  const btn = document.getElementById('ig-acc-quick-connect-btn');
+  btn.disabled = true; btn.textContent = 'Connecting…';
+  try {
+    const row = await dbInsert('ig_accounts', toDbIgAccount({ handle, displayName: '', profileUrl: '', cpm: 5, notes: '' }));
+    igAccounts.push(fromDbIgAccount(row));
+    window.location.href = `/api/instagram-oauth-start?accountId=${row.id}&token=${encodeURIComponent(accessToken)}`;
+  } catch {
+    btn.disabled = false; btn.textContent = 'Connect Instagram Account →';
+  }
 }
 
 async function saveIgAccount() {
