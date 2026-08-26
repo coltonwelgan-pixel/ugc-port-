@@ -169,7 +169,7 @@
     /* STATS ROW */
     .result-stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       border-bottom: 1px solid var(--border);
     }
 
@@ -256,6 +256,67 @@
       font-style: italic;
     }
 
+    .result-objective {
+      padding: 2rem 2.5rem 0;
+      font-size: 0.9rem;
+      color: rgba(240,240,240,0.65);
+      line-height: 1.8;
+    }
+
+    .result-objective strong {
+      color: var(--fg);
+      font-weight: 700;
+    }
+
+    .result-proof {
+      padding: 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .result-proof h4 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent-hi);
+      margin-bottom: 1.25rem;
+    }
+
+    .result-proof-shot {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-acc);
+      background: var(--bg);
+    }
+
+    .result-proof-shot.is-placeholder {
+      aspect-ratio: 9 / 16;
+      max-width: 340px;
+      border-style: dashed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .result-proof-shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .result-proof-shot span {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(160,160,160,0.5);
+      line-height: 1.6;
+    }
+
     /* FOOTER */
     .results-footer {
       border-top: 1px solid var(--border);
@@ -276,9 +337,8 @@
 
     @media (max-width: 700px) {
       .result-stats { grid-template-columns: repeat(2, 1fr); }
-      .result-stat:nth-child(2) { border-right: none; }
-      .result-stat:nth-child(3) { border-top: 1px solid var(--border); }
-      .result-stat:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .result-stat:nth-child(2n) { border-right: none; }
+      .result-stat:nth-child(n+3) { border-top: 1px solid var(--border); }
       .result-breakdown { grid-template-columns: 1fr; }
       .result-section { border-right: none; border-top: 1px solid var(--border); }
       .result-section:first-child { border-top: none; }
@@ -307,34 +367,34 @@
 <div class="container">
   <div class="results-grid">
 
-    <!-- TRIIPS -->
-    <div class="result-card" id="triips">
+    <!-- REPLIT -->
+    <div class="result-card" id="replit">
       <div class="result-card-header">
-        <div class="result-card-logo">
-          <img src="triips-logo.svg" alt="Triips">
+        <div class="result-card-logo" style="background:#F0EBE3;">
+          <img src="replit-logo.svg" alt="Replit">
         </div>
         <div>
-          <div class="result-card-name">Triips.com</div>
+          <div class="result-card-name">Replit</div>
           <div class="result-card-type">Organic UGC</div>
         </div>
       </div>
 
+      <p class="result-objective">
+        <strong>Objective:</strong> Promote Replit in a positive light while showing real, honest use cases — proving why it's the go-to tool for turning any app or idea into a working reality in seconds.
+      </p>
+
       <div class="result-stats">
         <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
+          <div class="result-stat-num">1,369,000</div>
           <div class="result-stat-label">Total Views</div>
         </div>
         <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Videos Made</div>
+          <div class="result-stat-num">Aug 1</div>
+          <div class="result-stat-label">Campaign Started 2026</div>
         </div>
         <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Avg. Watch Time</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Top Video Views</div>
+          <div class="result-stat-num">0 → 5K</div>
+          <div class="result-stat-label">IG Followers in 1 Month</div>
         </div>
       </div>
 
@@ -342,46 +402,56 @@
         <div class="result-section">
           <h4>What I Did</h4>
           <ul>
-            <li class="placeholder">Placeholder — add formats and deliverables here</li>
-            <li class="placeholder">Placeholder — e.g. 3 organic TikTok scripts + shoots</li>
-            <li class="placeholder">Placeholder — e.g. Hook testing across 2 angles</li>
+            <li>Organic UGC showing real, from-scratch build sessions on Replit — idea to shipped app in one sitting</li>
+            <li>Hook-driven videos framed around speed and simplicity: "I built this app in seconds"</li>
+            <li>Content positioning Replit as the go-to tool for non-coders and builders alike to bring any idea to life</li>
           </ul>
         </div>
         <div class="result-section">
           <h4>Results</h4>
-          <p class="placeholder">Placeholder — add key outcomes, engagement stats, or client feedback once campaign wraps.</p>
+          <p>Since kicking off Aug 1, 2026, the content has pulled in 1,369,000+ total views and grown the account from 0 to 5,000 followers in its first month — while keeping Replit's brand positioning genuinely positive and use-case driven.</p>
+        </div>
+      </div>
+
+      <div class="result-proof">
+        <h4>Social Proof</h4>
+        <div class="result-proof-shot">
+          <img src="instagram-growth.jpg" alt="Colton Welgan's Instagram at 5,072 followers, 317 posts, with 1.3M views in the last 30 days">
         </div>
       </div>
     </div>
 
-    <!-- NEURO -->
-    <div class="result-card" id="neuro">
+    <!-- OPENART -->
+    <div class="result-card" id="openart">
       <div class="result-card-header">
-        <div class="result-card-logo" style="background:#fff;">
-          <img src="neuro-logo.svg" alt="Neuro">
+        <div class="result-card-logo" style="background:#000;">
+          <img src="openart-logo.png" alt="OpenArt">
         </div>
         <div>
-          <div class="result-card-name">Neuro Gum &amp; Mints</div>
-          <div class="result-card-type">Paid UGC Ads</div>
+          <div class="result-card-name">OpenArt</div>
+          <div class="result-card-type">Organic UGC</div>
         </div>
       </div>
 
+      <p class="result-objective">
+        <strong>About:</strong> OpenArt is a generative AI art platform founded by ex-Googlers in San Francisco, on a mission to make creating incredible art accessible to everyone.
+      </p>
+      <p class="result-objective">
+        <strong>Objective:</strong> Show the full range of OpenArt's use cases — from AI "vibe directing" for YouTube videos to generating Airbnb-style walkthroughs — positioning it as the go-to leader in generative AI graphics.
+      </p>
+
       <div class="result-stats">
         <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
+          <div class="result-stat-num">377,000</div>
           <div class="result-stat-label">Total Views</div>
         </div>
         <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Videos Made</div>
+          <div class="result-stat-num">Aug 2</div>
+          <div class="result-stat-label">Campaign Started 2026</div>
         </div>
         <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Avg. Watch Time</div>
-        </div>
-        <div class="result-stat">
-          <div class="result-stat-num placeholder">—</div>
-          <div class="result-stat-label">Top Video Views</div>
+          <div class="result-stat-num">0 → 2K</div>
+          <div class="result-stat-label">Followers in Under 1 Month</div>
         </div>
       </div>
 
@@ -389,14 +459,21 @@
         <div class="result-section">
           <h4>What I Did</h4>
           <ul>
-            <li class="placeholder">Placeholder — add formats and deliverables here</li>
-            <li class="placeholder">Placeholder — e.g. paid ad scripts + shoots</li>
-            <li class="placeholder">Placeholder — e.g. Hook testing across multiple angles</li>
+            <li>Organic UGC covering OpenArt's full toolkit — from AI "vibe directing" edits for YouTube to fully generated Airbnb walkthroughs</li>
+            <li>Use-case-driven videos showing real workflows, not just feature demos, to prove OpenArt as a genuine creative tool</li>
+            <li>Content positioning OpenArt as the go-to platform for generative AI graphics across multiple content angles</li>
           </ul>
         </div>
         <div class="result-section">
           <h4>Results</h4>
-          <p class="placeholder">Placeholder — add key outcomes, ROAS, CTR, or client feedback once campaign wraps.</p>
+          <p>Since kicking off Aug 2, 2026, the content has pulled in 377,000+ total views and grown the account from 0 to 2,000 followers in under a month — building OpenArt's name as a leader in generative AI graphics.</p>
+        </div>
+      </div>
+
+      <div class="result-proof">
+        <h4>Social Proof</h4>
+        <div class="result-proof-shot">
+          <img src="openart-growth.jpg" alt="@coltonlovesart Instagram at 2,002 followers, 38 posts, with 365.5K views in the last 30 days">
         </div>
       </div>
     </div>

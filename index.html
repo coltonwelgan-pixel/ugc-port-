@@ -262,21 +262,101 @@
     /* REPLACE: Main hero name */
     .hero-name {
       font-family: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
-      font-size: clamp(5.5rem, 16vw, 15rem);
-      line-height: 0.88;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      line-height: 0.9;
       letter-spacing: -0.01em;
       color: var(--white);
-      margin-bottom: 2.25rem;
+      margin-bottom: 1.5rem;
     }
 
     .hero-sub {
       font-size: clamp(1rem, 2vw, 1.3rem);
       font-style: italic;
       font-weight: 300;
-      color: var(--accent);
+      color: var(--grey);
       line-height: 1.55;
       max-width: 560px;
-      margin-bottom: 3rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-sub .hi {
+      color: var(--accent-hi);
+    }
+
+    /* ---- Hero split layout ---- */
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-photo-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .hero-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      background: var(--bg-raised);
+      border: 1px dashed var(--border-acc);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+      padding: 2rem;
+      color: var(--grey);
+    }
+
+    .hero-photo-placeholder svg {
+      width: 40px;
+      height: 40px;
+      opacity: 0.5;
+    }
+
+    .hero-photo-placeholder span {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      max-width: 200px;
+      line-height: 1.6;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-stat-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .hero-stat-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.5rem;
     }
 
     .hero-pills {
@@ -375,42 +455,6 @@
 
     .social-link:hover { color: var(--accent); }
     .social-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
-
-    /* ============================================================
-       MARQUEE TICKER
-    ============================================================ */
-    .ticker-wrap {
-      background: var(--accent);
-      overflow: hidden;
-      white-space: nowrap;
-      padding: 0.85rem 0;
-    }
-
-    .ticker-track {
-      display: inline-flex;
-      animation: ticker 22s linear infinite;
-    }
-
-    .ticker-track span {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      padding: 0 2.5rem;
-    }
-
-    .ticker-track span.dot {
-      color: rgba(255,255,255,0.4);
-      padding: 0;
-      letter-spacing: 0;
-      font-size: 0.5rem;
-    }
-
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
 
     /* ============================================================
        ABOUT
@@ -639,7 +683,7 @@
     }
 
     /* ============================================================
-       CLIENTS
+       CLIENTS / BRANDS
     ============================================================ */
     #clients {
       padding: 9rem 0;
@@ -649,113 +693,49 @@
     }
 
     .clients-header {
-      margin-bottom: 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      margin-bottom: 3.5rem;
     }
 
     .clients-headline {
       font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3rem, 8vw, 7rem);
-      line-height: 0.9;
+      font-size: clamp(2.75rem, 6.5vw, 5.5rem);
+      line-height: 0.92;
     }
 
-    /* ---- Clients marquee ---- */
-    .clients-marquee-wrap {
-      overflow: hidden;
-      width: 100%;
-      position: relative;
+    .clients-headline .accent-text {
+      color: var(--accent-hi);
     }
 
-    .clients-marquee-wrap::before,
-    .clients-marquee-wrap::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 120px;
-      z-index: 2;
-      pointer-events: none;
+    .clients-subtext {
+      font-style: italic;
+      color: var(--grey);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 400px;
     }
 
-    .clients-marquee-wrap::before {
-      left: 0;
-      background: linear-gradient(to right, var(--bg-raised), transparent);
+    .clients-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 0;
     }
 
-    .clients-marquee-wrap::after {
-      right: 0;
-      background: linear-gradient(to left, var(--bg-raised), transparent);
-    }
-
-    .clients-marquee-track {
-      display: flex;
-      gap: 4rem;
-      width: max-content;
-      animation: marquee-scroll 22s linear infinite;
-    }
-
-    .clients-marquee-wrap:hover .clients-marquee-track {
-      animation-play-state: paused;
-    }
-
-    @keyframes marquee-scroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+    /* ---- Brands grid ---- */
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
     }
 
     .client-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      min-width: 180px;
-    }
-
-    .client-card-logo {
-      width: 140px;
-      height: 112px;
-      border-radius: 18px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1E40FF;
-    }
-
-    .client-card-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .client-card-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--fg);
-    }
-
-    .client-card-type {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--grey);
-      margin-top: -0.5rem;
-    }
-
-    .client-card--empty {
-      min-width: 180px;
-      height: 148px;
-    }
-
-    .client-card--empty::before {
-      content: '';
-      display: block;
-      width: 100px;
-      height: 100px;
-      border-radius: 18px;
-      border: 1px dashed var(--border-acc);
-      margin: 0 auto;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
     }
 
     .client-card a {
@@ -764,12 +744,93 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      gap: 1.4rem;
+      text-align: center;
+      padding: 3.25rem 1.25rem;
+      height: 100%;
+    }
+
+    .client-card-logo {
+      width: 140px;
+      height: 140px;
+      border-radius: 22px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-acc);
+    }
+
+    .client-card-logo img {
+      width: 86%;
+      height: 86%;
+      object-fit: contain;
+    }
+
+    .client-card-logo img.fill {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .client-card-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey);
     }
 
     .client-card:hover .client-card-logo {
-      transform: scale(1.04);
+      transform: scale(1.05);
       transition: transform 0.2s ease;
+    }
+
+    @media (max-width: 900px) {
+      .clients-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .clients-grid { grid-template-columns: repeat(2, 1fr); }
+      .client-card-logo { width: 108px; height: 108px; }
+      .client-card a { padding: 2.5rem 1rem; }
+    }
+
+    /* ============================================================
+       NEWSLETTER
+    ============================================================ */
+    #newsletter {
+      padding: 7rem 0;
+      background: var(--bg-raised);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .newsletter-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .newsletter-inner .section-label {
+      justify-content: center;
+    }
+
+    .newsletter-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(2.75rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      margin-bottom: 1.5rem;
+    }
+
+    .newsletter-sub {
+      font-size: 1rem;
+      color: var(--grey);
+      line-height: 1.75;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
     }
 
     /* ============================================================
@@ -924,6 +985,10 @@
 
       #hero { padding-bottom: 5rem; }
 
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-photo-wrap { order: -1; aspect-ratio: 5 / 4; }
+      .hero-stats { gap: 2rem; }
+
       .hero-ctas { flex-direction: column; align-items: flex-start; }
       .btn { width: 100%; justify-content: center; }
 
@@ -948,10 +1013,11 @@
 ============================================================ -->
 <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
   <!-- REPLACE: Update links if you add/remove sections -->
-  <a href="#clients" onclick="closeMobileMenu()">Clients</a>
-  <a href="#work"    onclick="closeMobileMenu()">Work</a>
-  <a href="#about"   onclick="closeMobileMenu()">About</a>
-  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <a href="#clients"    onclick="closeMobileMenu()">Brands</a>
+  <a href="results.html" onclick="closeMobileMenu()">Results</a>
+  <a href="#work"       onclick="closeMobileMenu()">Content</a>
+  <a href="#about"      onclick="closeMobileMenu()">About</a>
+  <a href="#contact"    onclick="closeMobileMenu()">Contact</a>
 </div>
 
 <!-- ============================================================
@@ -962,9 +1028,9 @@
   <a href="#hero" class="nav-logo">Colton Welgan</a>
 
   <ul class="nav-links">
-    <li><a href="#clients">Clients</a></li>
+    <li><a href="#clients">Brands</a></li>
     <li><a href="results.html">Results</a></li>
-    <li><a href="#work">Work</a></li>
+    <li><a href="#work">Content</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -981,104 +1047,64 @@
 ============================================================ -->
 <section id="hero">
   <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
 
-    <p class="hero-eyebrow">UGC</p>
+        <p class="hero-eyebrow">UGC Creator &middot; Based in Canada</p>
 
-    <!-- REPLACE: Your display name -->
-    <h1 class="hero-name display">Colton<br>Welgan.</h1>
+        <!-- REPLACE: Your display name -->
+        <h1 class="hero-name display">Colton<br>Welgan.</h1>
 
-    <div class="hero-pills">
-      <span class="pill">Tech</span>
-      <span class="pill">AI</span>
-      <span class="pill">UGC Creator</span>
-      <span class="pill">Marketer</span>
-      <span class="pill">Content Creator</span>
-    </div>
-
-    <div class="hero-ctas">
-      <!-- REPLACE: Update href to your preferred CTA destination -->
-      <a href="#contact" class="btn btn-filled">Work With Me →</a>
-      <a href="#work"    class="btn btn-ghost">View Work</a>
-    </div>
-
-    <!-- REPLACE: Update each href to your actual social profiles -->
-    <div class="hero-socials">
-      <a href="#" class="social-link" aria-label="Instagram">
-        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        Instagram
-      </a>
-      <a href="#" class="social-link" aria-label="TikTok">
-        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-        TikTok
-      </a>
-      <a href="#" class="social-link" aria-label="YouTube">
-        <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-        YouTube
-      </a>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============================================================
-     MARQUEE TICKER
-============================================================ -->
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker-track">
-    <!-- Duplicated for seamless infinite loop -->
-    <span>Virality Expert</span><span class="dot">◆</span>
-    <span>Brand Strategist</span><span class="dot">◆</span>
-    <span>Tech UGC</span><span class="dot">◆</span>
-    <span>Lifestyle UGC</span><span class="dot">◆</span>
-    <span>Virality Expert</span><span class="dot">◆</span>
-    <span>Brand Strategist</span><span class="dot">◆</span>
-    <span>Tech UGC</span><span class="dot">◆</span>
-    <span>Lifestyle UGC</span><span class="dot">◆</span>
-  </div>
-</div>
-
-<!-- ============================================================
-     SECTION 3ABOUT
-============================================================ -->
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-
-      <!-- REPLACE: Save your photo as "photo.jpg" inside the ugc-portfolio folder -->
-      <img
-        src="photo.jpg"
-        alt="Colton Welgan"
-        class="about-photo fade-up"
-      >
-
-      <div>
-        <div class="section-label fade-up">About</div>
-
-        <h2 class="about-headline display fade-up delay-1">Hey,<br>I'm Colton.</h2>
-
-        <p class="about-body fade-up delay-2">
-          Hey, I'm Colton, a 22-year-old UGC creator based in Vancouver, Canada, specializing in tech and AI/software brands.
+        <p class="hero-sub fade-up delay-1">
+          Trend-led, conversion-driven UGC for tech &amp; AI brands. <span class="hi">The kind of content people actually stop for.</span>
         </p>
 
-        <p class="about-body fade-up delay-3">
-          I create viral content that shows real use cases for your brand and product in such an organic way that users barely even recognize it as an ad! Content that gets your product in front of the people who actually need it, and gives them a reason to buy today, not "someday."
-        </p>
+        <!-- REPLACE: Update stat values as your numbers grow -->
+        <div class="hero-stats fade-up delay-2">
+          <div class="hero-stat">
+            <div class="hero-stat-num display">2M+</div>
+            <div class="hero-stat-label">Total Reach</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num display">10+</div>
+            <div class="hero-stat-label">Brands Worked With</div>
+          </div>
+        </div>
 
-        <p class="about-body fade-up delay-4">
-          With a background in sales, I understand the psychology behind what actually gets people to convert, and it's rarely a "BUY NOW." I know how to build desire and trust into a video so the sell feels invisible, not forced.
-        </p>
+        <div class="hero-pills">
+          <span class="pill">Tech</span>
+          <span class="pill">AI</span>
+          <span class="pill">UGC Creator</span>
+          <span class="pill">Marketer</span>
+          <span class="pill">Content Creator</span>
+        </div>
 
-        <p class="about-body fade-up delay-5">
-          I test new hooks, angles, and formats on every video because virality isn't luck, it's iteration. My real strength: spotting exactly where a brand's current content isn't landing, whether it's weak hooks, unclear value, or too "ad-like," and fixing it with UGC that feels native and converts.
-        </p>
+        <div class="hero-ctas">
+          <!-- REPLACE: Update href to your preferred CTA destination -->
+          <a href="#contact" class="btn btn-filled">Work With Me →</a>
+          <a href="#work"    class="btn btn-ghost">View Content</a>
+        </div>
 
-        <p class="about-body fade-up delay-5">
-          If your product isn't backed by UGC right now, you're leaving growth on the table.
-        </p>
+        <!-- REPLACE: Update each href to your actual social profiles -->
+        <div class="hero-socials">
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a href="#" class="social-link" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            TikTok
+          </a>
+          <a href="#" class="social-link" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            YouTube
+          </a>
+        </div>
 
-        <p class="about-body fade-up delay-5">
-          Let's talk about what your brand's next viral moment looks like. Send me a message and let's create it!
-        </p>
+      </div>
+
+      <div class="hero-photo-wrap fade-up delay-1">
+        <img src="hero-photo.jpg" alt="Colton Welgan">
       </div>
 
     </div>
@@ -1086,166 +1112,105 @@
 </section>
 
 <!-- ============================================================
-     SECTION 4 — CLIENTS
+     SECTION 4 — BRANDS
 ============================================================ -->
 <section id="clients">
   <div class="container">
 
     <div class="clients-header">
-      <div class="section-label fade-up">Clients</div>
-      <h2 class="clients-headline display fade-up delay-1">
-        Clients.
-      </h2>
+      <div>
+        <div class="section-label fade-up">Brands</div>
+        <h2 class="clients-headline display fade-up delay-1">
+          Brands I've<br>Worked <span class="accent-text">With.</span>
+        </h2>
+      </div>
+      <p class="clients-subtext fade-up delay-1">
+        From indie startups to AI-first platforms, I create UGC that performs across organic and paid for brands big and small.
+      </p>
     </div>
 
-    <div class="clients-marquee-wrap fade-up delay-2">
-      <div class="clients-marquee-track">
-        <!-- set 1 -->
-        <div class="client-card">
-          <a href="results.html#triips">
-            <div class="client-card-logo">
-              <img src="triips-logo.svg" alt="Triips">
-            </div>
-            <div class="client-card-name">Triips.com</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="results.html#neuro">
-            <div class="client-card-logo" style="background:#fff;">
-              <img src="neuro-logo.svg" alt="Neuro">
-            </div>
-            <div class="client-card-name">Neuro Gum &amp; Mints</div>
-            <div class="client-card-type">Paid UGC Ads</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#F0EBE3;">
-              <img src="replit-logo.svg" alt="Replit">
-            </div>
-            <div class="client-card-name">Replit</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo">
-              <img src="involio-logo.svg" alt="Involio">
-            </div>
-            <div class="client-card-name">Involio</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#D1FE17;">
-              <img src="higgsfield-logo.png" alt="Higgsfield">
-            </div>
-            <div class="client-card-name">Higgsfield</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="anara-logo.png" alt="Anara">
-            </div>
-            <div class="client-card-name">Anara</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="openart-logo.png" alt="OpenArt">
-            </div>
-            <div class="client-card-name">OpenArt</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="cto-logo.jpg" alt="cto.new">
-            </div>
-            <div class="client-card-name">cto.new</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <!-- set 2 (duplicate for seamless loop) -->
-        <div class="client-card">
-          <a href="results.html#triips">
-            <div class="client-card-logo">
-              <img src="triips-logo.svg" alt="Triips">
-            </div>
-            <div class="client-card-name">Triips.com</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="results.html#neuro">
-            <div class="client-card-logo" style="background:#fff;">
-              <img src="neuro-logo.svg" alt="Neuro">
-            </div>
-            <div class="client-card-name">Neuro Gum &amp; Mints</div>
-            <div class="client-card-type">Paid UGC Ads</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#F0EBE3;">
-              <img src="replit-logo.svg" alt="Replit">
-            </div>
-            <div class="client-card-name">Replit</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo">
-              <img src="involio-logo.svg" alt="Involio">
-            </div>
-            <div class="client-card-name">Involio</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#D1FE17;">
-              <img src="higgsfield-logo.png" alt="Higgsfield">
-            </div>
-            <div class="client-card-name">Higgsfield</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="anara-logo.png" alt="Anara">
-            </div>
-            <div class="client-card-name">Anara</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="openart-logo.png" alt="OpenArt">
-            </div>
-            <div class="client-card-name">OpenArt</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
-        <div class="client-card">
-          <a href="#">
-            <div class="client-card-logo" style="background:#000;">
-              <img src="cto-logo.jpg" alt="cto.new">
-            </div>
-            <div class="client-card-name">cto.new</div>
-            <div class="client-card-type">Organic UGC</div>
-          </a>
-        </div>
+    <div class="clients-divider fade-up delay-1"></div>
+
+    <div class="clients-grid fade-up delay-2">
+      <div class="client-card">
+        <a href="results.html">
+          <div class="client-card-logo">
+            <img src="triips-logo.svg" alt="Triips" class="fill">
+          </div>
+          <div class="client-card-name">Triips.com</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="results.html">
+          <div class="client-card-logo" style="background:#fff;">
+            <img src="neuro-logo.svg" alt="Neuro">
+          </div>
+          <div class="client-card-name">Neuro Gum</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="results.html#replit">
+          <div class="client-card-logo" style="background:#F0EBE3;">
+            <img src="replit-logo.svg" alt="Replit">
+          </div>
+          <div class="client-card-name">Replit</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo">
+            <img src="involio-logo.svg" alt="Involio">
+          </div>
+          <div class="client-card-name">Involio</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#D1FE17;">
+            <img src="higgsfield-logo.png" alt="Higgsfield">
+          </div>
+          <div class="client-card-name">Higgsfield</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#000;">
+            <img src="anara-logo.png" alt="Anara">
+          </div>
+          <div class="client-card-name">Anara</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="results.html#openart">
+          <div class="client-card-logo" style="background:#000;">
+            <img src="openart-logo.png" alt="OpenArt">
+          </div>
+          <div class="client-card-name">OpenArt</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#000;">
+            <img src="cto-logo.jpg" alt="cto.new">
+          </div>
+          <div class="client-card-name">cto.new</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#fff;">
+            <img src="pump-fun-logo.svg" alt="Pump.fun">
+          </div>
+          <div class="client-card-name">Pump.fun</div>
+        </a>
+      </div>
+      <div class="client-card">
+        <a href="#">
+          <div class="client-card-logo" style="background:#00D9A6;">
+            <img src="kalshi-logo.svg" alt="Kalshi">
+          </div>
+          <div class="client-card-name">Kalshi</div>
+        </a>
       </div>
     </div>
 
@@ -1260,7 +1225,7 @@
 
     <div class="work-top">
       <div>
-        <div class="section-label fade-up">Work</div>
+        <div class="section-label fade-up">Content</div>
         <h2 class="work-headline display fade-up delay-1">
           The Content.
         </h2>
@@ -1311,6 +1276,23 @@
 </section>
 
 <!-- ============================================================
+     SECTION 6 — NEWSLETTER
+============================================================ -->
+<section id="newsletter">
+  <div class="container">
+    <div class="newsletter-inner">
+      <div class="section-label fade-up">Newsletter</div>
+      <h2 class="newsletter-headline display fade-up delay-1">Get the Playbook.</h2>
+      <p class="newsletter-sub fade-up delay-2">
+        Behind-the-scenes breakdowns of what's actually working in UGC right now — hooks, formats, and the stuff brands pay for. Straight to your inbox.
+      </p>
+      <!-- REPLACE: swap this href for your Substack URL -->
+      <a href="#" target="_blank" rel="noopener" class="btn btn-filled fade-up delay-3">Subscribe on Substack →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      SECTION 7 — CONTACT / CTA
 ============================================================ -->
 <section id="contact">
@@ -1333,6 +1315,54 @@
 </section>
 
 <!-- ============================================================
+     SECTION 8 — ABOUT
+============================================================ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- REPLACE: Save your photo as "photo.jpg" inside the ugc-portfolio folder -->
+      <img
+        src="photo.jpg"
+        alt="Colton Welgan"
+        class="about-photo fade-up"
+      >
+
+      <div>
+        <div class="section-label fade-up">About</div>
+
+        <h2 class="about-headline display fade-up delay-1">Hey,<br>I'm Colton.</h2>
+
+        <p class="about-body fade-up delay-2">
+          Hey, I'm Colton, a 22-year-old UGC creator based in Vancouver, Canada, specializing in tech and AI/software brands.
+        </p>
+
+        <p class="about-body fade-up delay-3">
+          I create viral content that shows real use cases for your brand and product in such an organic way that users barely even recognize it as an ad! Content that gets your product in front of the people who actually need it, and gives them a reason to buy today, not "someday."
+        </p>
+
+        <p class="about-body fade-up delay-4">
+          With a background in sales, I understand the psychology behind what actually gets people to convert, and it's rarely a "BUY NOW." I know how to build desire and trust into a video so the sell feels invisible, not forced.
+        </p>
+
+        <p class="about-body fade-up delay-5">
+          I test new hooks, angles, and formats on every video because virality isn't luck, it's iteration. My real strength: spotting exactly where a brand's current content isn't landing, whether it's weak hooks, unclear value, or too "ad-like," and fixing it with UGC that feels native and converts.
+        </p>
+
+        <p class="about-body fade-up delay-5">
+          If your product isn't backed by UGC right now, you're leaving growth on the table.
+        </p>
+
+        <p class="about-body fade-up delay-5">
+          Let's talk about what your brand's next viral moment looks like. Send me a message and let's create it!
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
      FOOTER
 ============================================================ -->
 <footer>
@@ -1342,9 +1372,10 @@
         © <span id="footer-year">2025</span> <span>Colton Welgan</span>. UGC Creator.
       </p>
       <nav class="footer-right" aria-label="Footer navigation">
-        <a href="#work">Work</a>
+        <a href="#clients">Brands</a>
+        <a href="results.html">Results</a>
+        <a href="#work">Content</a>
         <a href="#about">About</a>
-        <a href="#clients">Clients</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
