@@ -50,7 +50,7 @@
     .config-warn { color: var(--warning); font-size: 12px; line-height: 1.5; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); border-radius: 8px; padding: 10px 12px; display: none; }
 
     /* ── LAYOUT ── */
-    #app { display: none; min-height: 100vh; }
+    #app-admin, #app-editor { display: none; min-height: 100vh; }
     .sidebar {
       width: var(--sidebar-w); height: 100vh; position: fixed; top: 0; left: 0;
       background: var(--bg-raised); border-right: 1px solid var(--border);
@@ -79,6 +79,22 @@
     .page.active { display: block; }
     .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; margin-bottom: 4px; }
     .page-subtitle { font-size: 13px; color: var(--grey); margin-bottom: 28px; }
+
+    /* ── EDITOR PORTAL ── */
+    .editor-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 32px; border-bottom: 1px solid var(--border); background: var(--bg-raised);
+    }
+    .editor-main { padding: 32px; max-width: 900px; margin: 0 auto; }
+    .job-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .job-card-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .job-card-title { font-size: 17px; font-weight: 700; }
+    .job-links { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+    .job-links a { color: var(--accent-hi); word-break: break-all; }
+    .job-notes { font-size: 13px; color: var(--grey-light); background: var(--bg-raised); border-radius: 8px; padding: 10px 12px; }
 
     /* ── FORMS / INPUTS ── */
     input, select, textarea {
@@ -143,19 +159,14 @@
       display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px;
       font-size: 11px; font-weight: 700; white-space: nowrap;
     }
-    .badge-scripted  { background: rgba(139,92,246,0.15); color: #a78bfa; }
-    .badge-filmed    { background: rgba(59,130,246,0.15); color: #60a5fa; }
-    .badge-editing   { background: rgba(245,158,11,0.15); color: #fbbf24; }
-    .badge-sent      { background: rgba(20,184,166,0.15); color: #2dd4bf; }
-    .badge-approved  { background: rgba(34,197,94,0.15); color: #4ade80; }
-    .badge-revision  { background: rgba(239,68,68,0.15); color: #f87171; }
-    .badge-posted    { background: rgba(123,45,139,0.25); color: #c084fc; }
-    .badge-active    { background: rgba(34,197,94,0.15); color: #4ade80; }
-    .badge-lead      { background: rgba(59,130,246,0.15); color: #60a5fa; }
-    .badge-inactive  { background: rgba(136,136,136,0.15); color: #888; }
-    .badge-pending   { background: rgba(245,158,11,0.15); color: #fbbf24; }
-    .badge-invoiced  { background: rgba(59,130,246,0.15); color: #60a5fa; }
-    .badge-paid      { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge-active     { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge-lead       { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .badge-inactive   { background: rgba(136,136,136,0.15); color: #888; }
+    .badge-assigned   { background: rgba(139,92,246,0.15); color: #a78bfa; }
+    .badge-in_progress{ background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .badge-submitted  { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .badge-approved   { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge-revision   { background: rgba(239,68,68,0.15); color: #f87171; }
     .badge-outlier-hi { background: rgba(245,158,11,0.18); color: #fbbf24; }
     .badge-outlier-lo { background: rgba(239,68,68,0.14); color: #f87171; }
 
@@ -164,67 +175,9 @@
     .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
     .search-input { max-width: 240px; }
 
-    /* ── KANBAN ── */
-    .kanban-wrap { overflow-x: auto; padding-bottom: 8px; }
-    .kanban { display: flex; gap: 12px; min-width: max-content; }
-    .kanban-col {
-      width: 200px; background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 12px; display: flex; flex-direction: column;
-    }
-    .kanban-col-header {
-      padding: 12px 14px; border-bottom: 1px solid var(--border); display: flex;
-      align-items: center; justify-content: space-between;
-    }
-    .kanban-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
-    .kanban-count { background: var(--bg-hover); border-radius: 100px; padding: 2px 8px; font-size: 11px; color: var(--grey); }
-    .kanban-cards { padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 80px; }
-    .k-card {
-      background: var(--bg-raised); border: 1px solid var(--border); border-radius: 8px;
-      padding: 10px 12px; cursor: pointer; transition: border-color .15s;
-    }
-    .k-card:hover { border-color: var(--accent); }
-    .k-card-title { font-size: 12px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
-    .k-card-meta { font-size: 11px; color: var(--grey); display: flex; flex-direction: column; gap: 3px; }
-    .k-card-client { font-size: 11px; color: var(--accent-hi); font-weight: 600; margin-bottom: 4px; }
-    .k-card-due { color: var(--warning); }
-    .k-card-overdue { color: var(--danger); }
-
-    /* ── CALENDAR ── */
-    .cal-nav { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    .cal-day-header { text-align: center; font-size: 11px; font-weight: 700; color: var(--grey); text-transform: uppercase; padding-bottom: 8px; }
-    .cal-day {
-      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
-      min-height: 90px; padding: 8px;
-    }
-    .cal-day.today { border-color: var(--accent); }
-    .cal-day.other-month { opacity: .35; }
-    .cal-day-num { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
-    .cal-event {
-      font-size: 10px; border-radius: 4px; padding: 2px 5px; margin-bottom: 2px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
-    }
-    .cal-event-due  { background: rgba(245,158,11,0.2); color: #fbbf24; }
-    .cal-event-post { background: rgba(123,45,139,0.25); color: #c084fc; }
-
-    /* ── REVENUE ── */
-    .rev-totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
-    .rev-total-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-    .rev-total-card .label { font-size: 11px; font-weight: 700; color: var(--grey); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
-    .rev-total-card .amount { font-size: 28px; font-family: 'Bebas Neue'; letter-spacing: 1px; }
-    .rev-total-card.paid .amount { color: var(--success); }
-    .rev-total-card.outstanding .amount { color: var(--warning); }
+    /* ── CHART ── */
     .chart-container { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
     .chart-inner { position: relative; height: 260px; }
-    .month-grid-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .month-grid-table th { background: var(--bg-raised); padding: 8px 12px; text-align: center; font-size: 11px; color: var(--grey); text-transform: uppercase; border: 1px solid var(--border); }
-    .month-grid-table th:first-child { text-align: left; }
-    .month-grid-table td { padding: 8px 12px; border: 1px solid var(--border); text-align: center; }
-    .month-grid-table td:first-child { text-align: left; font-weight: 600; }
-    .month-grid-table tr.total-row td { background: var(--accent-dim); font-weight: 700; color: var(--white); }
-    .year-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-    .year-tab { padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--grey); }
-    .year-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
 
     /* ── MODAL ── */
     .modal-overlay {
@@ -261,7 +214,7 @@
 
     /* ── DASHBOARD GRID ── */
     .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } .rev-totals { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -273,7 +226,7 @@
       <div class="login-logo">WELGAN <span>CREATIVE</span></div>
       <div class="login-sub">Creator HQ — Private Dashboard</div>
     </div>
-    <div id="supabase-banner" class="config-warn">⚠️ Backend not connected yet. Follow BACKEND_SETUP.md to create your Supabase project, then add your Project URL + anon key to backend.html.</div>
+    <div id="supabase-banner" class="config-warn">⚠️ Backend not connected yet. See BACKEND_SETUP.md.</div>
     <div id="login-error" class="login-error"></div>
     <div class="form-group">
       <label>Email</label>
@@ -287,18 +240,16 @@
   </div>
 </div>
 
-<!-- ══════════════════ APP ══════════════════ -->
-<div id="app">
+<!-- ══════════════════ ADMIN APP ══════════════════ -->
+<div id="app-admin">
   <div class="sidebar">
     <div class="sidebar-logo">WELGAN <span>HQ</span></div>
     <nav class="sidebar-nav">
       <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
       <div class="nav-item" onclick="showPage('instagram')"><span class="icon">📈</span> Instagram Analytics</div>
-      <div class="nav-item" onclick="showPage('tracker')"><span class="icon">🎬</span> Content Tracker</div>
-      <div class="nav-item" onclick="showPage('calendar')"><span class="icon">📅</span> Calendar</div>
-      <div class="nav-item" onclick="showPage('clients')"><span class="icon">🤝</span> Clients</div>
-      <div class="nav-item" onclick="showPage('revenue')"><span class="icon">💰</span> Revenue</div>
-      <div class="nav-item" onclick="showPage('meetings')"><span class="icon">🤙</span> Pipeline</div>
+      <div class="nav-item" onclick="showPage('brands')"><span class="icon">🤝</span> Brands</div>
+      <div class="nav-item" onclick="showPage('jobs')"><span class="icon">🎬</span> Editing Jobs</div>
+      <div class="nav-item" onclick="showPage('expenses')"><span class="icon">💸</span> Expenses</div>
     </nav>
     <div class="sidebar-footer">
       <div class="sidebar-user" id="sidebar-user-email"></div>
@@ -314,32 +265,27 @@
       <div class="page-subtitle" id="dash-date"></div>
 
       <div class="stats-grid">
-        <div class="stat-card"><div class="label">Active Clients</div><div class="value" id="stat-active-clients">—</div><div class="sub">brands</div></div>
-        <div class="stat-card"><div class="label">Due This Week</div><div class="value trend-warn" id="stat-due-week">—</div><div class="sub">deliverables</div></div>
-        <div class="stat-card"><div class="label">In Progress</div><div class="value" id="stat-in-progress">—</div><div class="sub">not yet posted</div></div>
-        <div class="stat-card"><div class="label">Month Revenue</div><div class="value" id="stat-month-rev">—</div><div class="sub" id="stat-month-label">this month</div></div>
-        <div class="stat-card"><div class="label">Open Revisions</div><div class="value trend-warn" id="stat-revisions">—</div><div class="sub">awaiting changes</div></div>
-        <div class="stat-card"><div class="label">Year Revenue</div><div class="value" id="stat-year-rev">—</div><div class="sub" id="stat-year-label">this year</div></div>
+        <div class="stat-card"><div class="label">Active Brands</div><div class="value" id="stat-active-clients">—</div><div class="sub">working with</div></div>
         <div class="stat-card"><div class="label">IG Views This Week</div><div class="value" id="stat-ig-week-views">—</div><div class="sub">combined, all accounts</div></div>
         <div class="stat-card"><div class="label">Top Account (Week)</div><div class="value" id="stat-ig-top-account" style="font-size:20px">—</div><div class="sub" id="stat-ig-top-account-views"></div></div>
       </div>
 
       <div class="dash-grid">
         <div class="card">
-          <div class="card-header"><div class="card-title">Due Soon</div></div>
+          <div class="card-header"><div class="card-title">Brands You're Working With</div></div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Title</th><th>Client</th><th>Due</th><th>Stage</th></tr></thead>
-              <tbody id="due-soon-tbody"></tbody>
+              <thead><tr><th>Brand</th><th>Rate</th><th>Status</th></tr></thead>
+              <tbody id="dash-clients-tbody"></tbody>
             </table>
           </div>
         </div>
         <div class="card">
-          <div class="card-header"><div class="card-title">Active Clients</div></div>
+          <div class="card-header"><div class="card-title">Views Per Account</div></div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Brand</th><th>Rate</th><th>Videos</th></tr></thead>
-              <tbody id="dash-clients-tbody"></tbody>
+              <thead><tr><th>Account</th><th>Week</th><th>Month</th><th>Year</th></tr></thead>
+              <tbody id="dash-ig-tbody"></tbody>
             </table>
           </div>
         </div>
@@ -410,60 +356,22 @@
       </div>
     </div>
 
-    <!-- ── CONTENT TRACKER ── -->
-    <div id="page-tracker" class="page">
+    <!-- ── BRANDS ── -->
+    <div id="page-brands" class="page">
       <div class="page-header">
         <div>
-          <div class="page-title">Content Tracker</div>
-          <div class="page-subtitle">Track every video from script to post</div>
+          <div class="page-title">Brands</div>
+          <div class="page-subtitle">Who you're working with</div>
         </div>
         <div class="page-actions">
-          <select id="tracker-filter-client" style="width:auto" onchange="renderKanban()">
-            <option value="">All Clients</option>
-          </select>
-          <button class="btn btn-primary" onclick="openDeliverableModal()">+ Add Video</button>
-        </div>
-      </div>
-      <div class="kanban-wrap">
-        <div class="kanban" id="kanban-board"></div>
-      </div>
-    </div>
-
-    <!-- ── CALENDAR ── -->
-    <div id="page-calendar" class="page">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Content Calendar</div>
-          <div class="page-subtitle">🟡 Due dates &nbsp;·&nbsp; 🟣 Post dates</div>
-        </div>
-        <div class="page-actions">
-          <button class="btn btn-primary" onclick="openDeliverableModal()">+ Add Video</button>
-        </div>
-      </div>
-      <div class="cal-nav">
-        <button class="btn btn-ghost btn-sm" onclick="calPrev()">← Prev</button>
-        <h3 id="cal-month-label" style="font-family:'Bebas Neue';font-size:24px;letter-spacing:1px"></h3>
-        <button class="btn btn-ghost btn-sm" onclick="calNext()">Next →</button>
-      </div>
-      <div class="cal-grid" id="cal-grid"></div>
-    </div>
-
-    <!-- ── CLIENTS ── -->
-    <div id="page-clients" class="page">
-      <div class="page-header">
-        <div>
-          <div class="page-title">Clients</div>
-          <div class="page-subtitle">Your brand CRM</div>
-        </div>
-        <div class="page-actions">
-          <input class="search-input" type="text" id="client-search" placeholder="Search clients…" oninput="renderClients()">
+          <input class="search-input" type="text" id="client-search" placeholder="Search brands…" oninput="renderClients()">
           <select id="client-status-filter" onchange="renderClients()" style="width:auto">
             <option value="">All</option>
             <option value="active">Active</option>
             <option value="lead">Lead</option>
             <option value="inactive">Inactive</option>
           </select>
-          <button class="btn btn-primary" onclick="openClientModal()">+ Add Client</button>
+          <button class="btn btn-primary" onclick="openClientModal()">+ Add Brand</button>
         </div>
       </div>
       <div class="card">
@@ -476,99 +384,51 @@
       </div>
     </div>
 
-    <!-- ── REVENUE ── -->
-    <div id="page-revenue" class="page">
+    <!-- ── EDITING JOBS ── -->
+    <div id="page-jobs" class="page">
       <div class="page-header">
         <div>
-          <div class="page-title">Revenue</div>
-          <div class="page-subtitle">Monthly and yearly money tracking across all brands</div>
+          <div class="page-title">Editing Jobs</div>
+          <div class="page-subtitle">Assign work, track progress, review submissions</div>
         </div>
         <div class="page-actions">
-          <button class="btn btn-primary" onclick="openRevenueModal()">+ Log Payment</button>
+          <button class="btn btn-ghost" onclick="openInviteModal()">+ Invite Editor</button>
+          <button class="btn btn-primary" onclick="openJobModal()">+ New Job</button>
         </div>
       </div>
-
-      <div class="rev-totals">
-        <div class="rev-total-card"><div class="label">Total Logged</div><div class="amount" id="rev-total">$0</div></div>
-        <div class="rev-total-card paid"><div class="label">Collected</div><div class="amount" id="rev-paid">$0</div></div>
-        <div class="rev-total-card outstanding"><div class="label">Outstanding</div><div class="amount" id="rev-outstanding">$0</div></div>
-      </div>
-
-      <div class="year-tabs" id="year-tabs"></div>
-
-      <div class="chart-container">
-        <div class="card-header" style="margin-bottom:16px"><div class="card-title">Monthly Revenue by Brand</div></div>
-        <div class="chart-inner"><canvas id="rev-chart"></canvas></div>
-      </div>
-
-      <div class="card" style="margin-bottom:24px">
-        <div class="card-header"><div class="card-title">Monthly Breakdown by Brand</div></div>
-        <div class="table-wrap" id="month-grid-wrap"></div>
-      </div>
-
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">Payment Log</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <select id="rev-filter-client" onchange="renderRevLog()" style="width:auto">
-              <option value="">All Clients</option>
-            </select>
-            <select id="rev-filter-status" onchange="renderRevLog()" style="width:auto">
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="invoiced">Invoiced</option>
-              <option value="paid">Paid</option>
-            </select>
-          </div>
-        </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Date</th><th>Client</th><th>Deliverable</th><th>Amount</th><th>Status</th><th>Notes</th><th></th></tr></thead>
-            <tbody id="revenue-tbody"></tbody>
+            <thead><tr><th>Title</th><th>Editor</th><th>Status</th><th>Created</th><th></th></tr></thead>
+            <tbody id="jobs-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- ── PIPELINE / MEETINGS ── -->
-    <div id="page-meetings" class="page">
+    <!-- ── EXPENSES ── -->
+    <div id="page-expenses" class="page">
       <div class="page-header">
         <div>
-          <div class="page-title">Pipeline</div>
-          <div class="page-subtitle">Deals in progress — who you're talking to and what's at stake</div>
+          <div class="page-title">Expenses</div>
+          <div class="page-subtitle">Business costs — software, contractors, gear</div>
         </div>
         <div class="page-actions">
-          <button class="btn btn-primary" onclick="openMeetingModal()">+ Add Deal</button>
+          <button class="btn btn-primary" onclick="openExpenseModal()">+ Log Expense</button>
         </div>
       </div>
 
-      <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:28px">
-        <div class="stat-card"><div class="label">Active Deals</div><div class="value" id="pipe-count">—</div><div class="sub">in pipeline</div></div>
-        <div class="stat-card"><div class="label">Pipeline Value</div><div class="value" id="pipe-value">—</div><div class="sub">potential revenue</div></div>
-        <div class="stat-card"><div class="label">Waiting to Sign</div><div class="value trend-warn" id="pipe-signing">—</div><div class="sub">deals nearly closed</div></div>
-        <div class="stat-card"><div class="label">Signed This Month</div><div class="value trend-good" id="pipe-signed">—</div><div class="sub">closed deals</div></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="label">Total Logged</div><div class="value" id="exp-total">—</div><div class="sub">all time</div></div>
+        <div class="stat-card"><div class="label">This Month</div><div class="value" id="exp-month">—</div><div class="sub" id="exp-month-label"></div></div>
+        <div class="stat-card"><div class="label">This Year</div><div class="value" id="exp-year">—</div><div class="sub" id="exp-year-label"></div></div>
       </div>
 
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">All Deals</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <input type="text" id="pipe-search" placeholder="Search…" oninput="renderMeetings()" style="max-width:180px">
-            <select id="pipe-stage-filter" onchange="renderMeetings()" style="width:auto">
-              <option value="">All Stages</option>
-              <option value="talking">Talking</option>
-              <option value="proposal">Proposal Sent</option>
-              <option value="negotiating">Negotiating</option>
-              <option value="waiting">Waiting to Sign</option>
-              <option value="signed">Signed</option>
-              <option value="lost">Lost</option>
-            </select>
-          </div>
-        </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Brand / Contact</th><th>Deal Value</th><th>Stage</th><th>Last Contact</th><th>Follow-up</th><th>Notes</th><th></th></tr></thead>
-            <tbody id="meetings-tbody"></tbody>
+            <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Notes</th><th></th></tr></thead>
+            <tbody id="expenses-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -577,89 +437,28 @@
   </main>
 </div>
 
-<!-- ══════════════════ MODALS ══════════════════ -->
-
-<!-- Deliverable Modal -->
-<div class="modal-overlay" id="modal-deliverable" onclick="if(event.target===this)closeModal('modal-deliverable')">
-  <div class="modal">
-    <div class="modal-title" id="del-modal-title">Add Video</div>
-    <input type="hidden" id="del-id">
-    <div class="form-group">
-      <label>Title</label>
-      <input type="text" id="del-title" placeholder="e.g. UGC Review – Neuro Gum">
+<!-- ══════════════════ EDITOR PORTAL ══════════════════ -->
+<div id="app-editor">
+  <div class="editor-header">
+    <div class="sidebar-logo" style="padding:0;border:none">WELGAN <span>HQ</span></div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="sidebar-user" id="editor-user-name" style="margin:0"></div>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">Sign Out</button>
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Client / Brand</label>
-        <select id="del-client"></select>
-      </div>
-      <div class="form-group">
-        <label>Content Type</label>
-        <select id="del-type">
-          <option value="UGC Video">UGC Video</option>
-          <option value="Short Form">Short Form</option>
-          <option value="Long Form">Long Form</option>
-          <option value="Photo">Photo</option>
-          <option value="Story">Story</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Stage</label>
-      <div class="pill-select" id="del-stage-pills">
-        <div class="pill active" data-val="scripted"  onclick="selectPill(this,'del-stage-pills','del-stage')">Scripted</div>
-        <div class="pill"        data-val="filmed"    onclick="selectPill(this,'del-stage-pills','del-stage')">Filmed</div>
-        <div class="pill"        data-val="editing"   onclick="selectPill(this,'del-stage-pills','del-stage')">Editing</div>
-        <div class="pill"        data-val="sent"      onclick="selectPill(this,'del-stage-pills','del-stage')">Sent</div>
-        <div class="pill"        data-val="approved"  onclick="selectPill(this,'del-stage-pills','del-stage')">Approved</div>
-        <div class="pill"        data-val="revision"  onclick="selectPill(this,'del-stage-pills','del-stage')">Revision Requested</div>
-        <div class="pill"        data-val="posted"    onclick="selectPill(this,'del-stage-pills','del-stage')">Posted</div>
-      </div>
-      <input type="hidden" id="del-stage" value="scripted">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Due Date (brand deadline)</label>
-        <input type="date" id="del-due">
-      </div>
-      <div class="form-group">
-        <label>Post Date (goes live)</label>
-        <input type="date" id="del-post">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Platform</label>
-        <select id="del-platform">
-          <option value="TikTok">TikTok</option>
-          <option value="Instagram">Instagram</option>
-          <option value="YouTube">YouTube</option>
-          <option value="Facebook">Facebook</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Revision Count</label>
-        <input type="number" id="del-revisions" value="0" min="0">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="del-notes" placeholder="Script notes, brand requirements, links…"></textarea>
-    </div>
-    <div class="modal-footer">
-      <button id="del-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteDeliverable()">Delete</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-deliverable')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveDeliverable()">Save</button>
-    </div>
+  </div>
+  <div class="editor-main">
+    <div class="page-title">Your Jobs</div>
+    <div class="page-subtitle">Drive links, assets, and status for work assigned to you</div>
+    <div id="editor-jobs-list"></div>
   </div>
 </div>
 
-<!-- Client Modal -->
+<!-- ══════════════════ MODALS ══════════════════ -->
+
+<!-- Client / Brand Modal -->
 <div class="modal-overlay" id="modal-client" onclick="if(event.target===this)closeModal('modal-client')">
   <div class="modal">
-    <div class="modal-title" id="client-modal-title">Add Client</div>
+    <div class="modal-title" id="client-modal-title">Add Brand</div>
     <input type="hidden" id="client-id">
     <div class="form-group">
       <label>Brand Name</label>
@@ -693,10 +492,6 @@
       </div>
     </div>
     <div class="form-group">
-      <label>Videos Per Month <span style="color:var(--grey);font-weight:400">(fills calendar automatically — leave blank if not recurring)</span></label>
-      <input type="number" id="client-videos-per-month" placeholder="e.g. 30" min="0">
-    </div>
-    <div class="form-group">
       <label>Status</label>
       <div class="pill-select" id="client-status-pills">
         <div class="pill active" data-val="active"   onclick="selectPill(this,'client-status-pills','client-status')">Active</div>
@@ -713,110 +508,6 @@
       <button id="client-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteClient()">Delete</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-client')">Cancel</button>
       <button class="btn btn-primary" onclick="saveClient()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Revenue Modal -->
-<div class="modal-overlay" id="modal-revenue" onclick="if(event.target===this)closeModal('modal-revenue')">
-  <div class="modal">
-    <div class="modal-title" id="rev-modal-title">Log Payment</div>
-    <input type="hidden" id="rev-id">
-    <div class="form-row">
-      <div class="form-group">
-        <label>Client / Brand</label>
-        <select id="rev-client" onchange="populateRevDeliverables()"></select>
-      </div>
-      <div class="form-group">
-        <label>Amount ($)</label>
-        <input type="number" id="rev-amount" placeholder="500" min="0">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Date</label>
-        <input type="date" id="rev-date">
-      </div>
-      <div class="form-group">
-        <label>Status</label>
-        <select id="rev-status">
-          <option value="pending">Pending</option>
-          <option value="invoiced">Invoiced</option>
-          <option value="paid">Paid</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Linked Deliverable (optional)</label>
-      <select id="rev-deliverable"><option value="">— none —</option></select>
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="rev-notes" placeholder="Invoice #, payment method, PO number…"></textarea>
-    </div>
-    <div class="modal-footer">
-      <button id="rev-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteRevenue()">Delete</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-revenue')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveRevenue()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Meeting Modal -->
-<div class="modal-overlay" id="modal-meeting" onclick="if(event.target===this)closeModal('modal-meeting')">
-  <div class="modal">
-    <div class="modal-title" id="meeting-modal-title">Add Deal</div>
-    <input type="hidden" id="meeting-id">
-    <div class="form-row">
-      <div class="form-group">
-        <label>Brand / Company</label>
-        <input type="text" id="meeting-brand" placeholder="e.g. Athletic Greens">
-      </div>
-      <div class="form-group">
-        <label>Contact Name</label>
-        <input type="text" id="meeting-contact" placeholder="First Last">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Deal Value ($)</label>
-        <input type="number" id="meeting-value" placeholder="2000" min="0">
-      </div>
-      <div class="form-group">
-        <label>Contact Email</label>
-        <input type="email" id="meeting-email" placeholder="name@brand.com">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Stage</label>
-      <div class="pill-select" id="meeting-stage-pills">
-        <div class="pill active"  data-val="talking"     onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Talking</div>
-        <div class="pill"         data-val="proposal"    onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Proposal Sent</div>
-        <div class="pill"         data-val="negotiating" onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Negotiating</div>
-        <div class="pill"         data-val="waiting"     onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Waiting to Sign</div>
-        <div class="pill"         data-val="signed"      onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Signed</div>
-        <div class="pill"         data-val="lost"        onclick="selectPill(this,'meeting-stage-pills','meeting-stage')">Lost</div>
-      </div>
-      <input type="hidden" id="meeting-stage" value="talking">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Last Contact Date</label>
-        <input type="date" id="meeting-last">
-      </div>
-      <div class="form-group">
-        <label>Follow-up Date</label>
-        <input type="date" id="meeting-followup">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Notes</label>
-      <textarea id="meeting-notes" placeholder="What was discussed, what they need, next steps…"></textarea>
-    </div>
-    <div class="modal-footer">
-      <button id="meeting-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteMeeting()">Delete</button>
-      <button class="btn btn-ghost" onclick="closeModal('modal-meeting')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveMeeting()">Save</button>
     </div>
   </div>
 </div>
@@ -901,14 +592,99 @@
   </div>
 </div>
 
+<!-- Invite Editor Modal -->
+<div class="modal-overlay" id="modal-invite" onclick="if(event.target===this)closeModal('modal-invite')">
+  <div class="modal">
+    <div class="modal-title">Invite Editor</div>
+    <div class="form-group">
+      <label>Editor's Email</label>
+      <input type="email" id="invite-email" placeholder="editor@email.com">
+    </div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="invite-name" placeholder="First Last">
+    </div>
+    <p style="font-size:12px;color:var(--grey)">They'll get an email with a link to set their own password and log in — you'll never see or handle it.</p>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-invite')">Cancel</button>
+      <button class="btn btn-primary" id="invite-submit-btn" onclick="sendInvite()">Send Invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- Job Modal -->
+<div class="modal-overlay" id="modal-job" onclick="if(event.target===this)closeModal('modal-job')">
+  <div class="modal">
+    <div class="modal-title" id="job-modal-title">New Job</div>
+    <input type="hidden" id="job-id">
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="job-title" placeholder="e.g. Neuro Gum UGC — 3 cuts">
+    </div>
+    <div class="form-group">
+      <label>Editor</label>
+      <select id="job-editor"></select>
+    </div>
+    <div class="form-group">
+      <label>Google Drive Link</label>
+      <input type="text" id="job-drive" placeholder="https://drive.google.com/...">
+    </div>
+    <div class="form-group">
+      <label>Asset / Reference Links <span style="color:var(--grey);font-weight:400">(one per line)</span></label>
+      <textarea id="job-assets" placeholder="https://... reference video&#10;https://... brand assets"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="job-notes" placeholder="Format specs, deadline, style notes…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button id="job-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteJob()">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-job')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveJob()">Save &amp; Notify Editor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Expense Modal -->
+<div class="modal-overlay" id="modal-expense" onclick="if(event.target===this)closeModal('modal-expense')">
+  <div class="modal">
+    <div class="modal-title" id="expense-modal-title">Log Expense</div>
+    <input type="hidden" id="expense-id">
+    <div class="form-group">
+      <label>Description</label>
+      <input type="text" id="expense-desc" placeholder="e.g. CapCut Pro subscription">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount ($)</label>
+        <input type="number" id="expense-amount" placeholder="20" min="0">
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="expense-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <input type="text" id="expense-category" placeholder="Software, Editor Pay, Gear…">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="expense-notes" placeholder="Optional details…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button id="expense-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteExpense()">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-expense')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveExpense()">Save</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 /* ══════════════════════════════════════════
    SUPABASE CONFIG
-   Fill these in after creating your project — see BACKEND_SETUP.md.
-   The anon/public key is safe to expose client-side; access is gated by
-   Row Level Security, which only lets an authenticated user read/write.
 ══════════════════════════════════════════ */
 const SUPABASE_URL = 'https://tfladstuvagsuzzdtiup.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmbGFkc3R1dmFnc3V6emR0aXVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc3NjY3NDgsImV4cCI6MjEwMzM0Mjc0OH0.LU01RHcQTyM5s4Z3OHIrm_bLFbLzLVILHCo5iW1wRxA';
@@ -916,6 +692,9 @@ const supabaseConfigured = SUPABASE_URL.startsWith('http') && SUPABASE_KEY.start
 const sb = supabaseConfigured ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 let currentUserEmail = '';
+let currentUserId = '';
+let currentUserRole = '';
+let accessToken = '';
 
 /* ══════════════════════════════════════════
    AUTH
@@ -931,8 +710,31 @@ async function doLogin() {
   const { data, error } = await sb.auth.signInWithPassword({ email: em, password: pw });
   btn.disabled = false; btn.textContent = 'Sign In →';
   if (error) { err.textContent = 'Incorrect email or password.'; return; }
-  currentUserEmail = data.user.email;
-  startApp();
+  await afterLogin(data.session);
+}
+
+async function afterLogin(session) {
+  currentUserEmail = session.user.email;
+  currentUserId    = session.user.id;
+  accessToken      = session.access_token;
+
+  const { data: profile, error } = await sb.from('profiles').select('role, full_name').eq('id', currentUserId).single();
+  if (error || !profile) {
+    document.getElementById('login-error').textContent = 'No profile found for this login. Contact the admin.';
+    return;
+  }
+  currentUserRole = profile.role;
+  document.getElementById('login-screen').style.display = 'none';
+
+  if (currentUserRole === 'admin') {
+    document.getElementById('app-admin').style.display = 'block';
+    document.getElementById('sidebar-user-email').textContent = currentUserEmail;
+    await startAdminApp();
+  } else {
+    document.getElementById('app-editor').style.display = 'block';
+    document.getElementById('editor-user-name').textContent = profile.full_name || currentUserEmail;
+    await startEditorApp();
+  }
 }
 
 async function doLogout() {
@@ -940,11 +742,22 @@ async function doLogout() {
   location.reload();
 }
 
+async function authedFetch(url, body) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + accessToken },
+    body: JSON.stringify(body || {}),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
 /* ══════════════════════════════════════════
    DATA LAYER  (Supabase)
 ══════════════════════════════════════════ */
-async function dbSelect(table) {
-  const { data, error } = await sb.from(table).select('*').order('created_at', { ascending: true });
+async function dbSelect(table, order) {
+  const { data, error } = await sb.from(table).select('*').order(order || 'created_at', { ascending: true });
   if (error) { console.error(error); toast('Error loading ' + table); return []; }
   return data;
 }
@@ -964,17 +777,8 @@ async function dbDelete(table, id) {
 }
 
 /* camelCase (JS) <-> snake_case (DB) mappers */
-function toDbClient(o)   { return { name:o.name, contact_name:o.contactName, contact_email:o.contactEmail, rate:o.rate, rate_type:o.rateType, videos_per_month:o.videosPerMonth, status:o.status, notes:o.notes }; }
-function fromDbClient(r) { return { id:r.id, name:r.name, contactName:r.contact_name||'', contactEmail:r.contact_email||'', rate:Number(r.rate)||0, rateType:r.rate_type||'per video', videosPerMonth:Number(r.videos_per_month)||0, status:r.status||'active', notes:r.notes||'', createdAt:r.created_at }; }
-
-function toDbDeliverable(o)   { return { title:o.title, client_id:o.clientId||null, content_type:o.contentType, stage:o.stage, due_date:o.dueDate||null, post_date:o.postDate||null, platform:o.platform, revision_count:o.revisions, notes:o.notes }; }
-function fromDbDeliverable(r) { return { id:r.id, title:r.title, clientId:r.client_id, contentType:r.content_type||'UGC Video', stage:r.stage||'scripted', dueDate:r.due_date||'', postDate:r.post_date||'', platform:r.platform||'TikTok', revisions:Number(r.revision_count)||0, notes:r.notes||'', createdAt:r.created_at }; }
-
-function toDbRevenue(o)   { return { client_id:o.clientId||null, deliverable_id:o.deliverableId||null, amount:o.amount, date:o.date||null, status:o.status, notes:o.notes }; }
-function fromDbRevenue(r) { return { id:r.id, clientId:r.client_id, deliverableId:r.deliverable_id, amount:Number(r.amount)||0, date:r.date||'', status:r.status||'pending', notes:r.notes||'', createdAt:r.created_at }; }
-
-function toDbMeeting(o)   { return { brand:o.brand, contact:o.contact, email:o.email, value:o.value, stage:o.stage, last_contact:o.lastContact||null, followup:o.followup||null, notes:o.notes }; }
-function fromDbMeeting(r) { return { id:r.id, brand:r.brand, contact:r.contact||'', email:r.email||'', value:Number(r.value)||0, stage:r.stage||'talking', lastContact:r.last_contact||'', followup:r.followup||'', notes:r.notes||'', createdAt:r.created_at }; }
+function toDbClient(o)   { return { name:o.name, contact_name:o.contactName, contact_email:o.contactEmail, rate:o.rate, rate_type:o.rateType, status:o.status, notes:o.notes }; }
+function fromDbClient(r) { return { id:r.id, name:r.name, contactName:r.contact_name||'', contactEmail:r.contact_email||'', rate:Number(r.rate)||0, rateType:r.rate_type||'per video', status:r.status||'active', notes:r.notes||'', createdAt:r.created_at }; }
 
 function toDbIgAccount(o)   { return { handle:o.handle, display_name:o.displayName, profile_url:o.profileUrl, cpm:o.cpm, notes:o.notes }; }
 function fromDbIgAccount(r) { return { id:r.id, handle:r.handle, displayName:r.display_name||'', profileUrl:r.profile_url||'', cpm:Number(r.cpm)||5, notes:r.notes||'', createdAt:r.created_at }; }
@@ -982,33 +786,41 @@ function fromDbIgAccount(r) { return { id:r.id, handle:r.handle, displayName:r.d
 function toDbIgPost(o)   { return { account_id:o.accountId, caption:o.caption, post_date:o.postDate, views:o.views, likes:o.likes, comments:o.comments, post_url:o.postUrl }; }
 function fromDbIgPost(r) { return { id:r.id, accountId:r.account_id, caption:r.caption||'', postDate:r.post_date, views:Number(r.views)||0, likes:Number(r.likes)||0, comments:Number(r.comments)||0, postUrl:r.post_url||'', createdAt:r.created_at }; }
 
-let clients      = [];
-let deliverables = [];
-let revenue      = [];
-let meetings     = [];
-let igAccounts   = [];
-let igPosts      = [];
+function toDbExpense(o)   { return { description:o.description, category:o.category, amount:o.amount, date:o.date||null, notes:o.notes }; }
+function fromDbExpense(r) { return { id:r.id, description:r.description, category:r.category||'', amount:Number(r.amount)||0, date:r.date||'', notes:r.notes||'', createdAt:r.created_at }; }
+
+function fromDbJob(r) { return { id:r.id, title:r.title, editorId:r.editor_id, driveLink:r.drive_link||'', assetLinks:r.asset_links||'', notes:r.notes||'', status:r.status||'assigned', createdAt:r.created_at, submittedAt:r.submitted_at, approvedAt:r.approved_at }; }
+
+let clients    = [];
+let igAccounts = [];
+let igPosts    = [];
+let expenses   = [];
+let jobs       = [];
+let editors    = [];
 
 /* ══════════════════════════════════════════
    APP INIT
 ══════════════════════════════════════════ */
-async function startApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('sidebar-user-email').textContent = currentUserEmail || '';
-
-  const [cRows, dRows, rRows, mRows, iaRows, ipRows] = await Promise.all([
-    dbSelect('clients'), dbSelect('deliverables'), dbSelect('revenue'), dbSelect('meetings'),
-    dbSelect('ig_accounts'), dbSelect('ig_posts')
+async function startAdminApp() {
+  const [cRows, iaRows, ipRows, eRows, jRows, pRows] = await Promise.all([
+    dbSelect('clients'), dbSelect('ig_accounts'), dbSelect('ig_posts'), dbSelect('expenses'),
+    dbSelect('editing_jobs'), dbSelect('profiles'),
   ]);
-  clients      = cRows.map(fromDbClient);
-  deliverables = dRows.map(fromDbDeliverable);
-  revenue      = rRows.map(fromDbRevenue);
-  meetings     = mRows.map(fromDbMeeting);
-  igAccounts   = iaRows.map(fromDbIgAccount);
-  igPosts      = ipRows.map(fromDbIgPost);
+  clients    = cRows.map(fromDbClient);
+  igAccounts = iaRows.map(fromDbIgAccount);
+  igPosts    = ipRows.map(fromDbIgPost);
+  expenses   = eRows.map(fromDbExpense);
+  jobs       = jRows.map(fromDbJob);
+  editors    = pRows.filter(p => p.role === 'editor');
 
-  renderDashboard(); renderInstagram(); renderKanban(); renderCalendar(); renderClients(); renderRevenue(); renderMeetings();
+  renderDashboard(); renderInstagram(); renderClients(); renderJobs(); renderExpenses();
+}
+
+async function startEditorApp() {
+  const { data, error } = await sb.from('editing_jobs').select('*').eq('editor_id', currentUserId).order('created_at', { ascending: false });
+  if (error) { toast('Error loading jobs'); return; }
+  jobs = data.map(fromDbJob);
+  renderEditorJobs();
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -1017,7 +829,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     return;
   }
   const { data } = await sb.auth.getSession();
-  if (data.session) { currentUserEmail = data.session.user.email; startApp(); }
+  if (data.session) await afterLogin(data.session);
 });
 
 /* ══════════════════════════════════════════
@@ -1028,15 +840,13 @@ function showPage(id) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.textContent.toLowerCase().includes(id === 'meetings' ? 'pipeline' : id)) n.classList.add('active');
+    if (n.textContent.toLowerCase().includes(id)) n.classList.add('active');
   });
   if (id === 'dashboard') renderDashboard();
   if (id === 'instagram') renderInstagram();
-  if (id === 'tracker')   renderKanban();
-  if (id === 'calendar')  renderCalendar();
-  if (id === 'clients')   renderClients();
-  if (id === 'revenue')   renderRevenue();
-  if (id === 'meetings')  renderMeetings();
+  if (id === 'brands')    renderClients();
+  if (id === 'jobs')      renderJobs();
+  if (id === 'expenses')  renderExpenses();
 }
 
 /* ══════════════════════════════════════════
@@ -1066,11 +876,6 @@ function fmtDate(d) {
 function today() {
   return new Date().toISOString().slice(0, 10);
 }
-function daysUntil(d) {
-  if (!d) return null;
-  const diff = new Date(d + 'T00:00:00') - new Date(today() + 'T00:00:00');
-  return Math.round(diff / 86400000);
-}
 function mondayOf(d) {
   const dt = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const day = dt.getDay();
@@ -1080,12 +885,12 @@ function mondayOf(d) {
 }
 function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
 function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-function stageBadge(s) {
-  const map = {scripted:'Scripted',filmed:'Filmed',editing:'Editing',sent:'Sent',approved:'Approved',revision:'Revision',posted:'Posted'};
-  return `<span class="badge badge-${s}">${map[s] || s}</span>`;
-}
 function statusBadge(s) {
   return `<span class="badge badge-${s}">${s.charAt(0).toUpperCase() + s.slice(1)}</span>`;
+}
+function jobStatusBadge(s) {
+  const map = {assigned:'Assigned', in_progress:'In Progress', submitted:'Submitted', approved:'Approved', revision:'Revision Requested'};
+  return `<span class="badge badge-${s}">${map[s] || s}</span>`;
 }
 function selectPill(el, groupId, hiddenId) {
   document.querySelectorAll(`#${groupId} .pill`).forEach(p => p.classList.remove('active'));
@@ -1117,41 +922,12 @@ function renderDashboard() {
   document.getElementById('dash-date').textContent =
     now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 
-  const activeClients = clients.filter(c => c.status === 'active').length;
-  document.getElementById('stat-active-clients').textContent = activeClients;
+  document.getElementById('stat-active-clients').textContent = clients.filter(c => c.status === 'active').length;
 
-  const weekEnd = new Date(); weekEnd.setDate(weekEnd.getDate() + 7);
-  const dueWeek = deliverables.filter(d => {
-    if (!d.dueDate || d.stage === 'posted') return false;
-    const dd = new Date(d.dueDate + 'T00:00:00');
-    return dd >= now && dd <= weekEnd;
-  }).length;
-  document.getElementById('stat-due-week').textContent = dueWeek;
-
-  document.getElementById('stat-in-progress').textContent =
-    deliverables.filter(d => d.stage !== 'posted').length;
-
-  const monthPaid = revenue.filter(r => {
-    if (!r.date || r.status !== 'paid') return false;
-    const rd = new Date(r.date);
-    return rd.getMonth() === now.getMonth() && rd.getFullYear() === now.getFullYear();
-  }).reduce((s, r) => s + Number(r.amount || 0), 0);
-  document.getElementById('stat-month-rev').textContent  = fmt$(monthPaid);
-  document.getElementById('stat-month-label').textContent = MONTH_NAMES[now.getMonth()];
-
-  document.getElementById('stat-revisions').textContent =
-    deliverables.filter(d => d.stage === 'revision').length;
-
-  const yearPaid = revenue.filter(r => {
-    if (!r.date || r.status !== 'paid') return false;
-    return new Date(r.date).getFullYear() === now.getFullYear();
-  }).reduce((s, r) => s + Number(r.amount || 0), 0);
-  document.getElementById('stat-year-rev').textContent   = fmt$(yearPaid);
-  document.getElementById('stat-year-label').textContent = now.getFullYear() + ' collected';
-
-  // Instagram — this week
   const wkStart = mondayOf(new Date());
   const wkEnd   = addDays(wkStart, 6);
+  const moStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const yrStart = new Date(now.getFullYear(), 0, 1);
   const wkPosts = igPosts.filter(p => p.postDate && p.postDate >= toISO(wkStart) && p.postDate <= toISO(wkEnd));
   const wkViews = wkPosts.reduce((s,p) => s + Number(p.views||0), 0);
   document.getElementById('stat-ig-week-views').textContent = fmtCompact(wkViews);
@@ -1163,36 +939,27 @@ function renderDashboard() {
   document.getElementById('stat-ig-top-account').textContent = topAcc ? topAcc.handle : '—';
   document.getElementById('stat-ig-top-account-views').textContent = topAcc ? fmtCompact(byAccount[topAccId]) + ' views' : 'no videos logged yet';
 
-  // due soon
-  const dueSoon = deliverables
-    .filter(d => d.dueDate && d.stage !== 'posted')
-    .sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate))
-    .slice(0, 8);
-  const tb = document.getElementById('due-soon-tbody');
-  tb.innerHTML = dueSoon.length ? dueSoon.map(d => {
-    const days = daysUntil(d.dueDate);
-    const cls  = days < 0 ? 'k-card-overdue' : days <= 3 ? 'k-card-due' : '';
-    const lbl  = days === 0 ? 'Today!' : days < 0 ? `${Math.abs(days)}d overdue` : `in ${days}d`;
-    return `<tr><td>${d.title}</td><td>${clientName(d.clientId)}</td>
-      <td class="${cls}">${fmtDate(d.dueDate)} <small>(${lbl})</small></td>
-      <td>${stageBadge(d.stage)}</td></tr>`;
-  }).join('') : '<tr class="empty-row"><td colspan="4">No upcoming deadlines 🎉</td></tr>';
-
-  // active clients
   const activeC = clients.filter(c => c.status === 'active');
   const tb2 = document.getElementById('dash-clients-tbody');
   tb2.innerHTML = activeC.length ? activeC.map(c => {
-    const vids = deliverables.filter(d => d.clientId === c.id).length;
     const rate = c.rate ? `${fmt$(c.rate)}/${c.rateType||'video'}` : '—';
     return `<tr onclick="openClientModal('${c.id}')" style="cursor:pointer">
-      <td><strong>${c.name}</strong></td><td>${rate}</td><td>${vids}</td></tr>`;
-  }).join('') : '<tr class="empty-row"><td colspan="3">No active clients yet</td></tr>';
+      <td><strong>${c.name}</strong></td><td>${rate}</td><td>${statusBadge(c.status)}</td></tr>`;
+  }).join('') : '<tr class="empty-row"><td colspan="3">No brands yet — add one from the Brands page</td></tr>';
+
+  const tb3 = document.getElementById('dash-ig-tbody');
+  tb3.innerHTML = igAccounts.length ? igAccounts.map(a => {
+    const wk = igPosts.filter(p => p.accountId === a.id && p.postDate >= toISO(wkStart) && p.postDate <= toISO(wkEnd)).reduce((s,p)=>s+Number(p.views||0),0);
+    const mo = igPosts.filter(p => p.accountId === a.id && p.postDate >= toISO(moStart)).reduce((s,p)=>s+Number(p.views||0),0);
+    const yr = igPosts.filter(p => p.accountId === a.id && p.postDate >= toISO(yrStart)).reduce((s,p)=>s+Number(p.views||0),0);
+    return `<tr><td><strong>${a.handle}</strong></td><td>${fmtCompact(wk)}</td><td>${fmtCompact(mo)}</td><td>${fmtCompact(yr)}</td></tr>`;
+  }).join('') : '<tr class="empty-row"><td colspan="4">No Instagram accounts yet</td></tr>';
 }
 
 /* ══════════════════════════════════════════
    INSTAGRAM ANALYTICS
 ══════════════════════════════════════════ */
-let igActiveAccount = null;   // null = All Accounts
+let igActiveAccount = null;
 let igPeriodMode     = 'week';
 let igPeriodDate     = new Date();
 let igChartInst      = null;
@@ -1518,111 +1285,7 @@ async function deleteIgPost() {
 }
 
 /* ══════════════════════════════════════════
-   CONTENT TRACKER (KANBAN)
-══════════════════════════════════════════ */
-const STAGES = [
-  {key:'scripted', label:'Scripted'},
-  {key:'filmed',   label:'Filmed'},
-  {key:'editing',  label:'Editing'},
-  {key:'sent',     label:'Sent'},
-  {key:'approved', label:'Approved'},
-  {key:'revision', label:'Revision'},
-  {key:'posted',   label:'Posted'},
-];
-
-function renderKanban() {
-  const sel = document.getElementById('tracker-filter-client');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">All Clients</option>' +
-    clients.map(c => `<option value="${c.id}" ${c.id===cur?'selected':''}>${c.name}</option>`).join('');
-
-  const filtered = cur ? deliverables.filter(d => d.clientId === cur) : deliverables;
-
-  document.getElementById('kanban-board').innerHTML = STAGES.map(stage => {
-    const cards = filtered.filter(d => d.stage === stage.key);
-    return `<div class="kanban-col">
-      <div class="kanban-col-header">
-        <div class="kanban-col-title">${stage.label}</div>
-        <div class="kanban-count">${cards.length}</div>
-      </div>
-      <div class="kanban-cards">
-        ${cards.length ? cards.map(d => {
-          const days = daysUntil(d.dueDate);
-          const cls  = days !== null && days < 0 ? 'k-card-overdue' : days !== null && days <= 3 ? 'k-card-due' : '';
-          const lbl  = d.dueDate ? (days === 0 ? 'Due today!' : days < 0 ? `${Math.abs(days)}d overdue` : `Due ${fmtDate(d.dueDate)}`) : '';
-          return `<div class="k-card" onclick="openDeliverableModal('${d.id}')">
-            <div class="k-card-client">${clientName(d.clientId)}</div>
-            <div class="k-card-title">${d.title}</div>
-            <div class="k-card-meta">
-              <span>${d.contentType || 'UGC Video'} · ${d.platform || ''}</span>
-              ${lbl ? `<span class="${cls}">${lbl}</span>` : ''}
-              ${d.revisions > 0 ? `<span style="color:var(--danger)">⚠ ${d.revisions} revision${d.revisions>1?'s':''}</span>` : ''}
-            </div>
-          </div>`;
-        }).join('') : '<div style="color:var(--grey);font-size:12px;text-align:center;padding:12px">Empty</div>'}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-/* ══════════════════════════════════════════
-   CALENDAR
-══════════════════════════════════════════ */
-let calYear  = new Date().getFullYear();
-let calMonth = new Date().getMonth();
-
-function calPrev() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
-function calNext() { calMonth++; if (calMonth > 11) { calMonth = 0;  calYear++; } renderCalendar(); }
-
-function renderCalendar() {
-  document.getElementById('cal-month-label').textContent = `${MONTH_NAMES[calMonth]} ${calYear}`;
-  const grid      = document.getElementById('cal-grid');
-  const dayNames  = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  const todayStr  = today();
-  const firstDay  = new Date(calYear, calMonth, 1).getDay();
-  const daysInMo  = new Date(calYear, calMonth + 1, 0).getDate();
-  const prevTotal = new Date(calYear, calMonth, 0).getDate();
-
-  const recurringByDay = {};
-  clients.filter(c => c.videosPerMonth > 0 && c.status === 'active').forEach(c => {
-    const n = Math.min(c.videosPerMonth, daysInMo);
-    for (let d = 1; d <= daysInMo; d++) {
-      if (Math.floor((d - 1) * n / daysInMo) < Math.floor(d * n / daysInMo)) {
-        if (!recurringByDay[d]) recurringByDay[d] = [];
-        recurringByDay[d].push(c.name);
-      }
-    }
-  });
-
-  let html = dayNames.map(d => `<div class="cal-day-header">${d}</div>`).join('');
-
-  for (let i = firstDay - 1; i >= 0; i--)
-    html += `<div class="cal-day other-month"><div class="cal-day-num">${prevTotal - i}</div></div>`;
-
-  for (let d = 1; d <= daysInMo; d++) {
-    const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = ds === todayStr;
-    const dueEvts  = deliverables.filter(x => x.dueDate  === ds);
-    const postEvts = deliverables.filter(x => x.postDate === ds);
-    const recurring = recurringByDay[d] || [];
-    html += `<div class="cal-day${isToday?' today':''}">
-      <div class="cal-day-num" style="${isToday?'color:var(--accent-hi)':''}">${d}</div>
-      ${recurring.map(name => `<div class="cal-event cal-event-post" title="${name} (recurring)">${name.slice(0,16)}</div>`).join('')}
-      ${dueEvts.map(x => `<div class="cal-event cal-event-due" onclick="openDeliverableModal('${x.id}')" title="${x.title}">🟡 ${x.title.slice(0,15)}</div>`).join('')}
-      ${postEvts.map(x => `<div class="cal-event cal-event-post" onclick="openDeliverableModal('${x.id}')" title="${x.title}">🟣 ${x.title.slice(0,15)}</div>`).join('')}
-    </div>`;
-  }
-
-  const total     = firstDay + daysInMo;
-  const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
-  for (let d = 1; d <= remaining; d++)
-    html += `<div class="cal-day other-month"><div class="cal-day-num">${d}</div></div>`;
-
-  grid.innerHTML = html;
-}
-
-/* ══════════════════════════════════════════
-   CLIENTS
+   BRANDS (clients)
 ══════════════════════════════════════════ */
 function renderClients() {
   const q  = (document.getElementById('client-search').value || '').toLowerCase();
@@ -1641,247 +1304,31 @@ function renderClients() {
       <td style="max-width:200px;color:var(--grey);font-size:12px">${c.notes||'—'}</td>
       <td><button class="btn btn-ghost btn-sm" onclick="openClientModal('${c.id}')">Edit</button></td>
     </tr>`).join('') :
-    '<tr class="empty-row"><td colspan="6">No clients — add your first brand!</td></tr>';
+    '<tr class="empty-row"><td colspan="6">No brands — add your first one!</td></tr>';
 }
 
-/* ══════════════════════════════════════════
-   REVENUE
-══════════════════════════════════════════ */
-let revChartInst    = null;
-let selectedRevYear = new Date().getFullYear();
-
-const BRAND_COLORS = [
-  '#7B2D8B','#3b82f6','#22c55e','#f59e0b','#ef4444',
-  '#06b6d4','#ec4899','#8b5cf6','#14b8a6','#f97316'
-];
-
-function renderRevenue() {
-  const total = revenue.reduce((s,r) => s + Number(r.amount||0), 0);
-  const paid  = revenue.filter(r => r.status==='paid').reduce((s,r) => s + Number(r.amount||0), 0);
-  document.getElementById('rev-total').textContent       = fmt$(total);
-  document.getElementById('rev-paid').textContent        = fmt$(paid);
-  document.getElementById('rev-outstanding').textContent = fmt$(total - paid);
-
-  const allYears = [...new Set(revenue.map(r => r.date ? new Date(r.date).getFullYear() : null).filter(Boolean))];
-  const curYear  = new Date().getFullYear();
-  if (!allYears.includes(curYear)) allYears.push(curYear);
-  allYears.sort((a,b) => b-a);
-  if (!allYears.includes(selectedRevYear)) selectedRevYear = curYear;
-
-  document.getElementById('year-tabs').innerHTML = allYears.map(y =>
-    `<button class="year-tab${y===selectedRevYear?' active':''}" onclick="selectRevYear(${y})">${y}</button>`
-  ).join('');
-
-  renderRevChart();
-  renderMonthGrid();
-  renderRevLog();
-  populateRevFilters();
-}
-
-function selectRevYear(y) {
-  selectedRevYear = y;
-  document.querySelectorAll('.year-tab').forEach(t => t.classList.toggle('active', +t.textContent === y));
-  renderRevChart();
-  renderMonthGrid();
-}
-
-function renderRevChart() {
-  const ML    = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const yr    = revenue.filter(r => r.date && new Date(r.date).getFullYear() === selectedRevYear && r.status === 'paid');
-  const cids  = [...new Set(yr.map(r => r.clientId))].filter(Boolean);
-
-  const datasets = cids.map((cid, i) => {
-    const data = Array(12).fill(0);
-    yr.filter(r => r.clientId === cid).forEach(r => { data[new Date(r.date).getMonth()] += Number(r.amount||0); });
-    const col = BRAND_COLORS[i % BRAND_COLORS.length];
-    return { label: clientName(cid), data, backgroundColor: col + 'bb', borderColor: col, borderWidth: 1 };
-  });
-
-  const ctx = document.getElementById('rev-chart').getContext('2d');
-  if (revChartInst) revChartInst.destroy();
-  revChartInst = new Chart(ctx, {
-    type: 'bar',
-    data: { labels: ML, datasets },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { color: '#bbb', font: { family:'Inter', size:12 } } } },
-      scales: {
-        x: { stacked: true, ticks: { color:'#888' }, grid: { color:'rgba(255,255,255,0.05)' } },
-        y: { stacked: true, ticks: { color:'#888', callback: v => '$'+v.toLocaleString() }, grid: { color:'rgba(255,255,255,0.05)' } }
-      }
-    }
-  });
-}
-
-function renderMonthGrid() {
-  const ML   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const yr   = revenue.filter(r => r.date && new Date(r.date).getFullYear() === selectedRevYear && r.status === 'paid');
-  const cids = [...new Set(yr.map(r => r.clientId))].filter(Boolean);
-
-  if (!cids.length) {
-    document.getElementById('month-grid-wrap').innerHTML =
-      '<p style="color:var(--grey);padding:16px">No paid revenue for ' + selectedRevYear + ' yet.</p>';
-    return;
-  }
-
-  const monthTotals = Array(12).fill(0);
-  let rows = '';
-  cids.forEach(cid => {
-    const data = Array(12).fill(0);
-    yr.filter(r => r.clientId === cid).forEach(r => {
-      const m = new Date(r.date).getMonth();
-      data[m] += Number(r.amount||0);
-      monthTotals[m] += Number(r.amount||0);
-    });
-    const rowTotal = data.reduce((a,b) => a+b, 0);
-    rows += `<tr><td>${clientName(cid)}</td>${data.map(v => `<td>${v ? fmt$(v) : '—'}</td>`).join('')}<td><strong>${fmt$(rowTotal)}</strong></td></tr>`;
-  });
-
-  const grandTotal = monthTotals.reduce((a,b) => a+b, 0);
-  document.getElementById('month-grid-wrap').innerHTML = `
-    <table class="month-grid-table">
-      <thead><tr><th>Brand</th>${ML.map(m=>`<th>${m}</th>`).join('')}<th>Total</th></tr></thead>
-      <tbody>
-        ${rows}
-        <tr class="total-row"><td>TOTAL</td>${monthTotals.map(v=>`<td>${v?fmt$(v):'—'}</td>`).join('')}<td>${fmt$(grandTotal)}</td></tr>
-      </tbody>
-    </table>`;
-}
-
-function populateRevFilters() {
-  const sel = document.getElementById('rev-filter-client');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">All Clients</option>' +
-    clients.map(c => `<option value="${c.id}" ${c.id===cur?'selected':''}>${c.name}</option>`).join('');
-}
-
-function renderRevLog() {
-  const fc = document.getElementById('rev-filter-client').value;
-  const fs = document.getElementById('rev-filter-status').value;
-  const filtered = revenue
-    .filter(r => (!fc || r.clientId===fc) && (!fs || r.status===fs))
-    .sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
-
-  const tb = document.getElementById('revenue-tbody');
-  tb.innerHTML = filtered.length ? filtered.map(r => {
-    const del = deliverables.find(d => d.id === r.deliverableId);
-    return `<tr>
-      <td>${fmtDate(r.date)}</td>
-      <td>${clientName(r.clientId)}</td>
-      <td style="color:var(--grey)">${del ? del.title : '—'}</td>
-      <td><strong>${fmt$(r.amount)}</strong></td>
-      <td>${statusBadge(r.status)}</td>
-      <td style="color:var(--grey);font-size:12px">${r.notes||'—'}</td>
-      <td><button class="btn btn-ghost btn-sm" onclick="openRevenueModal('${r.id}')">Edit</button></td>
-    </tr>`;
-  }).join('') : '<tr class="empty-row"><td colspan="7">No payments logged yet</td></tr>';
-}
-
-/* ══════════════════════════════════════════
-   DELIVERABLE MODAL
-══════════════════════════════════════════ */
-function openDeliverableModal(id) {
-  const sel = document.getElementById('del-client');
-  sel.innerHTML = clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-
-  if (id) {
-    const d = deliverables.find(x => x.id === id);
-    if (!d) return;
-    document.getElementById('del-modal-title').textContent  = 'Edit Video';
-    document.getElementById('del-id').value                 = d.id;
-    document.getElementById('del-title').value              = d.title || '';
-    document.getElementById('del-client').value             = d.clientId || '';
-    document.getElementById('del-type').value               = d.contentType || 'UGC Video';
-    document.getElementById('del-due').value                = d.dueDate || '';
-    document.getElementById('del-post').value                = d.postDate || '';
-    document.getElementById('del-platform').value           = d.platform || 'TikTok';
-    document.getElementById('del-revisions').value          = d.revisions || 0;
-    document.getElementById('del-notes').value               = d.notes || '';
-    setPill('del-stage-pills', 'del-stage', d.stage || 'scripted');
-    document.getElementById('del-delete-btn').style.display = 'inline-flex';
-  } else {
-    document.getElementById('del-modal-title').textContent  = 'Add Video';
-    document.getElementById('del-id').value                 = '';
-    document.getElementById('del-title').value              = '';
-    document.getElementById('del-due').value                = '';
-    document.getElementById('del-post').value                = '';
-    document.getElementById('del-type').value               = 'UGC Video';
-    document.getElementById('del-revisions').value          = 0;
-    document.getElementById('del-notes').value               = '';
-    setPill('del-stage-pills', 'del-stage', 'scripted');
-    document.getElementById('del-delete-btn').style.display = 'none';
-  }
-  openModal('modal-deliverable');
-}
-
-async function saveDeliverable() {
-  const id  = document.getElementById('del-id').value;
-  const obj = {
-    title:       document.getElementById('del-title').value.trim(),
-    clientId:    document.getElementById('del-client').value,
-    contentType: document.getElementById('del-type').value,
-    stage:       document.getElementById('del-stage').value,
-    dueDate:     document.getElementById('del-due').value,
-    postDate:    document.getElementById('del-post').value,
-    platform:    document.getElementById('del-platform').value,
-    revisions:   Number(document.getElementById('del-revisions').value),
-    notes:       document.getElementById('del-notes').value.trim(),
-  };
-  if (!obj.title)    { toast('Please enter a title'); return; }
-  if (!obj.clientId) { toast('Please select a client'); return; }
-
-  try {
-    if (id) {
-      const row = await dbUpdate('deliverables', id, toDbDeliverable(obj));
-      deliverables[deliverables.findIndex(d=>d.id===id)] = fromDbDeliverable(row);
-    } else {
-      const row = await dbInsert('deliverables', toDbDeliverable(obj));
-      deliverables.push(fromDbDeliverable(row));
-    }
-  } catch { return; }
-
-  closeModal('modal-deliverable');
-  toast(id ? 'Video updated!' : 'Video added!');
-  renderKanban(); renderCalendar(); renderDashboard();
-}
-
-async function deleteDeliverable() {
-  const id = document.getElementById('del-id').value;
-  if (!confirm('Delete this video?')) return;
-  try { await dbDelete('deliverables', id); } catch { return; }
-  deliverables = deliverables.filter(d => d.id !== id);
-  closeModal('modal-deliverable');
-  toast('Deleted.');
-  renderKanban(); renderCalendar(); renderDashboard();
-}
-
-/* ══════════════════════════════════════════
-   CLIENT MODAL
-══════════════════════════════════════════ */
 function openClientModal(id) {
   if (id) {
     const c = clients.find(x => x.id === id);
     if (!c) return;
-    document.getElementById('client-modal-title').textContent   = 'Edit Client';
+    document.getElementById('client-modal-title').textContent   = 'Edit Brand';
     document.getElementById('client-id').value                  = c.id;
     document.getElementById('client-name').value                = c.name || '';
     document.getElementById('client-contact-name').value        = c.contactName || '';
     document.getElementById('client-contact-email').value       = c.contactEmail || '';
     document.getElementById('client-rate').value                = c.rate || '';
     document.getElementById('client-rate-type').value           = c.rateType || 'per video';
-    document.getElementById('client-videos-per-month').value    = c.videosPerMonth || '';
     document.getElementById('client-notes').value                = c.notes || '';
     setPill('client-status-pills', 'client-status', c.status || 'active');
     document.getElementById('client-delete-btn').style.display  = 'inline-flex';
   } else {
-    document.getElementById('client-modal-title').textContent   = 'Add Client';
+    document.getElementById('client-modal-title').textContent   = 'Add Brand';
     document.getElementById('client-id').value                  = '';
     document.getElementById('client-name').value                = '';
     document.getElementById('client-contact-name').value        = '';
     document.getElementById('client-contact-email').value       = '';
     document.getElementById('client-rate').value                = '';
     document.getElementById('client-rate-type').value           = 'per video';
-    document.getElementById('client-videos-per-month').value    = '';
     document.getElementById('client-notes').value                = '';
     setPill('client-status-pills', 'client-status', 'active');
     document.getElementById('client-delete-btn').style.display  = 'none';
@@ -1892,14 +1339,13 @@ function openClientModal(id) {
 async function saveClient() {
   const id  = document.getElementById('client-id').value;
   const obj = {
-    name:            document.getElementById('client-name').value.trim(),
-    contactName:     document.getElementById('client-contact-name').value.trim(),
-    contactEmail:    document.getElementById('client-contact-email').value.trim(),
-    rate:            Number(document.getElementById('client-rate').value) || 0,
-    rateType:        document.getElementById('client-rate-type').value,
-    videosPerMonth:  Number(document.getElementById('client-videos-per-month').value) || 0,
-    status:          document.getElementById('client-status').value,
-    notes:           document.getElementById('client-notes').value.trim(),
+    name:         document.getElementById('client-name').value.trim(),
+    contactName:  document.getElementById('client-contact-name').value.trim(),
+    contactEmail: document.getElementById('client-contact-email').value.trim(),
+    rate:         Number(document.getElementById('client-rate').value) || 0,
+    rateType:     document.getElementById('client-rate-type').value,
+    status:       document.getElementById('client-status').value,
+    notes:        document.getElementById('client-notes').value.trim(),
   };
   if (!obj.name) { toast('Please enter a brand name'); return; }
 
@@ -1914,232 +1360,292 @@ async function saveClient() {
   } catch { return; }
 
   closeModal('modal-client');
-  toast(id ? 'Client updated!' : 'Client added!');
-  renderClients(); renderDashboard(); renderKanban(); renderCalendar();
+  toast(id ? 'Brand updated!' : 'Brand added!');
+  renderClients(); renderDashboard();
 }
 
 async function deleteClient() {
   const id = document.getElementById('client-id').value;
-  if (!confirm('Delete this client?')) return;
+  if (!confirm('Delete this brand?')) return;
   try { await dbDelete('clients', id); } catch { return; }
   clients = clients.filter(c => c.id !== id);
   closeModal('modal-client');
-  toast('Client deleted.');
+  toast('Brand deleted.');
   renderClients(); renderDashboard();
 }
 
 /* ══════════════════════════════════════════
-   REVENUE MODAL
+   EDITING JOBS (admin)
 ══════════════════════════════════════════ */
-function populateRevDeliverables() {
-  const cid = document.getElementById('rev-client').value;
-  const sel = document.getElementById('rev-deliverable');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">— none —</option>' +
-    deliverables
-      .filter(d => !cid || d.clientId === cid)
-      .map(d => `<option value="${d.id}" ${d.id===cur?'selected':''}>${d.title}</option>`)
-      .join('');
+function editorName(id) {
+  const e = editors.find(e => e.id === id);
+  return e ? (e.full_name || e.email) : '—';
 }
 
-function openRevenueModal(id) {
-  const csel = document.getElementById('rev-client');
-  csel.innerHTML = clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+function renderJobs() {
+  const tb = document.getElementById('jobs-tbody');
+  tb.innerHTML = jobs.length ? jobs.map(j => {
+    const actions = j.status === 'submitted'
+      ? `<button class="btn btn-primary btn-sm" onclick="approveJob('${j.id}')">Approve</button>
+         <button class="btn btn-ghost btn-sm" onclick="requestRevision('${j.id}')">Send Back</button>`
+      : `<button class="btn btn-ghost btn-sm" onclick="openJobModal('${j.id}')">Edit</button>`;
+    return `<tr>
+      <td><strong>${j.title}</strong></td>
+      <td>${editorName(j.editorId)}</td>
+      <td>${jobStatusBadge(j.status)}</td>
+      <td style="color:var(--grey)">${fmtDate((j.createdAt||'').slice(0,10))}</td>
+      <td style="display:flex;gap:8px">${actions}</td>
+    </tr>`;
+  }).join('') : '<tr class="empty-row"><td colspan="5">No editing jobs yet</td></tr>';
+}
+
+function openInviteModal() {
+  document.getElementById('invite-email').value = '';
+  document.getElementById('invite-name').value = '';
+  openModal('modal-invite');
+}
+
+async function sendInvite() {
+  const email = document.getElementById('invite-email').value.trim();
+  const fullName = document.getElementById('invite-name').value.trim();
+  if (!email) { toast('Please enter an email'); return; }
+  const btn = document.getElementById('invite-submit-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    await authedFetch('/api/invite-editor', { email, fullName });
+    toast('Invite sent!');
+    closeModal('modal-invite');
+    const { data } = await sb.from('profiles').select('*').eq('role', 'editor');
+    editors = data || [];
+  } catch (e) {
+    toast(e.message);
+  }
+  btn.disabled = false; btn.textContent = 'Send Invite';
+}
+
+function openJobModal(id) {
+  const sel = document.getElementById('job-editor');
+  sel.innerHTML = editors.length
+    ? editors.map(e => `<option value="${e.id}">${e.full_name || e.email}</option>`).join('')
+    : '<option value="">No editors invited yet</option>';
 
   if (id) {
-    const r = revenue.find(x => x.id === id);
-    if (!r) return;
-    document.getElementById('rev-modal-title').textContent     = 'Edit Payment';
-    document.getElementById('rev-id').value                    = r.id;
-    document.getElementById('rev-client').value                = r.clientId || '';
-    document.getElementById('rev-amount').value                = r.amount || '';
-    document.getElementById('rev-date').value                  = r.date || '';
-    document.getElementById('rev-status').value                = r.status || 'pending';
-    document.getElementById('rev-notes').value                 = r.notes || '';
-    populateRevDeliverables();
-    document.getElementById('rev-deliverable').value           = r.deliverableId || '';
-    document.getElementById('rev-delete-btn').style.display    = 'inline-flex';
+    const j = jobs.find(x => x.id === id);
+    if (!j) return;
+    document.getElementById('job-modal-title').textContent = 'Edit Job';
+    document.getElementById('job-id').value      = j.id;
+    sel.value                                     = j.editorId;
+    document.getElementById('job-title').value   = j.title || '';
+    document.getElementById('job-drive').value   = j.driveLink || '';
+    document.getElementById('job-assets').value  = j.assetLinks || '';
+    document.getElementById('job-notes').value   = j.notes || '';
+    document.getElementById('job-delete-btn').style.display = 'inline-flex';
   } else {
-    document.getElementById('rev-modal-title').textContent     = 'Log Payment';
-    document.getElementById('rev-id').value                    = '';
-    document.getElementById('rev-amount').value                = '';
-    document.getElementById('rev-date').value                  = today();
-    document.getElementById('rev-status').value                = 'pending';
-    document.getElementById('rev-notes').value                 = '';
-    populateRevDeliverables();
-    document.getElementById('rev-delete-btn').style.display    = 'none';
+    document.getElementById('job-modal-title').textContent = 'New Job';
+    document.getElementById('job-id').value      = '';
+    document.getElementById('job-title').value   = '';
+    document.getElementById('job-drive').value   = '';
+    document.getElementById('job-assets').value  = '';
+    document.getElementById('job-notes').value   = '';
+    document.getElementById('job-delete-btn').style.display = 'none';
   }
-  openModal('modal-revenue');
+  openModal('modal-job');
 }
 
-async function saveRevenue() {
-  const id  = document.getElementById('rev-id').value;
+async function saveJob() {
+  const id = document.getElementById('job-id').value;
   const obj = {
-    clientId:      document.getElementById('rev-client').value,
-    amount:        Number(document.getElementById('rev-amount').value),
-    date:          document.getElementById('rev-date').value,
-    status:        document.getElementById('rev-status').value,
-    deliverableId: document.getElementById('rev-deliverable').value,
-    notes:         document.getElementById('rev-notes').value.trim(),
+    title:      document.getElementById('job-title').value.trim(),
+    editor_id:  document.getElementById('job-editor').value,
+    drive_link: document.getElementById('job-drive').value.trim(),
+    asset_links: document.getElementById('job-assets').value.trim(),
+    notes:      document.getElementById('job-notes').value.trim(),
   };
-  if (!obj.clientId) { toast('Please select a client'); return; }
-  if (!obj.amount)   { toast('Please enter an amount'); return; }
-  if (!obj.date)     { toast('Please enter a date'); return; }
+  if (!obj.title)     { toast('Please enter a title'); return; }
+  if (!obj.editor_id) { toast('Please select an editor'); return; }
 
   try {
+    let row;
     if (id) {
-      const row = await dbUpdate('revenue', id, toDbRevenue(obj));
-      revenue[revenue.findIndex(r=>r.id===id)] = fromDbRevenue(row);
+      row = await dbUpdate('editing_jobs', id, obj);
+      jobs[jobs.findIndex(j=>j.id===id)] = fromDbJob(row);
     } else {
-      const row = await dbInsert('revenue', toDbRevenue(obj));
-      revenue.push(fromDbRevenue(row));
+      row = await dbInsert('editing_jobs', { ...obj, status: 'assigned' });
+      jobs.push(fromDbJob(row));
+      authedFetch('/api/notify-editor', { jobId: row.id }).catch(() => toast('Job saved, but the notification email failed to send.'));
     }
   } catch { return; }
 
-  closeModal('modal-revenue');
-  toast(id ? 'Payment updated!' : 'Payment logged!');
-  renderRevenue(); renderDashboard();
+  closeModal('modal-job');
+  toast(id ? 'Job updated!' : 'Job created — editor notified!');
+  renderJobs();
 }
 
-async function deleteRevenue() {
-  const id = document.getElementById('rev-id').value;
-  if (!confirm('Delete this payment?')) return;
-  try { await dbDelete('revenue', id); } catch { return; }
-  revenue = revenue.filter(r => r.id !== id);
-  closeModal('modal-revenue');
-  toast('Payment deleted.');
-  renderRevenue(); renderDashboard();
+async function deleteJob() {
+  const id = document.getElementById('job-id').value;
+  if (!confirm('Delete this job?')) return;
+  try { await dbDelete('editing_jobs', id); } catch { return; }
+  jobs = jobs.filter(j => j.id !== id);
+  closeModal('modal-job');
+  toast('Job deleted.');
+  renderJobs();
+}
+
+async function approveJob(id) {
+  try {
+    const row = await dbUpdate('editing_jobs', id, { status: 'approved', approved_at: new Date().toISOString() });
+    jobs[jobs.findIndex(j=>j.id===id)] = fromDbJob(row);
+  } catch { return; }
+  toast('Job approved!');
+  renderJobs();
+}
+
+async function requestRevision(id) {
+  try {
+    const row = await dbUpdate('editing_jobs', id, { status: 'revision' });
+    jobs[jobs.findIndex(j=>j.id===id)] = fromDbJob(row);
+  } catch { return; }
+  toast('Sent back for revisions.');
+  renderJobs();
 }
 
 /* ══════════════════════════════════════════
-   PIPELINE / MEETINGS
+   EDITOR PORTAL
 ══════════════════════════════════════════ */
-
-const PIPE_STAGE_MAP = {
-  talking:     {label:'Talking',          cls:'badge-filmed'},
-  proposal:    {label:'Proposal Sent',    cls:'badge-editing'},
-  negotiating: {label:'Negotiating',      cls:'badge-sent'},
-  waiting:     {label:'Waiting to Sign',  cls:'badge-approved'},
-  signed:      {label:'Signed ✓',         cls:'badge-active'},
-  lost:        {label:'Lost',             cls:'badge-inactive'},
-};
-
-function pipeStageBadge(s) {
-  const m = PIPE_STAGE_MAP[s] || {label:s, cls:'badge-inactive'};
-  return `<span class="badge ${m.cls}">${m.label}</span>`;
-}
-
-function renderMeetings() {
-  const now   = new Date();
-  const active = meetings.filter(m => m.stage !== 'signed' && m.stage !== 'lost');
-  const pipeVal = active.reduce((s,m) => s + Number(m.value||0), 0);
-  const waiting = meetings.filter(m => m.stage === 'waiting').length;
-  const signedThisMonth = meetings.filter(m => {
-    if (m.stage !== 'signed' || !m.lastContact) return false;
-    const d = new Date(m.lastContact);
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-  }).length;
-
-  document.getElementById('pipe-count').textContent   = active.length;
-  document.getElementById('pipe-value').textContent   = fmt$(pipeVal);
-  document.getElementById('pipe-signing').textContent = waiting;
-  document.getElementById('pipe-signed').textContent  = signedThisMonth;
-
-  const q  = (document.getElementById('pipe-search').value || '').toLowerCase();
-  const sf = document.getElementById('pipe-stage-filter').value;
-  const filtered = meetings.filter(m =>
-    (!q  || (m.brand||'').toLowerCase().includes(q) || (m.contact||'').toLowerCase().includes(q)) &&
-    (!sf || m.stage === sf)
-  ).sort((a,b) => {
-    const order = {waiting:0,negotiating:1,proposal:2,talking:3,signed:4,lost:5};
-    return (order[a.stage]||9) - (order[b.stage]||9);
-  });
-
-  const tb = document.getElementById('meetings-tbody');
-  tb.innerHTML = filtered.length ? filtered.map(m => {
-    const fu = m.followup ? daysUntil(m.followup) : null;
-    const fuCls = fu !== null && fu < 0 ? 'k-card-overdue' : fu !== null && fu <= 2 ? 'k-card-due' : '';
-    const fuLbl = fu === null ? '—' : fu === 0 ? 'Today!' : fu < 0 ? `${Math.abs(fu)}d overdue` : fmtDate(m.followup);
-    return `<tr>
-      <td><strong>${m.brand||'—'}</strong><br><small style="color:var(--grey)">${m.contact||''} ${m.email ? '· '+m.email : ''}</small></td>
-      <td><strong>${m.value ? fmt$(m.value) : '—'}</strong></td>
-      <td>${pipeStageBadge(m.stage)}</td>
-      <td style="color:var(--grey)">${fmtDate(m.lastContact)}</td>
-      <td class="${fuCls}">${fuLbl}</td>
-      <td style="color:var(--grey);font-size:12px;max-width:200px">${m.notes||'—'}</td>
-      <td><button class="btn btn-ghost btn-sm" onclick="openMeetingModal('${m.id}')">Edit</button></td>
-    </tr>`;
-  }).join('') : '<tr class="empty-row"><td colspan="7">No deals yet — add your first prospect!</td></tr>';
-}
-
-function openMeetingModal(id) {
-  if (id) {
-    const m = meetings.find(x => x.id === id);
-    if (!m) return;
-    document.getElementById('meeting-modal-title').textContent    = 'Edit Deal';
-    document.getElementById('meeting-id').value                   = m.id;
-    document.getElementById('meeting-brand').value                = m.brand || '';
-    document.getElementById('meeting-contact').value              = m.contact || '';
-    document.getElementById('meeting-value').value                = m.value || '';
-    document.getElementById('meeting-email').value                = m.email || '';
-    document.getElementById('meeting-last').value                 = m.lastContact || '';
-    document.getElementById('meeting-followup').value             = m.followup || '';
-    document.getElementById('meeting-notes').value                = m.notes || '';
-    setPill('meeting-stage-pills', 'meeting-stage', m.stage || 'talking');
-    document.getElementById('meeting-delete-btn').style.display   = 'inline-flex';
-  } else {
-    document.getElementById('meeting-modal-title').textContent    = 'Add Deal';
-    document.getElementById('meeting-id').value                   = '';
-    document.getElementById('meeting-brand').value                = '';
-    document.getElementById('meeting-contact').value              = '';
-    document.getElementById('meeting-value').value                = '';
-    document.getElementById('meeting-email').value                = '';
-    document.getElementById('meeting-last').value                 = today();
-    document.getElementById('meeting-followup').value             = '';
-    document.getElementById('meeting-notes').value                = '';
-    setPill('meeting-stage-pills', 'meeting-stage', 'talking');
-    document.getElementById('meeting-delete-btn').style.display   = 'none';
+function renderEditorJobs() {
+  const wrap = document.getElementById('editor-jobs-list');
+  if (!jobs.length) {
+    wrap.innerHTML = '<p style="color:var(--grey)">No jobs assigned to you yet.</p>';
+    return;
   }
-  openModal('modal-meeting');
+  wrap.innerHTML = jobs.map(j => {
+    const links = (j.assetLinks || '').split('\n').filter(Boolean)
+      .map(l => `<a href="${l}" target="_blank" rel="noopener">${l}</a>`).join('');
+    let action = '';
+    if (j.status === 'assigned')    action = `<button class="btn btn-primary btn-sm" onclick="editorSetStatus('${j.id}','in_progress')">Start Working</button>`;
+    if (j.status === 'in_progress') action = `<button class="btn btn-primary btn-sm" onclick="editorSubmit('${j.id}')">Submit for Review</button>`;
+    if (j.status === 'revision')    action = `<button class="btn btn-primary btn-sm" onclick="editorSetStatus('${j.id}','in_progress')">Resume Work</button>`;
+    if (j.status === 'submitted')   action = `<span style="color:var(--grey);font-size:12px">Waiting on review</span>`;
+    if (j.status === 'approved')    action = `<span style="color:var(--success);font-size:12px">✓ Approved</span>`;
+    return `<div class="job-card">
+      <div class="job-card-header">
+        <div class="job-card-title">${j.title}</div>
+        ${jobStatusBadge(j.status)}
+      </div>
+      <div class="job-links">
+        ${j.driveLink ? `<div>📁 Google Drive: <a href="${j.driveLink}" target="_blank" rel="noopener">${j.driveLink}</a></div>` : ''}
+        ${links}
+      </div>
+      ${j.notes ? `<div class="job-notes">${j.notes}</div>` : ''}
+      <div>${action}</div>
+    </div>`;
+  }).join('');
 }
 
-async function saveMeeting() {
-  const id  = document.getElementById('meeting-id').value;
+async function editorSetStatus(id, status) {
+  const { data, error } = await sb.from('editing_jobs').update({ status }).eq('id', id).select().single();
+  if (error) { toast('Update failed: ' + error.message); return; }
+  jobs[jobs.findIndex(j=>j.id===id)] = fromDbJob(data);
+  renderEditorJobs();
+}
+
+async function editorSubmit(id) {
+  const { data, error } = await sb.from('editing_jobs')
+    .update({ status: 'submitted', submitted_at: new Date().toISOString() }).eq('id', id).select().single();
+  if (error) { toast('Update failed: ' + error.message); return; }
+  jobs[jobs.findIndex(j=>j.id===id)] = fromDbJob(data);
+  renderEditorJobs();
+  toast('Submitted!');
+  authedFetch('/api/notify-admin', { jobId: id }).catch(() => toast('Submitted, but the notification email failed to send.'));
+}
+
+/* ══════════════════════════════════════════
+   EXPENSES
+══════════════════════════════════════════ */
+function renderExpenses() {
+  const now = new Date();
+  const total = expenses.reduce((s,e) => s + Number(e.amount||0), 0);
+  const monthTotal = expenses.filter(e => e.date && e.date.slice(0,7) === today().slice(0,7)).reduce((s,e) => s + Number(e.amount||0), 0);
+  const yearTotal   = expenses.filter(e => e.date && e.date.slice(0,4) === today().slice(0,4)).reduce((s,e) => s + Number(e.amount||0), 0);
+  document.getElementById('exp-total').textContent = fmt$(total);
+  document.getElementById('exp-month').textContent = fmt$(monthTotal);
+  document.getElementById('exp-month-label').textContent = MONTH_NAMES[now.getMonth()];
+  document.getElementById('exp-year').textContent = fmt$(yearTotal);
+  document.getElementById('exp-year-label').textContent = now.getFullYear();
+
+  const tb = document.getElementById('expenses-tbody');
+  const sorted = expenses.slice().sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+  tb.innerHTML = sorted.length ? sorted.map(e => `
+    <tr>
+      <td>${fmtDate(e.date)}</td>
+      <td><strong>${e.description}</strong></td>
+      <td style="color:var(--grey)">${e.category||'—'}</td>
+      <td>${fmt$(e.amount)}</td>
+      <td style="color:var(--grey);font-size:12px">${e.notes||'—'}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="openExpenseModal('${e.id}')">Edit</button></td>
+    </tr>`).join('') : '<tr class="empty-row"><td colspan="6">No expenses logged yet</td></tr>';
+}
+
+function openExpenseModal(id) {
+  if (id) {
+    const e = expenses.find(x => x.id === id);
+    if (!e) return;
+    document.getElementById('expense-modal-title').textContent = 'Edit Expense';
+    document.getElementById('expense-id').value       = e.id;
+    document.getElementById('expense-desc').value     = e.description || '';
+    document.getElementById('expense-amount').value   = e.amount || '';
+    document.getElementById('expense-date').value     = e.date || '';
+    document.getElementById('expense-category').value = e.category || '';
+    document.getElementById('expense-notes').value    = e.notes || '';
+    document.getElementById('expense-delete-btn').style.display = 'inline-flex';
+  } else {
+    document.getElementById('expense-modal-title').textContent = 'Log Expense';
+    document.getElementById('expense-id').value       = '';
+    document.getElementById('expense-desc').value     = '';
+    document.getElementById('expense-amount').value   = '';
+    document.getElementById('expense-date').value     = today();
+    document.getElementById('expense-category').value = '';
+    document.getElementById('expense-notes').value    = '';
+    document.getElementById('expense-delete-btn').style.display = 'none';
+  }
+  openModal('modal-expense');
+}
+
+async function saveExpense() {
+  const id = document.getElementById('expense-id').value;
   const obj = {
-    brand:       document.getElementById('meeting-brand').value.trim(),
-    contact:     document.getElementById('meeting-contact').value.trim(),
-    value:       Number(document.getElementById('meeting-value').value),
-    email:       document.getElementById('meeting-email').value.trim(),
-    stage:       document.getElementById('meeting-stage').value,
-    lastContact: document.getElementById('meeting-last').value,
-    followup:    document.getElementById('meeting-followup').value,
-    notes:       document.getElementById('meeting-notes').value.trim(),
+    description: document.getElementById('expense-desc').value.trim(),
+    amount:      Number(document.getElementById('expense-amount').value) || 0,
+    date:        document.getElementById('expense-date').value,
+    category:    document.getElementById('expense-category').value.trim(),
+    notes:       document.getElementById('expense-notes').value.trim(),
   };
-  if (!obj.brand) { toast('Please enter a brand name'); return; }
+  if (!obj.description) { toast('Please enter a description'); return; }
+  if (!obj.amount)      { toast('Please enter an amount'); return; }
 
   try {
     if (id) {
-      const row = await dbUpdate('meetings', id, toDbMeeting(obj));
-      meetings[meetings.findIndex(m=>m.id===id)] = fromDbMeeting(row);
+      const row = await dbUpdate('expenses', id, toDbExpense(obj));
+      expenses[expenses.findIndex(e=>e.id===id)] = fromDbExpense(row);
     } else {
-      const row = await dbInsert('meetings', toDbMeeting(obj));
-      meetings.push(fromDbMeeting(row));
+      const row = await dbInsert('expenses', toDbExpense(obj));
+      expenses.push(fromDbExpense(row));
     }
   } catch { return; }
 
-  closeModal('modal-meeting');
-  toast(id ? 'Deal updated!' : 'Deal added!');
-  renderMeetings();
+  closeModal('modal-expense');
+  toast(id ? 'Expense updated!' : 'Expense logged!');
+  renderExpenses();
 }
 
-async function deleteMeeting() {
-  const id = document.getElementById('meeting-id').value;
-  if (!confirm('Delete this deal?')) return;
-  try { await dbDelete('meetings', id); } catch { return; }
-  meetings = meetings.filter(m => m.id !== id);
-  closeModal('modal-meeting');
-  toast('Deal deleted.');
-  renderMeetings();
+async function deleteExpense() {
+  const id = document.getElementById('expense-id').value;
+  if (!confirm('Delete this expense?')) return;
+  try { await dbDelete('expenses', id); } catch { return; }
+  expenses = expenses.filter(e => e.id !== id);
+  closeModal('modal-expense');
+  toast('Expense deleted.');
+  renderExpenses();
 }
 </script>
 </body>
