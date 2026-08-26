@@ -203,6 +203,8 @@
     .pill-account { display: inline-flex; align-items: center; gap: 2px; }
     .pill-edit { cursor: pointer; color: var(--grey); font-size: 11px; padding: 6px 8px; border-radius: 100px; }
     .pill-edit:hover { color: var(--white); background: var(--bg-hover); }
+    .conn-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; background: var(--grey); }
+    .conn-dot.connected { background: var(--success); box-shadow: 0 0 6px rgba(34,197,94,0.7); }
 
     /* ── TOAST ── */
     #toast {
@@ -539,6 +541,10 @@
       <label>Notes</label>
       <textarea id="ig-acc-notes" placeholder="Niche, posting cadence, goals…"></textarea>
     </div>
+    <div id="ig-acc-connect-row" style="display:none;padding:12px 14px;background:var(--bg-raised);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <span id="ig-acc-connect-status" style="font-size:12px;color:var(--grey-light)"></span>
+      <button id="ig-acc-connect-btn" class="btn btn-ghost btn-sm" onclick="connectOrSyncIgAccount()"></button>
+    </div>
     <div class="modal-footer">
       <button id="ig-acc-delete-btn" class="btn btn-danger" style="margin-right:auto;display:none" onclick="deleteIgAccount()">Delete</button>
       <button class="btn btn-ghost" onclick="closeModal('modal-ig-account')">Cancel</button>
@@ -781,7 +787,7 @@ function toDbClient(o)   { return { name:o.name, contact_name:o.contactName, con
 function fromDbClient(r) { return { id:r.id, name:r.name, contactName:r.contact_name||'', contactEmail:r.contact_email||'', rate:Number(r.rate)||0, rateType:r.rate_type||'per video', status:r.status||'active', notes:r.notes||'', createdAt:r.created_at }; }
 
 function toDbIgAccount(o)   { return { handle:o.handle, display_name:o.displayName, profile_url:o.profileUrl, cpm:o.cpm, notes:o.notes }; }
-function fromDbIgAccount(r) { return { id:r.id, handle:r.handle, displayName:r.display_name||'', profileUrl:r.profile_url||'', cpm:Number(r.cpm)||5, notes:r.notes||'', createdAt:r.created_at }; }
+function fromDbIgAccount(r) { return { id:r.id, handle:r.handle, displayName:r.display_name||'', profileUrl:r.profile_url||'', cpm:Number(r.cpm)||5, notes:r.notes||'', connected:!!r.connected, createdAt:r.created_at }; }
 
 function toDbIgPost(o)   { return { account_id:o.accountId, caption:o.caption, post_date:o.postDate, views:o.views, likes:o.likes, comments:o.comments, post_url:o.postUrl }; }
 function fromDbIgPost(r) { return { id:r.id, accountId:r.account_id, caption:r.caption||'', postDate:r.post_date, views:Number(r.views)||0, likes:Number(r.likes)||0, comments:Number(r.comments)||0, postUrl:r.post_url||'', createdAt:r.created_at }; }
@@ -975,7 +981,7 @@ function renderIgAccountChips() {
   const allPill = `<div class="pill${igActiveAccount===null?' active':''}" onclick="selectIgAccount(null)">All Accounts</div>`;
   const accPills = igAccounts.map(a => `
     <div class="pill-account">
-      <span class="pill${igActiveAccount===a.id?' active':''}" onclick="selectIgAccount('${a.id}')">${a.handle}</span>
+      <span class="pill${igActiveAccount===a.id?' active':''}" onclick="selectIgAccount('${a.id}')"><span class="conn-dot${a.connected?' connected':''}" title="${a.connected?'Connected':'Not connected'}"></span>${a.handle}</span>
       <span class="pill-edit" onclick="openAccountModal('${a.id}')" title="Edit account">✎</span>
     </div>`).join('');
   wrap.innerHTML = allPill + accPills + (igAccounts.length ? '' : '<span style="color:var(--grey);font-size:13px;padding:6px 0">No accounts yet — add your first Instagram account.</span>');
@@ -1164,6 +1170,9 @@ function openAccountModal(id) {
     document.getElementById('ig-acc-cpm').value     = a.cpm || 5;
     document.getElementById('ig-acc-notes').value   = a.notes || '';
     document.getElementById('ig-acc-delete-btn').style.display = 'inline-flex';
+    document.getElementById('ig-acc-connect-row').style.display = 'flex';
+    document.getElementById('ig-acc-connect-status').textContent = a.connected ? '🟢 Connected to Instagram' : '⚪ Not connected — data is manual only';
+    document.getElementById('ig-acc-connect-btn').textContent = a.connected ? 'Sync Now' : 'Connect Instagram';
   } else {
     document.getElementById('ig-account-modal-title').textContent = 'Add Account';
     document.getElementById('ig-acc-id').value      = '';
@@ -1173,6 +1182,7 @@ function openAccountModal(id) {
     document.getElementById('ig-acc-cpm').value     = 5;
     document.getElementById('ig-acc-notes').value   = '';
     document.getElementById('ig-acc-delete-btn').style.display = 'none';
+    document.getElementById('ig-acc-connect-row').style.display = 'none';
   }
   openModal('modal-ig-account');
 }
@@ -1199,6 +1209,32 @@ async function saveIgAccount() {
   closeModal('modal-ig-account');
   toast(id ? 'Account updated!' : 'Account added!');
   renderInstagram(); renderDashboard();
+}
+
+function connectOrSyncIgAccount() {
+  const id = document.getElementById('ig-acc-id').value;
+  const a = igAccounts.find(x => x.id === id);
+  if (!a) return;
+  if (a.connected) {
+    syncIgAccount(id);
+  } else {
+    window.location.href = `/api/instagram-oauth-start?accountId=${id}&token=${encodeURIComponent(accessToken)}`;
+  }
+}
+
+async function syncIgAccount(id) {
+  const btn = document.getElementById('ig-acc-connect-btn');
+  btn.disabled = true; btn.textContent = 'Syncing…';
+  try {
+    const result = await authedFetch('/api/instagram-sync', { accountId: id });
+    toast(`Synced ${result.synced} video${result.synced === 1 ? '' : 's'}!`);
+    const rows = await dbSelect('ig_posts');
+    igPosts = rows.map(fromDbIgPost);
+    renderInstagram(); renderDashboard();
+  } catch (e) {
+    toast('Sync failed: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = 'Sync Now';
 }
 
 async function deleteIgAccount() {

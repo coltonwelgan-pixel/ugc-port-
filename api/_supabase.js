@@ -8,7 +8,7 @@ function serviceClient() {
 
 async function requireUser(req, db) {
   const auth = req.headers.authorization || '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  const token = (auth.startsWith('Bearer ') ? auth.slice(7) : null) || req.query?.token || null;
   if (!token) return null;
   const { data, error } = await db.auth.getUser(token);
   if (error || !data.user) return null;
