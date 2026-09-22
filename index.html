@@ -259,6 +259,57 @@
       margin-bottom: 1.25rem;
     }
 
+    .hero-location {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-location svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--accent-hi);
+      flex-shrink: 0;
+    }
+
+    .hero-quick-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      padding: 0.85rem 1.4rem;
+      border: 1px solid var(--border-acc);
+      background: rgba(123,45,139,0.08);
+      margin-bottom: 2.5rem;
+      transition: border-color 0.25s, background 0.25s;
+    }
+
+    .hero-quick-contact:hover {
+      border-color: var(--accent-hi);
+      background: rgba(123,45,139,0.15);
+    }
+
+    .hero-quick-contact svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--accent-hi);
+      flex-shrink: 0;
+    }
+
+    .hero-quick-contact-label {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
     /* REPLACE: Main hero name */
     .hero-name {
       font-family: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
@@ -799,6 +850,220 @@
     }
 
     /* ============================================================
+       RESULTS / METRICS
+    ============================================================ */
+    #results {
+      padding: 9rem 0;
+    }
+
+    .results-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .results-headline {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.88;
+    }
+
+    .results-aside {
+      max-width: 400px;
+      font-size: 0.95rem;
+      color: var(--grey);
+      line-height: 1.75;
+    }
+
+    .results-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .result-card {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--bg-card);
+      scroll-margin-top: 6rem;
+    }
+
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-card-logo {
+      width: 68px;
+      height: 56px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-card-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .result-card-name {
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .result-card-type {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.3rem;
+    }
+
+    .result-objective {
+      padding: 2rem 2.5rem 0;
+      font-size: 0.9rem;
+      color: var(--grey);
+      line-height: 1.8;
+    }
+
+    .result-objective strong {
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-stat {
+      padding: 2rem;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .result-stat:last-child { border-right: none; }
+
+    .result-stat-num {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 2.6rem;
+      line-height: 1;
+      color: var(--accent-hi);
+    }
+
+    .result-stat-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.5rem;
+    }
+
+    .result-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-section {
+      padding: 2.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .result-section:last-child { border-right: none; }
+
+    .result-section h4 {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent-hi);
+      margin-bottom: 1rem;
+    }
+
+    .result-section p {
+      font-size: 0.88rem;
+      color: var(--grey);
+      line-height: 1.8;
+    }
+
+    .result-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .result-section ul li {
+      font-size: 0.88rem;
+      color: var(--grey);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.5;
+    }
+
+    .result-section ul li::before {
+      content: '◆';
+      font-size: 0.45rem;
+      color: var(--accent);
+      margin-top: 0.45rem;
+      flex-shrink: 0;
+    }
+
+    .result-proof {
+      padding: 2.5rem;
+    }
+
+    .result-proof h4 {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent-hi);
+      margin-bottom: 1.25rem;
+    }
+
+    .result-proof-shot {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border-acc);
+      background: var(--bg);
+    }
+
+    .result-proof-shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+      .result-stats { grid-template-columns: repeat(2, 1fr); }
+      .result-stat:nth-child(2n) { border-right: none; }
+      .result-stat:nth-child(n+3) { border-top: 1px solid var(--border); }
+      .result-breakdown { grid-template-columns: 1fr; }
+      .result-section { border-right: none; border-top: 1px solid var(--border); }
+      .result-section:first-child { border-top: none; }
+    }
+
+    /* ============================================================
        NEWSLETTER
     ============================================================ */
     #newsletter {
@@ -1014,7 +1279,7 @@
 <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
   <!-- REPLACE: Update links if you add/remove sections -->
   <a href="#clients"    onclick="closeMobileMenu()">Brands</a>
-  <a href="results.html" onclick="closeMobileMenu()">Results</a>
+  <a href="#results" onclick="closeMobileMenu()">Results</a>
   <a href="#work"       onclick="closeMobileMenu()">Content</a>
   <a href="#about"      onclick="closeMobileMenu()">About</a>
   <a href="#contact"    onclick="closeMobileMenu()">Contact</a>
@@ -1029,7 +1294,7 @@
 
   <ul class="nav-links">
     <li><a href="#clients">Brands</a></li>
-    <li><a href="results.html">Results</a></li>
+    <li><a href="#results">Results</a></li>
     <li><a href="#work">Content</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -1050,10 +1315,16 @@
     <div class="hero-inner">
       <div class="hero-content">
 
-        <p class="hero-eyebrow">UGC Creator &middot; Based in Canada</p>
+        <p class="hero-eyebrow">UGC Creator</p>
 
         <!-- REPLACE: Your display name -->
         <h1 class="hero-name display">Colton<br>Welgan.</h1>
+
+        <!-- REPLACE: Update your location -->
+        <p class="hero-location fade-up">
+          <svg viewBox="0 0 24 24"><path d="M12 2C7.86 2 4.5 5.36 4.5 9.5c0 5.25 6.5 11.5 7.09 12.05a.6.6 0 0 0 .82 0C13 21 19.5 14.75 19.5 9.5 19.5 5.36 16.14 2 12 2zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          Vancouver, Canada
+        </p>
 
         <p class="hero-sub fade-up delay-1">
           Trend-led, conversion-driven UGC for tech &amp; AI brands. <span class="hi">The kind of content people actually stop for.</span>
@@ -1077,6 +1348,15 @@
           <span class="pill">Fashion</span>
           <span class="pill">Health</span>
         </div>
+
+        <!-- REPLACE: Update email address — kept as plain, copy-pasteable text for brands reaching out -->
+        <a href="mailto:welgancreative@gmail.com" class="hero-quick-contact fade-up">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          <span>
+            <span class="hero-quick-contact-label">Email</span><br>
+            welgancreative@gmail.com
+          </span>
+        </a>
 
         <div class="hero-ctas">
           <!-- REPLACE: Update href to your preferred CTA destination -->
@@ -1132,7 +1412,7 @@
 
     <div class="clients-grid fade-up delay-2">
       <div class="client-card">
-        <a href="results.html">
+        <a href="#results">
           <div class="client-card-logo">
             <img src="triips-logo.svg" alt="Triips" class="fill">
           </div>
@@ -1140,7 +1420,7 @@
         </a>
       </div>
       <div class="client-card">
-        <a href="results.html">
+        <a href="#results">
           <div class="client-card-logo" style="background:#fff;">
             <img src="neuro-logo.svg" alt="Neuro">
           </div>
@@ -1148,7 +1428,7 @@
         </a>
       </div>
       <div class="client-card">
-        <a href="results.html#replit">
+        <a href="#results-replit">
           <div class="client-card-logo" style="background:#F0EBE3;">
             <img src="replit-logo.svg" alt="Replit">
           </div>
@@ -1180,7 +1460,7 @@
         </a>
       </div>
       <div class="client-card">
-        <a href="results.html#openart">
+        <a href="#results-openart">
           <div class="client-card-logo" style="background:#000;">
             <img src="openart-logo.png" alt="OpenArt">
           </div>
@@ -1195,6 +1475,142 @@
           <div class="client-card-name">Kalshi</div>
         </a>
       </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4B — RESULTS / METRICS
+============================================================ -->
+<section id="results">
+  <div class="container">
+
+    <div class="results-top">
+      <div>
+        <div class="section-label fade-up">Metrics</div>
+        <h2 class="results-headline display fade-up delay-1">
+          The Results.
+        </h2>
+      </div>
+      <p class="results-aside fade-up delay-1">
+        A breakdown of real campaigns — what I made, what it did, and the numbers behind it.
+      </p>
+    </div>
+
+    <div class="results-cards">
+
+      <!-- REPLIT -->
+      <div class="result-card fade-up delay-2" id="results-replit">
+        <div class="result-card-header">
+          <div class="result-card-logo" style="background:#F0EBE3;">
+            <img src="replit-logo.svg" alt="Replit">
+          </div>
+          <div>
+            <div class="result-card-name">Replit</div>
+            <div class="result-card-type">Organic UGC</div>
+          </div>
+        </div>
+
+        <p class="result-objective">
+          <strong>Objective:</strong> Promote Replit in a positive light while showing real, honest use cases — proving why it's the go-to tool for turning any app or idea into a working reality in seconds.
+        </p>
+
+        <div class="result-stats">
+          <div class="result-stat">
+            <div class="result-stat-num display">1,369,000</div>
+            <div class="result-stat-label">Total Views</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-num display">Aug 1</div>
+            <div class="result-stat-label">Campaign Started 2026</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-num display">0 → 5K</div>
+            <div class="result-stat-label">IG Followers in 1 Month</div>
+          </div>
+        </div>
+
+        <div class="result-breakdown">
+          <div class="result-section">
+            <h4>What I Did</h4>
+            <ul>
+              <li>Organic UGC showing real, from-scratch build sessions on Replit — idea to shipped app in one sitting</li>
+              <li>Hook-driven videos framed around speed and simplicity: "I built this app in seconds"</li>
+              <li>Content positioning Replit as the go-to tool for non-coders and builders alike to bring any idea to life</li>
+            </ul>
+          </div>
+          <div class="result-section">
+            <h4>Results</h4>
+            <p>Since kicking off Aug 1, 2026, the content has pulled in 1,369,000+ total views and grown the account from 0 to 5,000 followers in its first month — while keeping Replit's brand positioning genuinely positive and use-case driven.</p>
+          </div>
+        </div>
+
+        <div class="result-proof">
+          <h4>Social Proof</h4>
+          <div class="result-proof-shot">
+            <img src="instagram-growth.jpg" alt="Colton Welgan's Instagram at 5,072 followers, 317 posts, with 1.3M views in the last 30 days">
+          </div>
+        </div>
+      </div>
+
+      <!-- OPENART -->
+      <div class="result-card fade-up delay-2" id="results-openart">
+        <div class="result-card-header">
+          <div class="result-card-logo" style="background:#000;">
+            <img src="openart-logo.png" alt="OpenArt">
+          </div>
+          <div>
+            <div class="result-card-name">OpenArt</div>
+            <div class="result-card-type">Organic UGC</div>
+          </div>
+        </div>
+
+        <p class="result-objective">
+          <strong>About:</strong> OpenArt is a generative AI art platform founded by ex-Googlers in San Francisco, on a mission to make creating incredible art accessible to everyone.
+        </p>
+        <p class="result-objective">
+          <strong>Objective:</strong> Show the full range of OpenArt's use cases — from AI "vibe directing" for YouTube videos to generating Airbnb-style walkthroughs — positioning it as the go-to leader in generative AI graphics.
+        </p>
+
+        <div class="result-stats">
+          <div class="result-stat">
+            <div class="result-stat-num display">377,000</div>
+            <div class="result-stat-label">Total Views</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-num display">Aug 2</div>
+            <div class="result-stat-label">Campaign Started 2026</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-num display">0 → 2K</div>
+            <div class="result-stat-label">Followers in Under 1 Month</div>
+          </div>
+        </div>
+
+        <div class="result-breakdown">
+          <div class="result-section">
+            <h4>What I Did</h4>
+            <ul>
+              <li>Organic UGC covering OpenArt's full toolkit — from AI "vibe directing" edits for YouTube to fully generated Airbnb walkthroughs</li>
+              <li>Use-case-driven videos showing real workflows, not just feature demos, to prove OpenArt as a genuine creative tool</li>
+              <li>Content positioning OpenArt as the go-to platform for generative AI graphics across multiple content angles</li>
+            </ul>
+          </div>
+          <div class="result-section">
+            <h4>Results</h4>
+            <p>Since kicking off Aug 2, 2026, the content has pulled in 377,000+ total views and grown the account from 0 to 2,000 followers in under a month — building OpenArt's name as a leader in generative AI graphics.</p>
+          </div>
+        </div>
+
+        <div class="result-proof">
+          <h4>Social Proof</h4>
+          <div class="result-proof-shot">
+            <img src="openart-growth.jpg" alt="@coltonlovesart Instagram at 2,002 followers, 38 posts, with 365.5K views in the last 30 days">
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -1356,7 +1772,7 @@
       </p>
       <nav class="footer-right" aria-label="Footer navigation">
         <a href="#clients">Brands</a>
-        <a href="results.html">Results</a>
+        <a href="#results">Results</a>
         <a href="#work">Content</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
