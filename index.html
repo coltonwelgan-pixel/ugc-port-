@@ -327,11 +327,20 @@
       color: var(--grey);
       line-height: 1.55;
       max-width: 560px;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.1rem;
     }
 
     .hero-sub .hi {
       color: var(--accent-hi);
+    }
+
+    .hero-mission {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.6;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
     }
 
     /* ---- Hero split layout ---- */
@@ -425,6 +434,34 @@
       padding: 0.5rem 1rem;
       border: 1px solid var(--border);
       color: var(--grey);
+      transition: transform 0.2s ease;
+    }
+
+    .pill:hover { transform: translateY(-2px); }
+
+    /* REPLACE: Adjust per-category colors if your focus areas change */
+    .pill-tech {
+      color: #6FB3FF;
+      border-color: rgba(111,179,255,0.4);
+      background: rgba(111,179,255,0.08);
+    }
+
+    .pill-ai {
+      color: var(--accent-hi);
+      border-color: var(--border-acc);
+      background: rgba(123,45,139,0.1);
+    }
+
+    .pill-fashion {
+      color: #F080B0;
+      border-color: rgba(240,128,176,0.4);
+      background: rgba(240,128,176,0.08);
+    }
+
+    .pill-health {
+      color: #4ADE80;
+      border-color: rgba(74,222,128,0.4);
+      background: rgba(74,222,128,0.08);
     }
 
     .hero-ctas {
@@ -879,9 +916,10 @@
     }
 
     .results-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
     }
 
     .result-card {
@@ -894,15 +932,15 @@
     .result-card-header {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      padding: 2.5rem;
+      gap: 1.25rem;
+      padding: 1.75rem;
       border-bottom: 1px solid var(--border);
     }
 
     .result-card-logo {
-      width: 68px;
-      height: 56px;
-      border-radius: 10px;
+      width: 54px;
+      height: 44px;
+      border-radius: 8px;
       overflow: hidden;
       flex-shrink: 0;
       display: flex;
@@ -917,24 +955,24 @@
     }
 
     .result-card-name {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 800;
     }
 
     .result-card-type {
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 700;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--grey);
       margin-top: 0.3rem;
     }
 
     .result-objective {
-      padding: 2rem 2.5rem 0;
-      font-size: 0.9rem;
+      padding: 1.5rem 1.75rem 0;
+      font-size: 0.82rem;
       color: var(--grey);
-      line-height: 1.8;
+      line-height: 1.75;
     }
 
     .result-objective strong {
@@ -944,14 +982,14 @@
 
     .result-stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      margin-top: 1.5rem;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
 
     .result-stat {
-      padding: 2rem;
+      padding: 1.5rem 1rem;
       border-right: 1px solid var(--border);
       text-align: center;
     }
@@ -960,15 +998,15 @@
 
     .result-stat-num {
       font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: 2.6rem;
+      font-size: 2rem;
       line-height: 1;
       color: var(--accent-hi);
     }
 
     .result-stat-label {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 700;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--grey);
       margin-top: 0.5rem;
@@ -976,73 +1014,75 @@
 
     .result-breakdown {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       border-bottom: 1px solid var(--border);
     }
 
     .result-section {
-      padding: 2.5rem;
+      padding: 1.75rem;
       border-right: 1px solid var(--border);
+      border-top: 1px solid var(--border);
     }
 
+    .result-section:first-child { border-top: none; }
     .result-section:last-child { border-right: none; }
 
     .result-section h4 {
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 700;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent-hi);
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
     }
 
     .result-section p {
-      font-size: 0.88rem;
+      font-size: 0.83rem;
       color: var(--grey);
-      line-height: 1.8;
+      line-height: 1.75;
     }
 
     .result-section ul {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.55rem;
     }
 
     .result-section ul li {
-      font-size: 0.88rem;
+      font-size: 0.83rem;
       color: var(--grey);
       display: flex;
       align-items: flex-start;
-      gap: 0.6rem;
+      gap: 0.55rem;
       line-height: 1.5;
     }
 
     .result-section ul li::before {
       content: '◆';
-      font-size: 0.45rem;
+      font-size: 0.42rem;
       color: var(--accent);
-      margin-top: 0.45rem;
+      margin-top: 0.42rem;
       flex-shrink: 0;
     }
 
     .result-proof {
-      padding: 2.5rem;
+      padding: 1.75rem;
     }
 
     .result-proof h4 {
-      font-size: 0.62rem;
+      font-size: 0.58rem;
       font-weight: 700;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--accent-hi);
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .result-proof-shot {
       width: 100%;
-      max-width: 460px;
-      border-radius: 14px;
+      max-width: 340px;
+      border-radius: 12px;
       overflow: hidden;
       border: 1px solid var(--border-acc);
       background: var(--bg);
@@ -1054,13 +1094,15 @@
       display: block;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 960px) {
+      .results-cards { grid-template-columns: 1fr; }
+      .result-proof-shot { max-width: 460px; }
+    }
+
+    @media (max-width: 480px) {
       .result-stats { grid-template-columns: repeat(2, 1fr); }
       .result-stat:nth-child(2n) { border-right: none; }
       .result-stat:nth-child(n+3) { border-top: 1px solid var(--border); }
-      .result-breakdown { grid-template-columns: 1fr; }
-      .result-section { border-right: none; border-top: 1px solid var(--border); }
-      .result-section:first-child { border-top: none; }
     }
 
     /* ============================================================
@@ -1330,6 +1372,10 @@
           Trend-led, conversion-driven UGC for tech &amp; AI brands. <span class="hi">The kind of content people actually stop for.</span>
         </p>
 
+        <p class="hero-mission fade-up delay-1">
+          Helping brands get seen, get read, and get heard — through naturally-feeling UGC that never looks like an ad.
+        </p>
+
         <!-- REPLACE: Update stat values as your numbers grow -->
         <div class="hero-stats fade-up delay-2">
           <div class="hero-stat">
@@ -1343,10 +1389,10 @@
         </div>
 
         <div class="hero-pills">
-          <span class="pill">Tech</span>
-          <span class="pill">AI</span>
-          <span class="pill">Fashion</span>
-          <span class="pill">Health</span>
+          <span class="pill pill-tech">Tech</span>
+          <span class="pill pill-ai">AI</span>
+          <span class="pill pill-fashion">Fashion</span>
+          <span class="pill pill-health">Health</span>
         </div>
 
         <!-- REPLACE: Update email address — kept as plain, copy-pasteable text for brands reaching out -->
@@ -1404,7 +1450,7 @@
         </h2>
       </div>
       <p class="clients-subtext fade-up delay-1">
-        From indie startups to AI-first platforms, I create UGC that performs across organic and paid for brands big and small.
+        From AI platforms to fashion and health brands, I create UGC that performs across organic and paid for brands big and small.
       </p>
     </div>
 
