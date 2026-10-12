@@ -3,32 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- REPLACE: Update page title if desired -->
   <title>Colton Welgan | UGC Creator</title>
   <meta name="description" content="Story-driven, scroll-stopping UGC. The kind of content brands actually remember.">
 
-  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="https://player.vimeo.com/api/player.js" defer></script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
   <style>
     /* ============================================================
-       VARIABLES
+       TOKENS
+       Accent rule: purple is reserved for primary CTAs, active nav
+       state and focus rings. Everything else is neutral.
     ============================================================ */
     :root {
       --bg:          #0A0A0A;
       --bg-raised:   #0F0F0F;
-      --bg-card:     #111111;
+      --bg-card:     #131313;
       --accent:      #7B2D8B;
       --accent-hi:   #9B3DAB;
-      --accent-dim:  rgba(123, 45, 139, 0.15);
       --white:       #FFFFFF;
-      --grey:        #A0A0A0;
+      --text-2:      #B4B4B4;
+      --grey:        #8A8A8A;
       --border:      rgba(255,255,255,0.07);
-      --border-acc:  rgba(123, 45, 139, 0.35);
+      --border-md:   rgba(255,255,255,0.12);
+      --border-hi:   rgba(255,255,255,0.28);
+
+      --gutter:      clamp(1rem, 4vw, 3rem);
+      --sec-y:       clamp(3rem, 6vw, 4.5rem);
+      --ease:        cubic-bezier(0.16,1,0.3,1);
     }
 
     /* ============================================================
@@ -47,149 +53,235 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    /* Fine film grain so the black isn't a flat template fill */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.07;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
     img { max-width: 100%; display: block; }
     a { text-decoration: none; color: inherit; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 
-    /* ============================================================
-       UTILITY
-    ============================================================ */
+    :focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 3px; }
+
     .display {
       font-family: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
-      letter-spacing: 0.02em;
+      font-weight: 400;
+      letter-spacing: 0.01em;
     }
 
     .container {
-      max-width: 1340px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 0 5rem;
+      padding: 0 var(--gutter);
     }
 
-    .section-label {
+    .icon { width: 1em; height: 1em; fill: currentColor; flex-shrink: 0; }
+
+    /* Section titles — confident, compact. Display sizes are kept
+       for the hero name and the contact headline only. */
+    .sec-label {
       display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      font-size: 0.65rem;
+      gap: 0.6rem;
+      font-size: 0.62rem;
       font-weight: 700;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
+      color: var(--grey);
+      margin-bottom: 0.6rem;
     }
 
-    .section-label::before {
+    .sec-label::before {
       content: '';
-      display: block;
-      width: 28px;
+      width: 18px;
       height: 1px;
-      background: var(--accent);
-      flex-shrink: 0;
+      background: currentColor;
+    }
+
+    .sec-title {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-weight: 400;
+      font-size: clamp(2.1rem, 4.2vw, 3.4rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
     }
 
     /* ============================================================
-       SCROLL ANIMATIONS
+       SCROLL REVEAL — fade + 12px rise, staggered
     ============================================================ */
     .fade-up {
       opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
-                  transform 0.8s cubic-bezier(0.16,1,0.3,1);
+      transform: translateY(12px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
     }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.visible { opacity: 1; transform: none; }
 
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.45s; }
-    .delay-5 { transition-delay: 0.6s; }
+    .delay-1 { transition-delay: 0.06s; }
+    .delay-2 { transition-delay: 0.12s; }
+    .delay-3 { transition-delay: 0.18s; }
+    .delay-4 { transition-delay: 0.24s; }
+    .delay-5 { transition-delay: 0.3s; }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      min-height: 48px;
+      padding: 0.8rem 1.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, background 0.2s ease,
+                  border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-filled {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+
+    .btn-filled:hover {
+      background: var(--accent-hi);
+      border-color: var(--accent-hi);
+      box-shadow: 0 8px 24px rgba(123,45,139,0.35);
+    }
+
+    .btn-ghost {
+      border-color: var(--border-hi);
+      color: var(--white);
+    }
+
+    .btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.04); }
 
     /* ============================================================
        NAVIGATION
     ============================================================ */
     #nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 1000;
-      padding: 1.75rem 5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background 0.4s ease, border-color 0.4s ease, padding 0.3s ease;
       border-bottom: 1px solid transparent;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     #nav.scrolled {
-      background: rgba(10, 10, 10, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom-color: var(--border-acc);
-      padding-top: 1.1rem;
-      padding-bottom: 1.1rem;
+      background: rgba(10,10,10,0.86);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      height: 64px;
     }
 
     .nav-logo {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 800;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--white);
+      margin-right: auto;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
     }
 
     .nav-links {
       display: flex;
-      gap: 2.5rem;
+      gap: 1.75rem;
       list-style: none;
     }
 
     .nav-links a {
-      font-size: 0.68rem;
+      position: relative;
+      display: block;
+      padding: 0.75rem 0;
+      font-size: 0.66rem;
       font-weight: 700;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--grey);
-      position: relative;
-      transition: color 0.25s;
+      transition: color 0.2s;
     }
 
     .nav-links a::after {
       content: '';
       position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--accent);
-      transition: width 0.3s cubic-bezier(0.16,1,0.3,1);
+      left: 0; bottom: 0.45rem;
+      width: 0; height: 1px;
+      background: var(--white);
+      transition: width 0.3s var(--ease);
     }
 
     .nav-links a:hover { color: var(--white); }
     .nav-links a:hover::after { width: 100%; }
+    .nav-links a.active { color: var(--white); }
+    .nav-links a.active::after { width: 100%; background: var(--accent-hi); }
 
-    /* Hamburger */
+    .nav-socials {
+      display: flex;
+      align-items: center;
+      padding-left: 1.25rem;
+      border-left: 1px solid var(--border-md);
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+      color: var(--text-2);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .icon-btn:hover { color: var(--white); transform: translateY(-1px); }
+
     .hamburger {
       display: none;
+      width: 44px;
+      height: 44px;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       gap: 5px;
       cursor: pointer;
       z-index: 1001;
-      padding: 4px;
     }
 
     .hamburger span {
       display: block;
-      width: 22px;
+      width: 20px;
       height: 2px;
       background: var(--white);
       transition: transform 0.3s ease, opacity 0.3s ease;
-      transform-origin: center;
     }
 
-    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Mobile menu overlay */
     .mobile-menu {
       display: none;
       position: fixed;
@@ -197,456 +289,539 @@
       z-index: 999;
       background: var(--bg);
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      gap: 3rem;
+      padding: 5rem var(--gutter) 2rem;
+      gap: 0.25rem;
     }
 
     .mobile-menu.open { display: flex; }
 
-    .mobile-menu a {
+    .mobile-menu > a {
       font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: 3.5rem;
-      letter-spacing: 0.1em;
-      color: var(--white);
-      transition: color 0.2s;
+      font-size: 2.6rem;
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s, padding-left 0.2s;
     }
 
-    .mobile-menu a:hover { color: var(--accent); }
+    .mobile-menu > a:hover { color: var(--accent-hi); padding-left: 0.4rem; }
+
+    .mobile-menu .social-row { margin-top: 2rem; }
+
+    /* ============================================================
+       SOCIAL BUTTONS (hero, mobile menu, footer)
+    ============================================================ */
+    .social-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.5rem;
+      max-width: 460px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      min-height: 52px;
+      padding: 0 0.75rem;
+      border: 1px solid var(--border-md);
+      background: rgba(255,255,255,0.025);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .social-btn .icon { font-size: 22px; }
+
+    .social-btn:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.06);
+      transform: translateY(-2px);
+    }
 
     /* ============================================================
        HERO
     ============================================================ */
     #hero {
-      min-height: 100vh;
+      padding: calc(64px + clamp(1.5rem, 4vw, 3rem)) 0 var(--sec-y);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+      gap: clamp(2rem, 5vw, 4rem);
+      align-items: stretch;
+    }
+
+    .hero-meta {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 6rem;
-      padding-top: 10rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Subtle radial glow */
-    #hero::before {
-      content: '';
-      position: absolute;
-      top: -10%;
-      right: -5%;
-      width: 60%;
-      height: 80%;
-      background: radial-gradient(ellipse at center, rgba(123,45,139,0.10) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    #hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: var(--border);
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .hero-eyebrow {
-      font-size: 0.65rem;
+      font-size: 0.64rem;
       font-weight: 700;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.25rem;
+      color: var(--grey);
     }
 
     .hero-location {
       display: inline-flex;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 1.75rem;
-    }
-
-    .hero-location svg {
-      width: 18px;
-      height: 18px;
-      fill: var(--accent-hi);
-      flex-shrink: 0;
-    }
-
-    .hero-quick-contact {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.65rem;
+      gap: 0.4rem;
       font-size: 0.85rem;
       font-weight: 600;
-      color: var(--white);
-      padding: 0.85rem 1.4rem;
-      border: 1px solid var(--border-acc);
-      background: rgba(123,45,139,0.08);
-      margin-bottom: 2.5rem;
-      transition: border-color 0.25s, background 0.25s;
+      color: var(--text-2);
     }
 
-    .hero-quick-contact:hover {
-      border-color: var(--accent-hi);
-      background: rgba(123,45,139,0.15);
+    .hero-location .icon { font-size: 15px; }
+
+    .hero-name {
+      font-size: clamp(3.75rem, 8.5vw, 7rem);
+      line-height: 0.86;
+      margin-bottom: 1.1rem;
     }
 
-    .hero-quick-contact svg {
-      width: 16px;
-      height: 16px;
-      fill: var(--accent-hi);
-      flex-shrink: 0;
+    .hero-mission {
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      font-weight: 500;
+      line-height: 1.55;
+      max-width: 34ch;
+      margin-bottom: 1.5rem;
     }
 
-    .hero-quick-contact-label {
+    .hero-facts {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 1rem 2rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-stats { display: flex; gap: 2rem; }
+
+    .hero-stat-num {
+      font-size: clamp(2rem, 3.4vw, 2.6rem);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
       font-size: 0.58rem;
       font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--grey);
-    }
-
-    /* REPLACE: Main hero name */
-    .hero-name {
-      font-family: 'Bebas Neue', Impact, 'Arial Black', sans-serif;
-      font-size: clamp(3.5rem, 8vw, 7.5rem);
-      line-height: 0.9;
-      letter-spacing: -0.01em;
-      color: var(--white);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero-mission {
-      font-size: clamp(1rem, 1.8vw, 1.2rem);
-      font-weight: 600;
-      color: var(--white);
-      line-height: 1.6;
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-    }
-
-    /* ---- Hero split layout ---- */
-    .hero-inner {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .hero-photo-wrap {
-      width: 100%;
-      aspect-ratio: 4 / 5;
-      border-radius: 24px;
-      overflow: hidden;
-    }
-
-    .hero-photo-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hero-photo-placeholder {
-      width: 100%;
-      height: 100%;
-      border-radius: 24px;
-      background: var(--bg-raised);
-      border: 1px dashed var(--border-acc);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      text-align: center;
-      padding: 2rem;
-      color: var(--grey);
-    }
-
-    .hero-photo-placeholder svg {
-      width: 40px;
-      height: 40px;
-      opacity: 0.5;
-    }
-
-    .hero-photo-placeholder span {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      max-width: 200px;
-      line-height: 1.6;
-    }
-
-    .hero-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3rem;
-      margin-bottom: 2.75rem;
-    }
-
-    .hero-stat-num {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(2.2rem, 4vw, 3.2rem);
-      line-height: 1;
-      color: var(--white);
-    }
-
-    .hero-stat-label {
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--grey);
-      margin-top: 0.5rem;
+      margin-top: 0.3rem;
     }
 
     .hero-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-bottom: 3.5rem;
+      gap: 0.4rem;
+      margin-left: auto;
     }
 
     .pill {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--border);
-      color: var(--grey);
-      transition: transform 0.2s ease;
-    }
-
-    .pill:hover { transform: translateY(-2px); }
-
-    /* REPLACE: Adjust per-category colors if your focus areas change */
-    .pill-tech {
-      color: #6FB3FF;
-      border-color: rgba(111,179,255,0.4);
-      background: rgba(111,179,255,0.08);
-    }
-
-    .pill-ai {
-      color: var(--accent-hi);
-      border-color: var(--border-acc);
-      background: rgba(123,45,139,0.1);
-    }
-
-    .pill-fashion {
-      color: #F080B0;
-      border-color: rgba(240,128,176,0.4);
-      background: rgba(240,128,176,0.08);
-    }
-
-    .pill-health {
-      color: #4ADE80;
-      border-color: rgba(74,222,128,0.4);
-      background: rgba(74,222,128,0.08);
-    }
-
-    .hero-ctas {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 4.5rem;
+      gap: 0.45rem;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.45rem 0.7rem;
+      border: 1px solid var(--border-md);
+      color: var(--text-2);
+      transition: border-color 0.2s, color 0.2s;
     }
 
-    /* Buttons */
-    .btn {
+    .pill::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--dot);
+    }
+
+    .pill:hover { border-color: var(--border-hi); color: var(--white); }
+
+    .pill-tech    { --dot: #6FB3FF; }
+    .pill-ai      { --dot: #B86BC8; }
+    .pill-fashion { --dot: #F080B0; }
+    .pill-health  { --dot: #4ADE80; }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-quick-contact {
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      padding: 1rem 2.25rem;
-      font-size: 0.72rem;
+      min-height: 48px;
+      padding: 0 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-2);
+      border: 1px dashed var(--border-md);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .hero-quick-contact .icon { font-size: 15px; }
+    .hero-quick-contact:hover { color: var(--white); border-color: var(--border-hi); }
+
+    .hero-quick-contact-label {
+      font-size: 0.56rem;
       font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease,
-                  background 0.25s ease, border-color 0.25s ease;
-      border: 1px solid transparent;
-    }
-
-    .btn:hover { transform: translateY(-3px); }
-
-    .btn-filled {
-      background: var(--accent);
-      color: var(--white);
-      border-color: var(--accent);
-    }
-
-    .btn-filled:hover {
-      background: var(--accent-hi);
-      border-color: var(--accent-hi);
-      box-shadow: 0 8px 28px rgba(123,45,139,0.45);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--white);
-      border-color: rgba(255,255,255,0.25);
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--white);
-      box-shadow: 0 8px 28px rgba(255,255,255,0.07);
-    }
-
-    .btn-white {
-      background: var(--white);
-      color: var(--accent);
-      border-color: var(--white);
-    }
-
-    .btn-white:hover {
-      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-    }
-
-    .hero-socials {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .social-link {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--grey);
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .hero-photo-wrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+    }
+
+    /* ============================================================
+       BRANDS — marquee
+    ============================================================ */
+    #clients {
+      padding: clamp(2rem, 4vw, 2.75rem) 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.012);
+    }
+
+    .clients-header {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .clients-headline {
+      font-size: clamp(1.6rem, 2.6vw, 2rem);
+      line-height: 1;
+    }
+
+    .clients-subtext {
+      font-size: 0.85rem;
+      color: var(--grey);
+      line-height: 1.5;
+    }
+
+    .marquee {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+              mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 38s linear infinite;
+    }
+
+    .marquee:hover .marquee-track,
+    .marquee:focus-within .marquee-track { animation-play-state: paused; }
+
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    .marquee-set {
+      display: flex;
+      gap: 0.6rem;
+      padding-right: 0.6rem;
+      list-style: none;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      height: 56px;
+      padding: 0 1rem 0 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      white-space: nowrap;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .brand:hover { border-color: var(--border-hi); background: #181818; }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1a1a1a;
+      flex-shrink: 0;
+    }
+
+    .brand-logo img { width: 84%; height: 84%; object-fit: contain; }
+    .brand-logo img.fill { width: 100%; height: 100%; object-fit: cover; }
+
+    .brand-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-2);
       transition: color 0.2s;
     }
 
-    .social-link:hover { color: var(--accent); }
-    .social-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+    .brand:hover .brand-name { color: var(--white); }
 
     /* ============================================================
-       ABOUT
+       RESULTS
     ============================================================ */
-    #about {
-      padding: 9rem 0 5rem;
+    #results { padding: var(--sec-y) 0; }
+
+    .results-top {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: end;
+      gap: 1rem 3rem;
+      margin-bottom: 1.75rem;
     }
 
-    .about-grid {
+    .results-aside {
+      justify-self: end;
+      max-width: 38ch;
+      font-size: 0.88rem;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+
+    .results-cards {
       display: grid;
-      grid-template-columns: 5fr 7fr;
-      gap: 7rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      scroll-margin-top: 80px;
+      transition: border-color 0.25s;
+    }
+
+    .result-card:hover { border-color: var(--border-md); }
+
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .result-card-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .result-card-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .result-card-name { font-size: 1rem; font-weight: 800; }
+
+    .result-card-type {
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.15rem;
+    }
+
+    .result-objective {
+      padding: 0 1.25rem 1rem;
+      font-size: 0.8rem;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+
+    .result-objective strong { color: var(--text-2); font-weight: 700; }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-stat {
+      padding: 0.8rem 1.25rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .result-stat:last-child { border-right: none; }
+
+    .result-stat-num {
+      font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .result-stat-label {
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-top: 0.35rem;
+      line-height: 1.35;
+    }
+
+    .result-section { padding: 1rem 1.25rem; }
+
+    .result-section h4,
+    .result-proof summary {
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    .result-section h4 { margin-bottom: 0.6rem; }
+
+    .result-section ul {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .result-section li {
+      position: relative;
+      padding-left: 0.9rem;
+      font-size: 0.78rem;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .result-section li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0.55em;
+      width: 4px; height: 4px;
+      background: var(--grey);
+    }
+
+    /* Proof: collapsed by default, tiny thumbnail as a teaser */
+    .result-proof {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .result-proof summary {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-height: 52px;
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      list-style: none;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .result-proof summary::-webkit-details-marker { display: none; }
+    .result-proof summary:hover { color: var(--white); background: rgba(255,255,255,0.025); }
+
+    .proof-thumb {
+      width: 52px;
+      height: 34px;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid var(--border-md);
+      flex-shrink: 0;
+    }
+
+    .proof-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+    .proof-chevron {
+      margin-left: auto;
+      font-size: 0.9rem;
+      letter-spacing: 0;
+      transition: transform 0.25s var(--ease);
+    }
+
+    .result-proof[open] .proof-chevron { transform: rotate(180deg); }
+    .result-proof[open] .proof-thumb { display: none; }
+
+    .result-proof-shot {
+      margin: 0 1.25rem 1.25rem;
+      max-width: 360px;
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      border: 1px solid var(--border-md);
+      border-radius: 4px;
+    }
+
+    .result-proof-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+    /* ============================================================
+       CONTENT / VIDEOS
+    ============================================================ */
+    #work {
+      padding: var(--sec-y) 0;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,0.012);
+    }
+
+    .work-top { margin-bottom: 1.5rem; }
+
+    .work-layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+      gap: clamp(1.25rem, 3vw, 2.25rem);
       align-items: start;
     }
 
-    .about-photo {
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
-    }
-
-    .about-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3.5rem, 6vw, 5.5rem);
-      line-height: 0.92;
-      margin-bottom: 2rem;
-    }
-
-    .about-body {
-      font-size: 0.97rem;
-      line-height: 1.85;
-      color: var(--grey);
-      margin-bottom: 1.5rem;
-    }
-
-    .about-body strong { color: var(--white); font-weight: 600; }
-    .about-body em     { color: var(--accent); font-style: italic; }
-
-    .about-callout {
-      margin-top: 2.5rem;
-      padding: 1.5rem 2rem;
-      border-left: 2px solid var(--accent);
-      background: rgba(123,45,139,0.06);
-    }
-
-    .about-callout p {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--grey);
-      line-height: 1.7;
-    }
-
-    .about-callout p strong {
-      color: var(--white);
-      font-style: normal;
-      font-weight: 700;
-    }
-
-    /* ============================================================
-       WORK
-    ============================================================ */
-    #work {
-      padding: 9rem 0 4rem;
-      background: #111111;
-    }
-
-    .work-top {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 4rem;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .work-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3.5rem, 9vw, 8rem);
-      line-height: 0.88;
-    }
-
-    .work-aside {
-      max-width: 320px;
-      text-align: right;
-    }
-
-    .work-aside p {
-      font-size: 0.85rem;
-      color: var(--grey);
-      line-height: 1.75;
-    }
-
-    .work-aside p strong { color: var(--white); }
-
-    /* ── 4-card video grid ── */
-    .videos-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
-    }
-
     .vc {
-      aspect-ratio: 9 / 16;
       position: relative;
+      aspect-ratio: 9 / 16;
       overflow: hidden;
       background: var(--bg-card);
-      border: 1px solid var(--border-acc);
-      cursor: pointer;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      border: 1px solid var(--border-md);
+      transition: border-color 0.25s, transform 0.25s;
     }
 
-    .vc:hover, .vc.active {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent), 0 0 40px rgba(123,45,139,0.4);
-    }
+    .vc:hover { border-color: var(--border-hi); }
 
     .vc iframe {
       position: absolute;
@@ -656,619 +831,226 @@
       border: none;
     }
 
-    /* label always visible top-left */
-    .vc-label {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      right: 1rem;
-      z-index: 3;
+    .featured-video { border-color: var(--border-hi); }
+
+    .work-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      min-width: 0;
     }
 
-    .vc-tag {
-      display: inline-block;
-      font-size: 0.5rem;
-      font-weight: 700;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--white);
-      background: var(--accent);
-      padding: 0.25rem 0.6rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .vc-title {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.05em;
-      color: var(--white);
-      text-shadow: 0 1px 6px rgba(0,0,0,0.95);
-      display: block;
-    }
-
-
-    /* ── Featured (#1) video ── */
-    .featured {
-      display: grid;
-      grid-template-columns: minmax(0, 380px) 1fr;
-      gap: 4rem;
-      align-items: center;
-      margin-bottom: 4rem;
-    }
-
-    .featured .vc {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent), 0 0 60px rgba(123,45,139,0.35);
+    .featured-copy {
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .featured-tag {
       display: inline-block;
-      font-size: 0.6rem;
+      font-size: 0.56rem;
       font-weight: 700;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
-      color: var(--white);
-      background: var(--accent);
-      padding: 0.4rem 0.8rem;
-      margin-bottom: 1.25rem;
+      color: var(--bg);
+      background: var(--white);
+      padding: 0.3rem 0.6rem;
+      margin-bottom: 0.75rem;
     }
 
     .featured-title {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      line-height: 0.92;
-      margin-bottom: 1.25rem;
+      font-size: clamp(2rem, 3.6vw, 3rem);
+      line-height: 0.9;
+      margin-bottom: 0.6rem;
     }
 
     .featured-copy p {
-      font-size: 0.95rem;
-      color: var(--grey);
-      line-height: 1.75;
-      max-width: 420px;
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.6;
+      max-width: 44ch;
     }
 
-    .swipe-hint { display: none; }
+    .rail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .swipe-hint {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    .rail-controls { display: flex; gap: 0.4rem; }
+
+    .rail-btn {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-md);
+      font-size: 1rem;
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+    }
+
+    .rail-btn:hover:not(:disabled) { border-color: var(--white); background: rgba(255,255,255,0.05); }
+    .rail-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .videos-grid {
+      --cols: 4;
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .videos-grid::-webkit-scrollbar { display: none; }
+
+    .videos-grid .vc {
+      flex: 0 0 calc((100% - (var(--cols) - 1) * 0.75rem) / var(--cols));
+      scroll-snap-align: start;
+    }
 
     .work-footnote {
-      text-align: center;
-      font-size: 0.82rem;
-      font-style: italic;
-      color: rgba(160,160,160,0.5);
-    }
-
-    @media (max-width: 1024px) { .videos-grid { grid-template-columns: repeat(2, 1fr); } }
-
-    /* ============================================================
-       FORMATS
-    ============================================================ */
-    #formats {
-      padding: 9rem 0;
-    }
-
-    .formats-header {
-      margin-bottom: 4rem;
-    }
-
-    .formats-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3rem, 8vw, 7rem);
-      line-height: 0.9;
-    }
-
-    .formats-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1px;
-      background: var(--border);
-    }
-
-    .format-card {
-      background: var(--bg);
-      padding: 3rem 2.75rem 3.5rem;
-      border-top: 2px solid var(--accent);
-      transition: background 0.3s ease;
-    }
-
-    .format-card:hover { background: #0D0D0D; }
-
-    .format-num {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: 5rem;
-      color: rgba(160,80,180,0.65);
-      line-height: 1;
-      margin-bottom: 1.75rem;
-    }
-
-    .format-name {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: 2.2rem;
-      letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-    }
-
-    .format-desc {
-      font-size: 0.9rem;
-      color: var(--grey);
-      line-height: 1.75;
-    }
-
-    .format-desc em {
-      color: rgba(255,255,255,0.6);
-      font-style: italic;
-    }
-
-    /* ============================================================
-       CLIENTS / BRANDS
-    ============================================================ */
-    #clients {
-      padding: 9rem 0;
-      background: var(--bg-raised);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .clients-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 2.5rem;
-      margin-bottom: 3.5rem;
-    }
-
-    .clients-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(2.75rem, 6.5vw, 5.5rem);
-      line-height: 0.92;
-    }
-
-    .clients-headline .accent-text {
-      color: var(--accent-hi);
-    }
-
-    .clients-subtext {
-      font-style: italic;
-      color: var(--grey);
-      font-size: 1.05rem;
-      line-height: 1.75;
-      max-width: 400px;
-    }
-
-    .clients-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 0;
-    }
-
-    /* ---- Brands grid ---- */
-    .clients-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      border-top: 1px solid var(--border);
-      border-left: 1px solid var(--border);
-    }
-
-    .client-card {
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .client-card a {
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1.4rem;
-      text-align: center;
-      padding: 3.25rem 1.25rem;
-      height: 100%;
-    }
-
-    .client-card-logo {
-      width: 140px;
-      height: 140px;
-      border-radius: 22px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-card);
-      border: 1px solid var(--border-acc);
-    }
-
-    .client-card-logo img {
-      width: 86%;
-      height: 86%;
-      object-fit: contain;
-    }
-
-    .client-card-logo img.fill {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .client-card-name {
       font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-style: italic;
       color: var(--grey);
-    }
-
-    .client-card:hover .client-card-logo {
-      transform: scale(1.05);
-      transition: transform 0.2s ease;
-    }
-
-    @media (max-width: 900px) {
-      .clients-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    @media (max-width: 560px) {
-      .clients-grid { grid-template-columns: repeat(2, 1fr); }
-      .client-card-logo { width: 108px; height: 108px; }
-      .client-card a { padding: 2.5rem 1rem; }
     }
 
     /* ============================================================
-       RESULTS / METRICS
-    ============================================================ */
-    #results {
-      padding: 9rem 0;
-    }
-
-    .results-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-bottom: 4rem;
-    }
-
-    .results-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(3.5rem, 9vw, 8rem);
-      line-height: 0.88;
-    }
-
-    .results-aside {
-      max-width: 400px;
-      font-size: 0.95rem;
-      color: var(--grey);
-      line-height: 1.75;
-    }
-
-    .results-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-
-    .result-card {
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      background: var(--bg-card);
-      scroll-margin-top: 6rem;
-    }
-
-    .result-card-header {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      padding: 1.75rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .result-card-logo {
-      width: 54px;
-      height: 44px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .result-card-logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .result-card-name {
-      font-size: 1.1rem;
-      font-weight: 800;
-    }
-
-    .result-card-type {
-      font-size: 0.58rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--grey);
-      margin-top: 0.3rem;
-    }
-
-    .result-objective {
-      padding: 1.5rem 1.75rem 0;
-      font-size: 0.82rem;
-      color: var(--grey);
-      line-height: 1.75;
-    }
-
-    .result-objective strong {
-      color: var(--white);
-      font-weight: 700;
-    }
-
-    .result-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      margin-top: 1.5rem;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .result-stat {
-      padding: 1.5rem 1rem;
-      border-right: 1px solid var(--border);
-      text-align: center;
-    }
-
-    .result-stat:last-child { border-right: none; }
-
-    .result-stat-num {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: 2rem;
-      line-height: 1;
-      color: var(--accent-hi);
-    }
-
-    .result-stat-label {
-      font-size: 0.55rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--grey);
-      margin-top: 0.5rem;
-    }
-
-    .result-breakdown {
-      display: grid;
-      grid-template-columns: 1fr;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .result-section {
-      padding: 1.75rem;
-      border-right: 1px solid var(--border);
-      border-top: 1px solid var(--border);
-    }
-
-    .result-section:first-child { border-top: none; }
-    .result-section:last-child { border-right: none; }
-
-    .result-section h4 {
-      font-size: 0.58rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent-hi);
-      margin-bottom: 0.85rem;
-    }
-
-    .result-section p {
-      font-size: 0.83rem;
-      color: var(--grey);
-      line-height: 1.75;
-    }
-
-    .result-section ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-    }
-
-    .result-section ul li {
-      font-size: 0.83rem;
-      color: var(--grey);
-      display: flex;
-      align-items: flex-start;
-      gap: 0.55rem;
-      line-height: 1.5;
-    }
-
-    .result-section ul li::before {
-      content: '◆';
-      font-size: 0.42rem;
-      color: var(--accent);
-      margin-top: 0.42rem;
-      flex-shrink: 0;
-    }
-
-    .result-proof {
-      padding: 1.75rem;
-      margin-top: auto;
-    }
-
-    .result-proof h4 {
-      font-size: 0.58rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent-hi);
-      margin-bottom: 1rem;
-    }
-
-    .result-proof-shot {
-      width: 100%;
-      max-width: 340px;
-      aspect-ratio: 3 / 2;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border-acc);
-      background: var(--bg);
-    }
-
-    .result-proof-shot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top;
-      display: block;
-    }
-
-    @media (max-width: 960px) {
-      .results-cards { grid-template-columns: 1fr; }
-      .result-proof-shot { max-width: 460px; }
-    }
-
-    @media (max-width: 480px) {
-      .result-stats { grid-template-columns: repeat(3, 1fr); }
-      .result-stat { padding: 1.1rem 0.4rem; }
-      .result-stat-num { font-size: 1.45rem; }
-      .result-stat-label { font-size: 0.5rem; letter-spacing: 0.1em; }
-    }
-
-    /* ============================================================
-       NEWSLETTER
+       NEWSLETTER — one horizontal band
     ============================================================ */
     #newsletter {
-      padding: 7rem 0;
-      background: var(--bg-raised);
+      padding: clamp(2rem, 4vw, 3rem) 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      text-align: center;
     }
 
     .newsletter-inner {
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
-    .newsletter-inner .section-label {
-      justify-content: center;
-    }
-
-    .newsletter-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(2.75rem, 6vw, 4.5rem);
-      line-height: 0.95;
-      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto;
+      align-items: center;
+      gap: 1.25rem 2.5rem;
     }
 
     .newsletter-sub {
-      font-size: 1rem;
+      font-size: 0.88rem;
       color: var(--grey);
-      line-height: 1.75;
-      max-width: 480px;
-      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+      max-width: 52ch;
     }
 
     /* ============================================================
        CONTACT
     ============================================================ */
     #contact {
-      background: var(--accent);
-      padding: 9rem 0;
       position: relative;
       overflow: hidden;
-    }
-
-    #contact::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      padding: clamp(3.5rem, 8vw, 6rem) 0;
       background:
-        radial-gradient(ellipse at 0% 0%, rgba(0,0,0,0.35) 0%, transparent 55%),
-        radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.25) 0%, transparent 55%);
-      pointer-events: none;
+        radial-gradient(ellipse 60% 80% at 100% 100%, rgba(123,45,139,0.22), transparent 70%);
+      border-bottom: 1px solid var(--border);
     }
 
-    /* Large decorative watermark */
     #contact::after {
       content: "LET'S GO";
       position: absolute;
-      bottom: -2rem;
-      right: -1rem;
+      bottom: -0.15em;
+      right: -0.05em;
       font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(6rem, 18vw, 18rem);
-      color: rgba(0,0,0,0.12);
-      letter-spacing: -0.02em;
-      pointer-events: none;
+      font-size: clamp(6rem, 20vw, 16rem);
       line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.07);
       white-space: nowrap;
+      pointer-events: none;
     }
 
     .contact-inner { position: relative; z-index: 1; }
 
     .contact-over {
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       font-weight: 700;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 1.25rem;
+      color: var(--grey);
+      margin-bottom: 0.9rem;
     }
 
     .contact-headline {
-      font-family: 'Bebas Neue', Impact, sans-serif;
-      font-size: clamp(4.5rem, 13vw, 11rem);
-      line-height: 0.88;
-      color: var(--white);
-      margin-bottom: 2.5rem;
+      font-size: clamp(3.2rem, 9vw, 7.5rem);
+      line-height: 0.86;
+      margin-bottom: 1.75rem;
     }
 
-    .contact-body {
-      font-size: 1rem;
-      line-height: 1.85;
-      color: rgba(255,255,255,0.78);
-      max-width: 520px;
-      margin-bottom: 3.5rem;
+    .contact-email { text-transform: none; letter-spacing: 0.02em; font-size: 0.9rem; }
+
+    /* ============================================================
+       ABOUT
+    ============================================================ */
+    #about { padding: var(--sec-y) 0; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      align-items: start;
     }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 4px;
+    }
+
+    .about-headline { margin-bottom: 1.25rem; }
+
+    .about-text { columns: 2 280px; column-gap: 2.5rem; }
+
+    .about-body {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text-2);
+      margin-bottom: 0.9rem;
+      break-inside: avoid;
+    }
+
+    .about-body:first-child { color: var(--white); font-weight: 500; }
 
     /* ============================================================
        FOOTER
     ============================================================ */
-    footer {
-      background: #050505;
-      border-top: 1px solid var(--border);
-      padding: 2.25rem 0;
-    }
+    footer { padding: 1.5rem 0; }
 
     .footer-inner {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem;
+      gap: 0.75rem 2rem;
     }
 
-    .footer-left {
-      font-size: 0.68rem;
-      color: var(--grey);
-      letter-spacing: 0.08em;
-    }
+    .footer-left { font-size: 0.7rem; color: var(--grey); letter-spacing: 0.06em; }
+    .footer-left span { color: var(--white); }
 
-    .footer-left span { color: var(--accent); }
-
-    .footer-right {
-      display: flex;
-      gap: 2rem;
-    }
+    .footer-right { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin-left: auto; }
 
     .footer-right a {
-      font-size: 0.62rem;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 0.6rem;
       font-weight: 700;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--grey);
       transition: color 0.2s;
@@ -1276,234 +1058,222 @@
 
     .footer-right a:hover { color: var(--white); }
 
+    .footer-socials { display: flex; margin-right: -0.6rem; }
+    .footer-socials .icon-btn { font-size: 20px; color: var(--white); }
+    .footer-socials .icon-btn:hover { color: var(--accent-hi); }
+
     /* ============================================================
-       RESPONSIVETABLET (≤1024px)
+       RESPONSIVE
     ============================================================ */
-    @media (max-width: 1024px) {
-      .container { padding: 0 2.5rem; }
-      #nav { padding-left: 2.5rem; padding-right: 2.5rem; }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 3.5rem;
-      }
-
-      .about-photo {
-        max-width: 380px;
-        margin: 0 auto;
-        aspect-ratio: 4 / 3;
-      }
-
-      .work-top {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .work-aside { text-align: left; max-width: 100%; }
-
-
-      .formats-grid { grid-template-columns: repeat(2, 1fr); }
-      .formats-grid .format-card:nth-child(10) { grid-column: span 2; }
+    @media (max-width: 1100px) {
+      .nav-links { gap: 1.25rem; }
+      .videos-grid { --cols: 3; }
     }
 
-    /* ============================================================
-       RESPONSIVEMOBILE (≤768px)
-    ============================================================ */
-    @media (max-width: 768px) {
-      .container { padding: 0 1.5rem; }
-      #nav { padding: 1.25rem 1.5rem; }
-
-      .nav-links { display: none !important; }
+    @media (max-width: 960px) {
+      .nav-links, .nav-socials { display: none; }
       .hamburger { display: flex; }
+      .nav-mobile-socials { display: flex !important; }
 
-      .formats-grid { grid-template-columns: 1fr; gap: 0; }
-      .formats-grid .format-card:nth-child(10) { grid-column: span 1; }
-
-      .format-card:not(:last-child) {
-        border-bottom: 1px solid var(--border);
-      }
-
-      /* Hero — tighter, photo up top */
-      #hero { min-height: 0; padding-top: 5.5rem; padding-bottom: 3.5rem; }
-      .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .hero-photo-wrap { order: -1; aspect-ratio: 4 / 3; border-radius: 18px; }
-      .hero-name { margin-bottom: 1rem; }
-      .hero-location { margin-bottom: 1rem; }
-      .hero-mission { margin-bottom: 1.75rem; }
-      .hero-stats { gap: 2.5rem; margin-bottom: 1.75rem; }
-      .hero-pills { margin-bottom: 1.75rem; }
-      .hero-quick-contact { display: flex; margin-bottom: 1.5rem; }
-
-      .hero-ctas { flex-direction: column; align-items: stretch; gap: 0.75rem; margin-bottom: 2.25rem; }
-      .btn { width: 100%; justify-content: center; }
-      .hero-socials { justify-content: space-between; gap: 1rem; }
-
-      #about, #work, #formats, #contact, #clients, #results { padding: 5rem 0; }
-      #newsletter { padding: 4.5rem 0; }
-      .clients-header, .results-top, .work-top { margin-bottom: 2.25rem; gap: 1.25rem; }
-
-      /* Featured video — full width, stacked */
-      .featured { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 3rem; }
-      .featured .vc { width: 100%; max-width: 360px; margin: 0 auto; }
-      .featured-copy { order: -1; }
-
-      /* Rest of the videos — swipeable row instead of a long stack */
-      .videos-grid {
-        display: flex;
-        gap: 0.85rem;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        margin-inline: -1.5rem;
-        padding: 0 1.5rem 0.5rem;
-        scroll-padding-inline: 1.5rem;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-      }
-      .videos-grid::-webkit-scrollbar { display: none; }
-      .videos-grid .vc { flex: 0 0 68%; scroll-snap-align: start; }
-
-      .swipe-hint {
-        display: block;
-        font-size: 0.6rem;
-        font-weight: 700;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: var(--grey);
-        margin-bottom: 1rem;
-      }
-
-      /* Footer — stack and wrap so it never overflows the screen */
-      .footer-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
-      .footer-right { flex-wrap: wrap; gap: 1rem 1.5rem; }
+      .results-cards { grid-template-columns: 1fr; }
+      .newsletter-inner { grid-template-columns: 1fr; gap: 0.75rem; }
+      .newsletter-inner .btn { justify-self: start; }
     }
 
-    /* ============================================================
-       RESPONSIVESMALL MOBILE (≤480px)
-    ============================================================ */
-    @media (max-width: 480px) {
-      .contact-headline { font-size: clamp(3.5rem, 14vw, 5rem); }
-      .hero-name { font-size: 4rem; }
+    .nav-mobile-socials { display: none; margin-right: -0.25rem; }
 
-      /* Brands — 3 across with smaller tiles */
-      .clients-grid { grid-template-columns: repeat(3, 1fr); }
-      .client-card a { padding: 1.5rem 0.5rem; gap: 0.75rem; }
-      .client-card-logo { width: 72px; height: 72px; border-radius: 16px; }
-      .client-card-name { font-size: 0.6rem; letter-spacing: 0.06em; }
+    @media (max-width: 768px) {
+      /* Hero: photo first, compact */
+      .hero-inner { grid-template-columns: 1fr; gap: 1.25rem; }
+      .hero-photo-wrap { order: -1; min-height: 0; aspect-ratio: 16 / 10; }
+      .hero-pills { margin-left: 0; }
+      .hero-actions .btn { flex: 1 1 calc(50% - 0.3rem); padding-inline: 0.75rem; }
+      .hero-quick-contact { width: 100%; justify-content: flex-start; }
+      .social-row { max-width: none; }
+
+      .results-top { grid-template-columns: 1fr; }
+      .results-aside { justify-self: start; }
+
+      /* Content: video + copy as a side-by-side lockup, rail below */
+      .work-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1rem; }
+      .work-side { display: contents; }
+      .featured-copy { grid-column: 2; grid-row: 1; align-self: center; border-bottom: 0; padding-bottom: 0; }
+      .featured-video { grid-column: 1; grid-row: 1; }
+      .rail-head, .videos-grid, .work-footnote { grid-column: 1 / -1; }
+      .rail-controls { display: none; }
+
+      .videos-grid {
+        --cols: 2.4;
+        margin-inline: calc(var(--gutter) * -1);
+        padding-inline: var(--gutter);
+        scroll-padding-inline: var(--gutter);
+      }
+
+      .about-grid { grid-template-columns: 120px minmax(0, 1fr); align-items: end; gap: 1rem; }
+      .about-grid > div { display: contents; }
+      .about-photo { grid-row: 1; aspect-ratio: 4 / 5; }
+      .about-head { grid-row: 1; grid-column: 2; }
+      .about-headline { margin-bottom: 0; }
+      .about-text { grid-column: 1 / -1; columns: 1; margin-top: 0.5rem; }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+      .footer-right { margin-left: 0; gap: 0 1.25rem; }
+      .footer-socials { margin-left: -0.6rem; }
+    }
+
+    @media (max-width: 420px) {
+      .nav-logo { font-size: 0.7rem; letter-spacing: 0.16em; }
+      .nav-inner { gap: 0.25rem; }
+      .hero-facts { gap: 0.9rem; }
+      .hero-stats { gap: 1.5rem; }
+      .social-btn { flex-direction: column; gap: 0.3rem; min-height: 64px; font-size: 0.6rem; }
+      .result-stat { padding: 0.75rem 0.7rem; }
+      .result-stat-num { font-size: 1.2rem; }
+      .result-stat-label { font-size: 0.48rem; letter-spacing: 0.08em; }
+      .featured-copy p { font-size: 0.82rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html, .videos-grid { scroll-behavior: auto; }
+      .fade-up { opacity: 1; transform: none; transition: none; }
+      .marquee { -webkit-mask-image: none; mask-image: none; }
+      .marquee-track { animation: none; width: auto; }
+      .marquee-set { flex-wrap: wrap; padding-right: 0; }
+      .marquee-set[aria-hidden="true"] { display: none; }
     }
   </style>
 </head>
 <body>
 
+<!-- Icon sprite (reused in nav, hero, menu, footer) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ig" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></symbol>
+  <symbol id="i-tt" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2C7.86 2 4.5 5.36 4.5 9.5c0 5.25 6.5 11.5 7.09 12.05a.6.6 0 0 0 .82 0C13 21 19.5 14.75 19.5 9.5 19.5 5.36 16.14 2 12 2zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></symbol>
+</svg>
+
 <!-- ============================================================
      MOBILE MENU OVERLAY
 ============================================================ -->
 <div class="mobile-menu" id="mobile-menu" role="navigation" aria-label="Mobile navigation">
-  <!-- REPLACE: Update links if you add/remove sections -->
-  <a href="#clients"    onclick="closeMobileMenu()">Brands</a>
+  <a href="#clients" onclick="closeMobileMenu()">Brands</a>
   <a href="#results" onclick="closeMobileMenu()">Results</a>
-  <a href="#work"       onclick="closeMobileMenu()">Content</a>
-  <a href="#about"      onclick="closeMobileMenu()">About</a>
-  <a href="#contact"    onclick="closeMobileMenu()">Contact</a>
+  <a href="#work"    onclick="closeMobileMenu()">Content</a>
+  <a href="#about"   onclick="closeMobileMenu()">About</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <div class="social-row">
+    <a href="https://www.instagram.com/coltonwelgan.mp4/" class="social-btn" target="_blank" rel="noopener"><svg class="icon"><use href="#i-ig"/></svg>Instagram</a>
+    <a href="https://www.tiktok.com/@coltonwelgan.mp4" class="social-btn" target="_blank" rel="noopener"><svg class="icon"><use href="#i-tt"/></svg>TikTok</a>
+    <a href="#" class="social-btn"><svg class="icon"><use href="#i-yt"/></svg>YouTube</a>
+  </div>
 </div>
 
 <!-- ============================================================
      NAVIGATION
 ============================================================ -->
 <nav id="nav">
-  <!-- REPLACE: Your preferred display name -->
-  <a href="#hero" class="nav-logo">Colton Welgan</a>
+  <div class="container nav-inner">
+    <a href="#hero" class="nav-logo">Colton Welgan</a>
 
-  <ul class="nav-links">
-    <li><a href="#clients">Brands</a></li>
-    <li><a href="#results">Results</a></li>
-    <li><a href="#work">Content</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+    <ul class="nav-links">
+      <li><a href="#clients">Brands</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#work">Content</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
 
-  <div class="hamburger" id="hamburger" aria-label="Open navigation" role="button" tabindex="0">
-    <span></span>
-    <span></span>
-    <span></span>
+    <div class="nav-socials">
+      <a href="https://www.instagram.com/coltonwelgan.mp4/" class="icon-btn" aria-label="Instagram" target="_blank" rel="noopener"><svg class="icon"><use href="#i-ig"/></svg></a>
+      <a href="https://www.tiktok.com/@coltonwelgan.mp4" class="icon-btn" aria-label="TikTok" target="_blank" rel="noopener"><svg class="icon"><use href="#i-tt"/></svg></a>
+      <a href="#" class="icon-btn" aria-label="YouTube"><svg class="icon"><use href="#i-yt"/></svg></a>
+    </div>
+
+    <div class="nav-mobile-socials">
+      <a href="https://www.instagram.com/coltonwelgan.mp4/" class="icon-btn" aria-label="Instagram" target="_blank" rel="noopener"><svg class="icon"><use href="#i-ig"/></svg></a>
+      <a href="https://www.tiktok.com/@coltonwelgan.mp4" class="icon-btn" aria-label="TikTok" target="_blank" rel="noopener"><svg class="icon"><use href="#i-tt"/></svg></a>
+      <a href="#" class="icon-btn" aria-label="YouTube"><svg class="icon"><use href="#i-yt"/></svg></a>
+    </div>
+
+    <div class="hamburger" id="hamburger" aria-label="Open navigation" role="button" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
 </nav>
 
 <!-- ============================================================
-     SECTION 1HERO
+     HERO
 ============================================================ -->
 <section id="hero">
   <div class="container">
     <div class="hero-inner">
       <div class="hero-content">
 
-        <p class="hero-eyebrow">UGC Creator</p>
+        <div class="hero-meta">
+          <p class="hero-eyebrow">UGC Creator</p>
+          <p class="hero-location">
+            <svg class="icon"><use href="#i-pin"/></svg>
+            Vancouver, Canada
+          </p>
+        </div>
 
-        <!-- REPLACE: Your display name -->
         <h1 class="hero-name display">Colton<br>Welgan.</h1>
 
-        <!-- REPLACE: Update your location -->
-        <p class="hero-location fade-up">
-          <svg viewBox="0 0 24 24"><path d="M12 2C7.86 2 4.5 5.36 4.5 9.5c0 5.25 6.5 11.5 7.09 12.05a.6.6 0 0 0 .82 0C13 21 19.5 14.75 19.5 9.5 19.5 5.36 16.14 2 12 2zm0 10.25a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
-          Vancouver, Canada
-        </p>
-
-        <p class="hero-mission fade-up delay-1">
+        <p class="hero-mission fade-up">
           Helping brands get seen, get read, and get heard — through naturally-feeling UGC that never looks like an ad.
         </p>
 
         <!-- REPLACE: Update stat values as your numbers grow -->
-        <div class="hero-stats fade-up delay-2">
-          <div class="hero-stat">
-            <div class="hero-stat-num display">4M+</div>
-            <div class="hero-stat-label">Total Views</div>
+        <div class="hero-facts fade-up delay-1">
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-num display">4M+</div>
+              <div class="hero-stat-label">Total Views</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num display">10+</div>
+              <div class="hero-stat-label">Brands Worked With</div>
+            </div>
           </div>
-          <div class="hero-stat">
-            <div class="hero-stat-num display">10+</div>
-            <div class="hero-stat-label">Brands Worked With</div>
+          <div class="hero-pills">
+            <span class="pill pill-tech">Tech</span>
+            <span class="pill pill-ai">AI</span>
+            <span class="pill pill-fashion">Fashion</span>
+            <span class="pill pill-health">Health</span>
           </div>
         </div>
 
-        <div class="hero-pills">
-          <span class="pill pill-tech">Tech</span>
-          <span class="pill pill-ai">AI</span>
-          <span class="pill pill-fashion">Fashion</span>
-          <span class="pill pill-health">Health</span>
-        </div>
-
-        <!-- REPLACE: Update email address — kept as plain, copy-pasteable text for brands reaching out -->
-        <a href="mailto:welgancreative@gmail.com" class="hero-quick-contact fade-up">
-          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          <span>
-            <span class="hero-quick-contact-label">Email</span><br>
-            welgancreative@gmail.com
-          </span>
-        </a>
-
-        <div class="hero-ctas">
-          <!-- REPLACE: Update href to your preferred CTA destination -->
+        <div class="hero-actions fade-up delay-2">
           <a href="#contact" class="btn btn-filled">Work With Me →</a>
           <a href="#work"    class="btn btn-ghost">View Content</a>
+          <!-- Kept as plain, copy-pasteable text for brands reaching out -->
+          <a href="mailto:welgancreative@gmail.com" class="hero-quick-contact">
+            <svg class="icon"><use href="#i-mail"/></svg>
+            <span class="hero-quick-contact-label">Email</span>
+            welgancreative@gmail.com
+          </a>
         </div>
 
-        <div class="hero-socials">
-          <a href="https://www.instagram.com/coltonwelgan.mp4/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            Instagram
+        <div class="social-row fade-up delay-3">
+          <a href="https://www.instagram.com/coltonwelgan.mp4/" class="social-btn" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg class="icon"><use href="#i-ig"/></svg>Instagram
           </a>
-          <a href="https://www.tiktok.com/@coltonwelgan.mp4" class="social-link" aria-label="TikTok" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-            TikTok
+          <a href="https://www.tiktok.com/@coltonwelgan.mp4" class="social-btn" aria-label="TikTok" target="_blank" rel="noopener">
+            <svg class="icon"><use href="#i-tt"/></svg>TikTok
           </a>
-          <a href="#" class="social-link" aria-label="YouTube">
-            <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-            YouTube
+          <a href="#" class="social-btn" aria-label="YouTube">
+            <svg class="icon"><use href="#i-yt"/></svg>YouTube
           </a>
         </div>
 
       </div>
 
-      <div class="hero-photo-wrap fade-up delay-1">
-        <img src="hero-photo.jpg" alt="Colton Welgan">
+      <div class="hero-photo-wrap">
+        <img src="hero-photo.jpg" alt="Colton Welgan" fetchpriority="high">
       </div>
 
     </div>
@@ -1511,105 +1281,33 @@
 </section>
 
 <!-- ============================================================
-     SECTION 4 — BRANDS
+     BRANDS
 ============================================================ -->
 <section id="clients">
   <div class="container">
 
-    <div class="clients-header">
-      <div>
-        <div class="section-label fade-up">Brands</div>
-        <h2 class="clients-headline display fade-up delay-1">
-          Brands I've<br>Worked <span class="accent-text">With.</span>
-        </h2>
-      </div>
-      <p class="clients-subtext fade-up delay-1">
+    <div class="clients-header fade-up">
+      <h2 class="clients-headline display">Brands I've Worked With.</h2>
+      <p class="clients-subtext">
         From AI platforms to fashion and health brands, I create UGC that performs across organic and paid for brands big and small.
       </p>
     </div>
 
-    <div class="clients-divider fade-up delay-1"></div>
-
-    <div class="clients-grid fade-up delay-2">
-      <div class="client-card">
-        <a href="#results">
-          <div class="client-card-logo">
-            <img src="triips-logo.svg" alt="Triips" class="fill">
-          </div>
-          <div class="client-card-name">Triips.com</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#results">
-          <div class="client-card-logo" style="background:#fff;">
-            <img src="neuro-logo.svg" alt="Neuro">
-          </div>
-          <div class="client-card-name">Neuro Gum</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#results-replit">
-          <div class="client-card-logo" style="background:#F0EBE3;">
-            <img src="replit-logo.svg" alt="Replit">
-          </div>
-          <div class="client-card-name">Replit</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#">
-          <div class="client-card-logo">
-            <img src="involio-logo.svg" alt="Involio">
-          </div>
-          <div class="client-card-name">Involio</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#">
-          <div class="client-card-logo" style="background:#D1FE17;">
-            <img src="higgsfield-logo.png" alt="Higgsfield">
-          </div>
-          <div class="client-card-name">Higgsfield</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#">
-          <div class="client-card-logo" style="background:#000;">
-            <img src="anara-logo.png" alt="Anara">
-          </div>
-          <div class="client-card-name">Anara</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#results-openart">
-          <div class="client-card-logo" style="background:#000;">
-            <img src="openart-logo.png" alt="OpenArt">
-          </div>
-          <div class="client-card-name">OpenArt</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#">
-          <div class="client-card-logo" style="background:#00D9A6;">
-            <img src="kalshi-logo.svg" alt="Kalshi">
-          </div>
-          <div class="client-card-name">Kalshi</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#">
-          <div class="client-card-logo" style="background:#000;">
-            <img src="runnr-logo.png" alt="Runnr Activewear" class="fill">
-          </div>
-          <div class="client-card-name">Runnr Activewear</div>
-        </a>
-      </div>
-      <div class="client-card">
-        <a href="#">
-          <div class="client-card-logo" style="background:#F2F2F2;">
-            <img src="legend-london-logo.jpg" alt="Legend London" class="fill" style="transform:scale(1.55);">
-          </div>
-          <div class="client-card-name">Legend London</div>
-        </a>
+    <div class="marquee fade-up delay-1">
+      <div class="marquee-track">
+        <ul class="marquee-set">
+          <li><a class="brand" href="#results"><span class="brand-logo"><img src="triips-logo.svg" alt="" class="fill"></span><span class="brand-name">Triips.com</span></a></li>
+          <li><a class="brand" href="#results"><span class="brand-logo" style="background:#fff;"><img src="neuro-logo.svg" alt=""></span><span class="brand-name">Neuro Gum</span></a></li>
+          <li><a class="brand" href="#results-replit"><span class="brand-logo" style="background:#F0EBE3;"><img src="replit-logo.svg" alt=""></span><span class="brand-name">Replit</span></a></li>
+          <li><a class="brand" href="#"><span class="brand-logo"><img src="involio-logo.svg" alt=""></span><span class="brand-name">Involio</span></a></li>
+          <li><a class="brand" href="#"><span class="brand-logo" style="background:#D1FE17;"><img src="higgsfield-logo.png" alt=""></span><span class="brand-name">Higgsfield</span></a></li>
+          <li><a class="brand" href="#"><span class="brand-logo" style="background:#000;"><img src="anara-logo.png" alt=""></span><span class="brand-name">Anara</span></a></li>
+          <li><a class="brand" href="#results-openart"><span class="brand-logo" style="background:#000;"><img src="openart-logo.png" alt=""></span><span class="brand-name">OpenArt</span></a></li>
+          <li><a class="brand" href="#"><span class="brand-logo" style="background:#00D9A6;"><img src="kalshi-logo.svg" alt=""></span><span class="brand-name">Kalshi</span></a></li>
+          <li><a class="brand" href="#"><span class="brand-logo" style="background:#000;"><img src="runnr-logo.png" alt="" class="fill"></span><span class="brand-name">Runnr Activewear</span></a></li>
+          <li><a class="brand" href="#"><span class="brand-logo" style="background:#F2F2F2;"><img src="legend-london-logo.jpg" alt="" class="fill" style="transform:scale(1.55);"></span><span class="brand-name">Legend London</span></a></li>
+        </ul>
+        <!-- second copy is cloned in by JS for a seamless loop -->
       </div>
     </div>
 
@@ -1617,19 +1315,17 @@
 </section>
 
 <!-- ============================================================
-     SECTION 4B — RESULTS / METRICS
+     RESULTS / METRICS
 ============================================================ -->
 <section id="results">
   <div class="container">
 
-    <div class="results-top">
+    <div class="results-top fade-up">
       <div>
-        <div class="section-label fade-up">Metrics</div>
-        <h2 class="results-headline display fade-up delay-1">
-          The Results.
-        </h2>
+        <div class="sec-label">Metrics</div>
+        <h2 class="sec-title">The Results.</h2>
       </div>
-      <p class="results-aside fade-up delay-1">
+      <p class="results-aside">
         A breakdown of real campaigns — what I made, what it did, and the numbers behind it.
       </p>
     </div>
@@ -1637,7 +1333,7 @@
     <div class="results-cards">
 
       <!-- REPLIT -->
-      <div class="result-card fade-up delay-2" id="results-replit">
+      <article class="result-card fade-up delay-1" id="results-replit">
         <div class="result-card-header">
           <div class="result-card-logo" style="background:#F0EBE3;">
             <img src="replit-logo.svg" alt="Replit">
@@ -1667,27 +1363,29 @@
           </div>
         </div>
 
-        <div class="result-breakdown">
-          <div class="result-section">
-            <h4>What I Did</h4>
-            <ul>
-              <li>Organic UGC showing real, from-scratch build sessions on Replit — idea to shipped app in one sitting</li>
-              <li>Hook-driven videos framed around speed and simplicity: "I built this app in seconds"</li>
-              <li>Content positioning Replit as the go-to tool for non-coders and builders alike to bring any idea to life</li>
-            </ul>
-          </div>
+        <div class="result-section">
+          <h4>What I Did</h4>
+          <ul>
+            <li>Organic UGC showing real, from-scratch build sessions on Replit — idea to shipped app in one sitting</li>
+            <li>Hook-driven videos framed around speed and simplicity: "I built this app in seconds"</li>
+            <li>Content positioning Replit as the go-to tool for non-coders and builders alike to bring any idea to life</li>
+          </ul>
         </div>
 
-        <div class="result-proof">
-          <h4>Social Proof</h4>
+        <details class="result-proof">
+          <summary>
+            <span class="proof-thumb"><img src="instagram-growth.jpg" alt="" loading="lazy"></span>
+            Social Proof
+            <span class="proof-chevron" aria-hidden="true">⌄</span>
+          </summary>
           <div class="result-proof-shot">
-            <img src="instagram-growth.jpg" alt="Colton Welgan's Instagram at 5,072 followers, 317 posts, with 1.3M views in the last 30 days">
+            <img src="instagram-growth.jpg" alt="Colton Welgan's Instagram at 5,072 followers, 317 posts, with 1.3M views in the last 30 days" loading="lazy">
           </div>
-        </div>
-      </div>
+        </details>
+      </article>
 
       <!-- OPENART -->
-      <div class="result-card fade-up delay-2" id="results-openart">
+      <article class="result-card fade-up delay-2" id="results-openart">
         <div class="result-card-header">
           <div class="result-card-logo" style="background:#000;">
             <img src="openart-logo.png" alt="OpenArt">
@@ -1717,24 +1415,26 @@
           </div>
         </div>
 
-        <div class="result-breakdown">
-          <div class="result-section">
-            <h4>What I Did</h4>
-            <ul>
-              <li>Organic UGC covering OpenArt's full toolkit — from AI "vibe directing" edits for YouTube to fully generated Airbnb walkthroughs</li>
-              <li>Use-case-driven videos showing real workflows, not just feature demos, to prove OpenArt as a genuine creative tool</li>
-              <li>Content positioning OpenArt as the go-to platform for generative AI graphics across multiple content angles</li>
-            </ul>
-          </div>
+        <div class="result-section">
+          <h4>What I Did</h4>
+          <ul>
+            <li>Organic UGC covering OpenArt's full toolkit — from AI "vibe directing" edits for YouTube to fully generated Airbnb walkthroughs</li>
+            <li>Use-case-driven videos showing real workflows, not just feature demos, to prove OpenArt as a genuine creative tool</li>
+            <li>Content positioning OpenArt as the go-to platform for generative AI graphics across multiple content angles</li>
+          </ul>
         </div>
 
-        <div class="result-proof">
-          <h4>Social Proof</h4>
+        <details class="result-proof">
+          <summary>
+            <span class="proof-thumb"><img src="openart-growth.jpg" alt="" loading="lazy"></span>
+            Social Proof
+            <span class="proof-chevron" aria-hidden="true">⌄</span>
+          </summary>
           <div class="result-proof-shot">
-            <img src="openart-growth.jpg" alt="@coltonlovesart Instagram at 2,002 followers, 38 posts, with 365.5K views in the last 30 days">
+            <img src="openart-growth.jpg" alt="@coltonlovesart Instagram at 2,002 followers, 38 posts, with 365.5K views in the last 30 days" loading="lazy">
           </div>
-        </div>
-      </div>
+        </details>
+      </article>
 
     </div>
 
@@ -1742,158 +1442,130 @@
 </section>
 
 <!-- ============================================================
-     SECTION 5 — WORK
+     CONTENT
 ============================================================ -->
 <section id="work">
   <div class="container">
 
-    <div class="work-top">
-      <div>
-        <div class="section-label fade-up">Content</div>
-        <h2 class="work-headline display fade-up delay-1">
-          The Content.
-        </h2>
-      </div>
+    <div class="work-top fade-up">
+      <div class="sec-label">Content</div>
+      <h2 class="sec-title">The Content.</h2>
     </div>
 
-    <!-- #1 featured video — swap the Vimeo ID to change it -->
-    <div class="featured fade-up delay-1">
-      <div class="vc">
+    <div class="work-layout">
+
+      <!-- #1 featured video — swap the Vimeo ID to change it -->
+      <div class="vc featured-video fade-up">
         <iframe src="https://player.vimeo.com/video/1234298497?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0&autoplay=1&muted=1&loop=1&playsinline=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Featured video"></iframe>
       </div>
-      <div class="featured-copy">
-        <span class="featured-tag">★ Top Pick</span>
-        <h3 class="featured-title">Start Here.</h3>
-        <p>If you only watch one, make it this one. Tap the video to turn the sound on.</p>
-      </div>
-    </div>
 
-    <p class="swipe-hint">More work — swipe →</p>
+      <div class="work-side">
+        <div class="featured-copy fade-up delay-1">
+          <span class="featured-tag">★ Top Pick</span>
+          <h3 class="featured-title display">Start Here.</h3>
+          <p>If you only watch one, make it this one. Tap the video to turn the sound on.</p>
+        </div>
 
-    <div class="videos-grid fade-up delay-1">
+        <div class="rail-head fade-up delay-2">
+          <p class="swipe-hint">More work — swipe →</p>
+          <div class="rail-controls">
+            <button class="rail-btn" id="rail-prev" aria-label="Previous videos">←</button>
+            <button class="rail-btn" id="rail-next" aria-label="Next videos">→</button>
+          </div>
+        </div>
 
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216666661?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
+        <div class="videos-grid fade-up delay-2" id="videos-rail">
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216666661?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216667040?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216668147?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216668267?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216668352?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216668460?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216669187?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+          <div class="vc"><iframe loading="lazy" src="https://player.vimeo.com/video/1216669230?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe></div>
+        </div>
 
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216667040?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
-
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216668147?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
-
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216668267?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
-
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216668352?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
-
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216668460?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
-
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216669187?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
-      </div>
-
-      <div class="vc">
-        <iframe src="https://player.vimeo.com/video/1216669230?badge=0&autopause=0&player_id=0&app_id=58479&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Content"></iframe>
+        <p class="work-footnote">
+          Scroll-stopping content built from scratch. Every hook intentional.
+        </p>
       </div>
 
     </div>
-
-    <p class="work-footnote fade-up">
-      Scroll-stopping content built from scratch. Every hook intentional.
-    </p>
 
   </div>
 </section>
 
 <!-- ============================================================
-     SECTION 6 — NEWSLETTER
+     NEWSLETTER
 ============================================================ -->
 <section id="newsletter">
   <div class="container">
-    <div class="newsletter-inner">
-      <div class="section-label fade-up">Newsletter</div>
-      <h2 class="newsletter-headline display fade-up delay-1">Get the Playbook.</h2>
-      <p class="newsletter-sub fade-up delay-2">
+    <div class="newsletter-inner fade-up">
+      <div>
+        <div class="sec-label">Newsletter</div>
+        <h2 class="sec-title">Get the Playbook.</h2>
+      </div>
+      <p class="newsletter-sub">
         Behind-the-scenes breakdowns of what's actually working in UGC right now — hooks, formats, and the stuff brands pay for. Straight to your inbox.
       </p>
       <!-- REPLACE: swap this href for your Substack URL -->
-      <a href="#" target="_blank" rel="noopener" class="btn btn-filled fade-up delay-3">Subscribe on Substack →</a>
+      <a href="#" target="_blank" rel="noopener" class="btn btn-ghost">Subscribe on Substack →</a>
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-     SECTION 7 — CONTACT / CTA
+     CONTACT / CTA
 ============================================================ -->
 <section id="contact">
   <div class="container">
     <div class="contact-inner">
-
       <p class="contact-over fade-up">Got a Brief?</p>
-
       <h2 class="contact-headline display fade-up delay-1">
         Let's Create<br>Something.
       </h2>
-
-      <!-- REPLACE: Update email address -->
-      <a href="mailto:welgancreative@gmail.com" class="btn btn-white fade-up delay-3">
+      <a href="mailto:welgancreative@gmail.com" class="btn btn-filled contact-email fade-up delay-2">
         welgancreative@gmail.com &nbsp;→
       </a>
-
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-     SECTION 8 — ABOUT
+     ABOUT
 ============================================================ -->
 <section id="about">
   <div class="container">
     <div class="about-grid">
 
-      <!-- REPLACE: Save your photo as "photo.jpg" inside the ugc-portfolio folder -->
-      <img
-        src="photo.jpg"
-        alt="Colton Welgan"
-        class="about-photo fade-up"
-      >
+      <img src="photo.jpg" alt="Colton Welgan" class="about-photo fade-up" loading="lazy">
 
       <div>
-        <div class="section-label fade-up">About</div>
+        <div class="about-head fade-up">
+          <div class="sec-label">About</div>
+          <h2 class="sec-title about-headline">Hey,<br>I'm Colton.</h2>
+        </div>
 
-        <h2 class="about-headline display fade-up delay-1">Hey,<br>I'm Colton.</h2>
-
-        <p class="about-body fade-up delay-2">
-          Hey, I'm Colton, a 22-year-old UGC creator based in Vancouver, Canada, specializing in tech and AI/software brands.
-        </p>
-
-        <p class="about-body fade-up delay-3">
-          I create viral content that shows real use cases for your brand and product in such an organic way that users barely even recognize it as an ad! Content that gets your product in front of the people who actually need it, and gives them a reason to buy today, not "someday."
-        </p>
-
-        <p class="about-body fade-up delay-4">
-          With a background in sales, I understand the psychology behind what actually gets people to convert, and it's rarely a "BUY NOW." I know how to build desire and trust into a video so the sell feels invisible, not forced.
-        </p>
-
-        <p class="about-body fade-up delay-5">
-          I test new hooks, angles, and formats on every video because virality isn't luck, it's iteration. My real strength: spotting exactly where a brand's current content isn't landing, whether it's weak hooks, unclear value, or too "ad-like," and fixing it with UGC that feels native and converts.
-        </p>
-
-        <p class="about-body fade-up delay-5">
-          If your product isn't backed by UGC right now, you're leaving growth on the table.
-        </p>
-
-        <p class="about-body fade-up delay-5">
-          Let's talk about what your brand's next viral moment looks like. Send me a message and let's create it!
-        </p>
+        <div class="about-text fade-up delay-1">
+          <p class="about-body">
+            Hey, I'm Colton, a 22-year-old UGC creator based in Vancouver, Canada, specializing in tech and AI/software brands.
+          </p>
+          <p class="about-body">
+            I create viral content that shows real use cases for your brand and product in such an organic way that users barely even recognize it as an ad! Content that gets your product in front of the people who actually need it, and gives them a reason to buy today, not "someday."
+          </p>
+          <p class="about-body">
+            With a background in sales, I understand the psychology behind what actually gets people to convert, and it's rarely a "BUY NOW." I know how to build desire and trust into a video so the sell feels invisible, not forced.
+          </p>
+          <p class="about-body">
+            I test new hooks, angles, and formats on every video because virality isn't luck, it's iteration. My real strength: spotting exactly where a brand's current content isn't landing, whether it's weak hooks, unclear value, or too "ad-like," and fixing it with UGC that feels native and converts.
+          </p>
+          <p class="about-body">
+            If your product isn't backed by UGC right now, you're leaving growth on the table.
+          </p>
+          <p class="about-body">
+            Let's talk about what your brand's next viral moment looks like. Send me a message and let's create it!
+          </p>
+        </div>
       </div>
 
     </div>
@@ -1916,22 +1588,24 @@
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/coltonwelgan.mp4/" class="icon-btn" aria-label="Instagram" target="_blank" rel="noopener"><svg class="icon"><use href="#i-ig"/></svg></a>
+        <a href="https://www.tiktok.com/@coltonwelgan.mp4" class="icon-btn" aria-label="TikTok" target="_blank" rel="noopener"><svg class="icon"><use href="#i-tt"/></svg></a>
+        <a href="#" class="icon-btn" aria-label="YouTube"><svg class="icon"><use href="#i-yt"/></svg></a>
+      </div>
     </div>
   </div>
 </footer>
 
-<!-- ============================================================
-     JAVASCRIPT
-============================================================ -->
 <script>
   // ── Auto-update footer year ───────────────────────────────────
   document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-  // ── Sticky nav with backdrop blur on scroll ───────────────────
+  // ── Sticky nav background on scroll ───────────────────────────
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   // ── Mobile hamburger menu ─────────────────────────────────────
   const hamburger  = document.getElementById('hamburger');
@@ -1956,8 +1630,15 @@
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hamburger.click(); }
   });
 
-  // ── Scroll-triggered fade-up animations ──────────────────────
-  const fadeEls = document.querySelectorAll('.fade-up');
+  // ── Brand marquee: clone the set once for a seamless loop ─────
+  const track = document.querySelector('.marquee-track');
+  const set = track.querySelector('.marquee-set');
+  const clone = set.cloneNode(true);
+  clone.setAttribute('aria-hidden', 'true');
+  clone.querySelectorAll('a').forEach(a => a.tabIndex = -1);
+  track.appendChild(clone);
+
+  // ── Scroll reveal ─────────────────────────────────────────────
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1965,24 +1646,51 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-  fadeEls.forEach(el => observer.observe(el));
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
+  // ── Active nav link (scrollspy) ───────────────────────────────
+  const navLinks = [...document.querySelectorAll('.nav-links a')];
+  const spy = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+
+  ['clients', 'results', 'work', 'about', 'contact'].forEach(id => spy.observe(document.getElementById(id)));
+
+  // ── Video rail arrows ─────────────────────────────────────────
+  const rail = document.getElementById('videos-rail');
+  const prev = document.getElementById('rail-prev');
+  const next = document.getElementById('rail-next');
+
+  function updateRail() {
+    prev.disabled = rail.scrollLeft <= 4;
+    next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
+  }
+
+  prev.addEventListener('click', () => rail.scrollBy({ left: -rail.clientWidth * 0.75 }));
+  next.addEventListener('click', () => rail.scrollBy({ left:  rail.clientWidth * 0.75 }));
+  rail.addEventListener('scroll', updateRail, { passive: true });
+  window.addEventListener('resize', updateRail);
+  updateRail();
 
   // ── Smooth scroll for in-page anchor links ────────────────────
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
-      const target = document.querySelector(anchor.getAttribute('href'));
+      const href = anchor.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
-        const top = target.getBoundingClientRect().top + window.scrollY - 80;
+        const top = target.getBoundingClientRect().top + window.scrollY - 64;
         window.scrollTo({ top, behavior: 'smooth' });
       }
     });
   });
 </script>
-
 
 </body>
 </html>
