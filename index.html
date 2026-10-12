@@ -384,7 +384,7 @@
       color: var(--text-2);
     }
 
-    .hero-location .icon { font-size: 15px; }
+    .hero-location .icon { font-size: 15px; fill: #E5484D; }
 
     .hero-name {
       font-size: clamp(3.75rem, 8.5vw, 7rem);
@@ -969,7 +969,7 @@
       font-size: clamp(6rem, 20vw, 16rem);
       line-height: 1;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(255,255,255,0.07);
+      -webkit-text-stroke: 1.5px rgba(255,255,255,0.2);
       white-space: nowrap;
       pointer-events: none;
     }
@@ -1000,8 +1000,9 @@
 
     .about-grid {
       display: grid;
-      grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
-      gap: clamp(1.5rem, 4vw, 3.5rem);
+      grid-template-columns: minmax(0, 340px) minmax(0, 640px);
+      justify-content: start;
+      gap: clamp(1.5rem, 5vw, 4.5rem);
       align-items: start;
     }
 
@@ -1011,21 +1012,30 @@
       object-fit: cover;
       object-position: top center;
       border-radius: 4px;
+      position: sticky;
+      top: 88px;
     }
 
     .about-headline { margin-bottom: 1.25rem; }
 
-    .about-text { columns: 2 280px; column-gap: 2.5rem; }
-
+    
     .about-body {
-      font-size: 0.88rem;
+      font-size: 0.95rem;
       line-height: 1.7;
       color: var(--text-2);
-      margin-bottom: 0.9rem;
-      break-inside: avoid;
+      margin-bottom: 1rem;
     }
 
-    .about-body:first-child { color: var(--white); font-weight: 500; }
+    .about-body:first-child {
+      font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+      line-height: 1.55;
+      color: var(--white);
+      font-weight: 500;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-body:nth-last-child(-n+2) { color: var(--white); }
 
     /* ============================================================
        FOOTER
@@ -1078,6 +1088,7 @@
       .results-cards { grid-template-columns: 1fr; }
       .newsletter-inner { grid-template-columns: 1fr; gap: 0.75rem; }
       .newsletter-inner .btn { justify-self: start; }
+      .about-grid { grid-template-columns: minmax(0, 240px) minmax(0, 1fr); }
     }
 
     .nav-mobile-socials { display: none; margin-right: -0.25rem; }
@@ -1114,7 +1125,8 @@
       .about-photo { grid-row: 1; aspect-ratio: 4 / 5; }
       .about-head { grid-row: 1; grid-column: 2; }
       .about-headline { margin-bottom: 0; }
-      .about-text { grid-column: 1 / -1; columns: 1; margin-top: 0.5rem; }
+      .about-text { grid-column: 1 / -1; margin-top: 0.5rem; }
+      .about-photo { position: static; }
 
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
       .footer-right { margin-left: 0; gap: 0 1.25rem; }
@@ -1231,8 +1243,8 @@
         <div class="hero-facts fade-up delay-1">
           <div class="hero-stats">
             <div class="hero-stat">
-              <div class="hero-stat-num display">4M+</div>
-              <div class="hero-stat-label">Total Views</div>
+              <div class="hero-stat-num display">4,000,000</div>
+              <div class="hero-stat-label">Organic Views</div>
             </div>
             <div class="hero-stat">
               <div class="hero-stat-num display">10+</div>
